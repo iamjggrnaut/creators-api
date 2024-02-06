@@ -74,7 +74,7 @@ class UserController {
             subject: 'Message from Node js',
             text: 'This message was sent from Node js server.',
             html:
-                `<p>Для подтверждения регистрации, перейдите по <a href="http://89.104.71.86:3001/confirmation/${encodeURI(email)}/${encodeURI(confirmationCode)}">ссылке</a>.</p>`,
+                `<p>Для подтверждения регистрации, перейдите по <a href="http://89.104.71.86:3000/confirmation/${encodeURI(email)}/${encodeURI(confirmationCode)}">ссылке</a>.</p>`,
         });
 
 
