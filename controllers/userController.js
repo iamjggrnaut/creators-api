@@ -58,12 +58,12 @@ class UserController {
         let testEmailAccount = await nodemailer.createTestAccount();
 
         let transporter = nodemailer.createTransport({
-            host: 'smtp.ethereal.email',
-            port: 587,
-            secure: false,
+            host: 'smtp.mail.ru',
+            port: 465,
+            secure: tru,
             auth: {
-                user: testEmailAccount.user,
-                pass: testEmailAccount.pass,
+                user: 'radar.analytica@mail.ru',
+                pass: 'mgKvHuuHK8xXZnt33SGM',
             },
         });
 
@@ -74,11 +74,11 @@ class UserController {
             subject: 'Message from Node js',
             text: 'This message was sent from Node js server.',
             html:
-                `<p>Для подтверждения регистрации, перейдите по <a href="http://localhost:3001/confirmation?email=${email}&code=${confirmationCode}">ссылке</a>.</p>`,
+                `<p>Для подтверждения регистрации, перейдите по <a href="http://89.104.71.86:3001/confirmation/${encodeURI(email)}/${encodeURI(confirmationCode)}">ссылке</a>.</p>`,
         });
 
 
-        // return res.json({ token })
+        return res.json({ result: 'done' })
     }
 
     async confirm(req, res, next) {
