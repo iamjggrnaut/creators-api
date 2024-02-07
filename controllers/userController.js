@@ -167,10 +167,12 @@ class UserController {
             method: 'GET',
             headers: {
                 'content-type': 'application/json',
-                'authorization': 'Bearer '
+                'authorization': 'Bearer ' + token
             }
         })
         const data = await res.json()
+
+        return res.json(data)
     }
 
 }
