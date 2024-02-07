@@ -13,7 +13,7 @@ router.patch('/update/:id', userController.updateToken)
 router.post('/signin', userController.login)
 router.post('/signup', userController.register)
 router.patch('/confirm', userController.confirm)
-router.post('/sales', userController.confirm)
+router.post('/sales', userController.getWBData)
 // router.patch('/reset-password', userController.confirm)
 
 
