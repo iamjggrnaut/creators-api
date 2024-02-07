@@ -166,7 +166,6 @@ class UserController {
     async getWBData(req, res) {
         const { token } = req.body
 
-        console.log(token);
         try {
             // Выполняем запрос к API Wildberries с использованием токена
             const response = await axios.get('https://statistics-api.wildberries.ru/api/v1/supplier/sales?dateFrom=2024-01-10', {
@@ -192,7 +191,7 @@ class UserController {
         // })
         // const data = await res.json()
 
-        return res.json(data)
+        return res.json({ token })
     }
 
 }
