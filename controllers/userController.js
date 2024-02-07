@@ -35,32 +35,10 @@ class UserController {
 
         user.update({ confirmationCode: confirmationCode }, { where: { email: email } })
 
-
-        // if (email) {
-        //     const mailOptions = {
-        //         from: 'romadeev@internet.ru', // Ваша почта на Mail.ru
-        //         to: email, // Почта получателя
-        //         subject: 'Тема письма',
-        //         html: `
-        //         <p>Спасибо за регистрацию!</p>
-        //         <p>Для подтверждения регистрации, перейдите по <a href="http://your-app-url/confirm/${confirmationCode}">ссылке</a>.</p>
-        //         `,
-        //     };
-
-        //     transporter.sendMail(mailOptions, (error, info) => {
-        //         if (error) {
-        //             console.error('Ошибка при отправке электронного письма:', error);
-        //         } else {
-        //             console.log('Электронное письмо успешно отправлено:', info.response);
-        //         }
-        //     });
-        // }
-        let testEmailAccount = await nodemailer.createTestAccount();
-
         let transporter = nodemailer.createTransport({
             host: 'smtp.mail.ru',
             port: 465,
-            secure: tru,
+            secure: true,
             auth: {
                 user: 'radar.analytica@mail.ru',
                 pass: 'mgKvHuuHK8xXZnt33SGM',
@@ -69,16 +47,16 @@ class UserController {
 
 
         let result = await transporter.sendMail({
-            from: '"Node js" <nodejs@example.com>',
-            to: 'rustam.tahamtan@gmail.com',
+            from: 'radar.analytica@mail.ru',
+            to: email,
             subject: 'Message from Node js',
             text: 'This message was sent from Node js server.',
             html:
-                `<p>Для подтверждения регистрации, перейдите по <a href="http://89.104.71.86:3000/confirmation/${encodeURI(email)}/${encodeURI(confirmationCode)}">ссылке</a>.</p>`,
+                `<p>Для подтверждения регистрации, перейдите по <a href="http://89.104.71.86:3000/confirmation/${email}/${confirmationCode}">ссылке</a>.</p>`,
         });
 
 
-        return res.json({ result: 'done' })
+        // return res.json({ result: 'done' })
     }
 
     async confirm(req, res, next) {
@@ -127,9 +105,10 @@ class UserController {
     async updateToken(req, res) {
         const { id } = req.params
         const { token, brandName } = req.body
+        const hashToken = await bcrypt.hash(token, 5)
         const user = await User.findOne({ where: { id } })
         if (user) {
-            user.update({ token, brandName }, { where: { id } })
+            user.update({ token: hashToken, brandName }, { where: { id } })
         }
     }
 
