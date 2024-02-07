@@ -18,6 +18,7 @@ const User = sequelize.define('user', {
     promoCode: { type: DataTypes.STRING, },
     confirmationCode: { type: DataTypes.STRING, },
     brandName: { type: DataTypes.STRING, },
+    token: { type: DataTypes.STRING, },
 })
 
 
