@@ -108,7 +108,7 @@ class UserController {
         const hashToken = await bcrypt.hash(token, 5)
         const user = await User.findOne({ where: { id } })
         if (user) {
-            user.update({ token: hashToken, brandName }, { where: { id } })
+            user.update({ token, brandName }, { where: { id } })
         }
     }
 
