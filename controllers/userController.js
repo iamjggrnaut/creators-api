@@ -171,10 +171,8 @@ class UserController {
             }
         })
         const data = await res.json()
-        if (data) {
-            return res.json('found')
-        } else { return res.json('nope') }
-        // return res.json(data)
+
+        return res.json(data)
     }
 
 }
