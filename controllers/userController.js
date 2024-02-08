@@ -54,9 +54,7 @@ class UserController {
             subject: 'Подтверждение регистрации',
             text: 'Данное письмо отправлено с сервиса Radat Analytica',
             html:
-                `
-                <div style="display: flex; width: 100vw; justify-content: center;">
-                    <div style="max-width: 100vw; padding: 1rem; min-height: 500px; background-color: white; ">
+                `<div style="padding: 1rem; background-color: white; ">
                         <div style="padding: 1rem;">
                             <h1>Здраствуйте, ${lastName}!</h1>
                             <p style="color: #8C8C8C;">Осталось совсем чуть-чуть</p>
@@ -73,8 +71,7 @@ class UserController {
                             <br>
                             <p>Если вы не проводили регистрацию, <span style="color: red; font-weight: 700;">не переходите по ссылке</span>. Вы так же можете обратиться в службу поддержки</p>
                         </div>
-                    </div>
-                </div>`,
+                    </div>`,
         });
 
 
