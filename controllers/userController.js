@@ -2,12 +2,26 @@ const { User } = require('../models/models')
 const ApiError = require('../error/ApiError')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
-
 const nodemailer = require('nodemailer');
 const uuid = require('uuid');
-
-
 const axios = require('axios');
+
+
+async function fetchData(url, resToken) {
+    try {
+        const response = await axios.get(url, {
+            headers: {
+                Authorization: `Bearer ${resToken}`
+            }
+        });
+        return response.data;
+    } catch (error) {
+        console.error('Ошибка при запросе к API:', error.message);
+        return null;
+    }
+}
+
+
 
 
 const confirmationCodes = {};
@@ -236,21 +250,7 @@ class UserController {
                 `https://suppliers-api.wildberries.ru/public/api/v1/info`
             ];
 
-            const responses = await Promise.all(
-                urls.map(async (url) => {
-                    try {
-                        const response = await axios.get(url, {
-                            headers: {
-                                Authorization: `Bearer ${resToken}`
-                            }
-                        });
-                        return response.data;
-                    } catch (error) {
-                        console.error('Ошибка при запросе к API:', error.message);
-                        return null;
-                    }
-                })
-            );
+            const responses = await Promise.all(urls.map(url => fetchData(url, resToken)));
 
             const responseData = {
                 warehouses: responses[0],
