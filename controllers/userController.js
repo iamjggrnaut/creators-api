@@ -250,20 +250,24 @@ class UserController {
                 `https://suppliers-api.wildberries.ru/public/api/v1/info`
             ];
 
-            const responses = await Promise.all(urls.map(url => fetchData(url, resToken)));
+            // const responses = await Promise.all(urls.map(url => fetchData(url, resToken)));
 
-            const responseData = {
-                warehouses: responses[0],
-                supplies: responses[1],
-                newOrders: responses[2],
-                reshipmentOrders: responses[3],
-                incomes: responses[4],
-                stocks: responses[5],
-                orders: responses[6],
-                sales: responses[7],
-                reportDetailByPeriod: responses[8],
-                info: responses[9]
-            };
+            const responseData = {};
+
+            for (const url of urls) {
+                try {
+                    const response = await axios.get(url, {
+                        headers: {
+                            Authorization: `Bearer ${resToken}`
+                        },
+                        timeout: 500
+                    });
+                    responseData[url] = response.data;
+                } catch (error) {
+                    console.error('Ошибка при запросе к API:', error.message);
+                    responseData[url] = null;
+                }
+            }
 
             return res.json(responseData);
         } catch (error) {
