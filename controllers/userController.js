@@ -254,7 +254,20 @@ class UserController {
 
             const responseData = {};
 
-            for (const url of urls) {
+            const names = [
+                'warehouses',
+                'supplies',
+                'newOrders',
+                'reshipmentOrders',
+                'incomes',
+                'stocks',
+                'orders',
+                'sales',
+                'reportDetailByPeriod',
+                'info'
+            ]
+
+            for (let i = 0; i < urls.length; i++) {
                 try {
                     const response = await axios.get(url, {
                         headers: {
@@ -262,10 +275,10 @@ class UserController {
                         },
                         timeout: 500
                     });
-                    responseData[url] = response.data;
+                    responseData[names[i]] = response.data;
                 } catch (error) {
                     console.error('Ошибка при запросе к API:', error.message);
-                    responseData[url] = null;
+                    responseData[names[i]] = null;
                 }
             }
 
