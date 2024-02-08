@@ -60,7 +60,7 @@ class UserController {
                             <p style="color: #8C8C8C;">Осталось совсем чуть-чуть</p>
                             <br>
                             <p>Подтвердите регистрацию по ссылке:</p>
-                            <a style="color: #5329FF; font-weight: bold;" href="https://radar-analytica.ru/confirmation/${email}/${confirmationCode}">Подтвердить</a>
+                            <a style="color: #5329FF; font-weight: bold;" href="https://radar-analytica.ru/development/confirmation/${email}/${confirmationCode}">Подтвердить</a>
                             <br>
                             <p>C наилучшими пожеланиями,</p>
                             <p>Команда сервиса Radar Analytica</p>
@@ -207,16 +207,6 @@ class UserController {
             throw error;
         }
 
-        // const result = await fetch(`https://statistics-api.wildberries.ru/api/v1/supplier/sales?dateFrom=${dateFrom}`, {
-        //     method: 'GET',
-        //     headers: {
-        //         'content-type': 'application/json',
-        //         'authorization': 'Bearer ' + decodedToken
-        //     }
-        // })
-        // const data = await result.json()
-
-        // return res.json({ data })
     }
 
 }
