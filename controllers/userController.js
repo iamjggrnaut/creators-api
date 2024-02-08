@@ -195,6 +195,8 @@ class UserController {
         console.log(user.token);
         console.log('---------------------');
         console.log(decodedToken);
+        console.log('---------------------');
+        console.log(id);
 
         const url = `https://statistics-api.wildberries.ru/api/v1/supplier/sales?dateFrom=${dateFrom}`
         const config = {
