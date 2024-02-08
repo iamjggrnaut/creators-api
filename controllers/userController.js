@@ -186,10 +186,15 @@ class UserController {
 
     async getWBData(req, res) {
         const { id } = req.params
-        const { dateFrom } = req.body
+        const { dateFrom } = req.query.dateFrom
 
         const user = await User.findOne({ where: { id } })
         const decodedToken = jwt.decode(user.token, { complete: true })
+
+        console.log('---------------------');
+        console.log(user.token);
+        console.log('---------------------');
+        console.log(decodedToken);
 
         const url = `https://statistics-api.wildberries.ru/api/v1/supplier/sales?dateFrom=${dateFrom}`
         const config = {
