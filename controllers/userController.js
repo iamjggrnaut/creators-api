@@ -101,13 +101,13 @@ class UserController {
         if (user.confirmed) {
             return res.json({ token })
         }
-        return
+        return res.json(null)
     }
 
     async check(req, res) {
         const token = generateJWT(req.user.id, req.user.email, req.user.role, req.user.firstName, req.user.lastName,
             req.user.isActive, req.user.image, req.user.patronym, req.user.isOnboarded, req.user.stage, req.user.promoCode, req.user.confirmed, req.user.phone)
-        return res.json({ token })
+        return res.status(500).json()
     }
 
     async getOne(req, res) {
