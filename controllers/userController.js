@@ -101,7 +101,7 @@ class UserController {
         if (user.confirmed) {
             return res.json({ token })
         }
-        return res.json()
+        return
     }
 
     async check(req, res) {
