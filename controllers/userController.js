@@ -192,13 +192,6 @@ class UserController {
         const decodedToken = jwt.decode(user.token, { complete: true })
         const resToken = decodedToken && decodedToken.payload ? decodedToken.payload.token : null
 
-        console.log('---------------------');
-        console.log(user);
-        console.log('---------------------');
-        console.log(decodedToken);
-        console.log('---------------------');
-        console.log(id);
-
         const url = `https://statistics-api.wildberries.ru/api/v1/supplier/sales?dateFrom=${'2024-01-10'}`
         const config = {
             headers: {
@@ -208,7 +201,7 @@ class UserController {
 
         try {
             const response = await axios.get(url, config);
-            return response.data;
+            return res.json(response.data)
         } catch (error) {
             console.error('Ошибка при запросе к API:', error);
             throw error;
