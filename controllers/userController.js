@@ -201,7 +201,7 @@ class UserController {
         const url = `https://statistics-api.wildberries.ru/api/v1/supplier/sales?dateFrom=${dateFrom}`
         const config = {
             headers: {
-                Authorization: `Bearer ${decodedToken}`
+                Authorization: `Bearer ${decodedToken?.payload?.token}`
             }
         }
 
