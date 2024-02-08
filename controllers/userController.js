@@ -83,7 +83,6 @@ class UserController {
         const user = await User.findOne({ where: { email } })
         if (user && user.email === email && user.confirmationCode === code) {
             user.update({ confirmed: true }, { where: { email } })
-            console.log('-------------------------worked');
         }
         return res.json({ confirmed: true })
     }
