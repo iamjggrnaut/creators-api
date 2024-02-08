@@ -128,7 +128,6 @@ class UserController {
         try {
             const signedToken = jwt.sign({ token, brandName }, process.env.SECRET_KEY);
             user.update({ token: signedToken });
-            console.log(user.token);
             res.status(200).json({ success: true, message: 'Токен успешно обновлен и сохранен.' });
         } catch (error) {
             console.error('Ошибка при обновлении токена:', error);
@@ -193,7 +192,7 @@ class UserController {
         const decodedToken = jwt.decode(user.token, { complete: true })
 
         console.log('---------------------');
-        console.log(user.token);
+        console.log(user);
         console.log('---------------------');
         console.log(decodedToken);
         console.log('---------------------');
