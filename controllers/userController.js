@@ -255,7 +255,7 @@ class UserController {
             const responseData = {
                 warehouses: responses[0],
                 supplies: responses[1],
-                resupplies: responses[2],
+                newOrders: responses[2],
                 reshipmentOrders: responses[3],
                 incomes: responses[4],
                 stocks: responses[5],
