@@ -186,14 +186,14 @@ class UserController {
     async getWBData(req, res) {
         const { token } = req.body
 
-        const res = await fetch(`https://statistics-api.wildberries.ru/api/v1/supplier/sales?dateFrom=2024-01-10`, {
+        const result = await fetch(`https://statistics-api.wildberries.ru/api/v1/supplier/sales?dateFrom=2024-01-10`, {
             method: 'GET',
             headers: {
                 'content-type': 'application/json',
                 'authorization': 'Bearer ' + token
             }
         })
-        const data = await res.json()
+        const data = await result.json()
 
         return res.json({ data })
     }
