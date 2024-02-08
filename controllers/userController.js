@@ -124,10 +124,14 @@ class UserController {
     async updateToken(req, res) {
         const { id } = req.params
         const { token, brandName } = req.body
-        const hashToken = await bcrypt.hash(token, 5)
         const user = await User.findOne({ where: { id } })
-        if (user) {
-            user.update({ token, brandName }, { where: { id } })
+        try {
+            const signedToken = jwt.sign({ token, brandName }, process.env.SECRET_KEY);
+            user.update({ token: signedToken });
+            res.status(200).json({ success: true, message: 'Токен успешно обновлен и сохранен.' });
+        } catch (error) {
+            console.error('Ошибка при обновлении токена:', error);
+            res.status(500).json({ success: false, message: 'Произошла ошибка при обновлении токена.' });
         }
     }
 
@@ -181,18 +185,37 @@ class UserController {
     }
 
     async getWBData(req, res) {
-        const { token } = req.body
+        const { id } = req.params
+        const { dateFrom } = req.body
 
-        const result = await fetch(`https://statistics-api.wildberries.ru/api/v1/supplier/sales?dateFrom=2024-01-10`, {
-            method: 'GET',
+        const user = await User.findOne({ where: { id } })
+        const decodedToken = jwt.decode(user.token, { complete: true })
+
+        const url = `https://statistics-api.wildberries.ru/api/v1/supplier/sales?dateFrom=${dateFrom}`
+        const config = {
             headers: {
-                'content-type': 'application/json',
-                'authorization': 'Bearer ' + token
+                Authorization: `Bearer ${decodedToken}`
             }
-        })
-        const data = await result.json()
+        }
 
-        return res.json({ data })
+        try {
+            const response = await axios.get(url, config);
+            return response.data;
+        } catch (error) {
+            console.error('Ошибка при запросе к API:', error);
+            throw error;
+        }
+
+        // const result = await fetch(`https://statistics-api.wildberries.ru/api/v1/supplier/sales?dateFrom=${dateFrom}`, {
+        //     method: 'GET',
+        //     headers: {
+        //         'content-type': 'application/json',
+        //         'authorization': 'Bearer ' + decodedToken
+        //     }
+        // })
+        // const data = await result.json()
+
+        // return res.json({ data })
     }
 
 }
