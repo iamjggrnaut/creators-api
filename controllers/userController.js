@@ -189,7 +189,7 @@ class UserController {
 
     async getWBData(req, res) {
         const { id } = req.params
-        const { dateFrom } = req.query.dateFrom
+        const { dateFrom } = req.query
 
         // const user = await User.findOne({ where: { id } })
         // const decodedToken = jwt.decode(user.token, { complete: true })
@@ -224,16 +224,16 @@ class UserController {
             const resToken = decodedToken && decodedToken.payload ? decodedToken.payload.token : null;
 
             const urls = [
-                'https://suppliers-api.wildberries.ru/api/v3/warehouses?dateFrom=2024-01-10',
-                'https://suppliers-api.wildberries.ru/api/v3/supplies?dateFrom=2024-01-10',
-                'https://suppliers-api.wildberries.ru/api/v3/supplies?dateFrom=2024-01-10',
-                'https://suppliers-api.wildberries.ru/api/v3/supplies/orders/reshipment?dateFrom=2024-01-10',
-                'https://statistics-api.wildberries.ru/api/v1/supplier/incomes?dateFrom=2024-01-10',
-                'https://statistics-api.wildberries.ru/api/v1/supplier/stocks?dateFrom=2024-01-10',
-                'https://statistics-api.wildberries.ru/api/v1/supplier/orders?dateFrom=2024-01-10',
-                'https://statistics-api.wildberries.ru/api/v1/supplier/sales?dateFrom=2024-01-10',
-                'https://statistics-api.wildberries.ru/api/v1/supplier/reportDetailByPeriod?dateFrom=2024-01-10',
-                'https://suppliers-api.wildberries.ru/public/api/v1/info'
+                `https://suppliers-api.wildberries.ru/api/v3/warehouses?dateFrom=${dateFrom}`,
+                `https://suppliers-api.wildberries.ru/api/v3/supplies?dateFrom=${dateFrom}`,
+                `https://suppliers-api.wildberries.ru/api/v3/supplies?dateFrom=${dateFrom}`,
+                `https://suppliers-api.wildberries.ru/api/v3/supplies/orders/reshipment?dateFrom=${dateFrom}`,
+                `https://statistics-api.wildberries.ru/api/v1/supplier/incomes?dateFrom=${dateFrom}`,
+                `https://statistics-api.wildberries.ru/api/v1/supplier/stocks?dateFrom=${dateFrom}`,
+                `https://statistics-api.wildberries.ru/api/v1/supplier/orders?dateFrom=${dateFrom}`,
+                `https://statistics-api.wildberries.ru/api/v1/supplier/sales?dateFrom=${dateFrom}`,
+                `https://statistics-api.wildberries.ru/api/v1/supplier/reportDetailByPeriod?dateFrom=${dateFrom}`,
+                `https://suppliers-api.wildberries.ru/public/api/v1/info`
             ];
 
             const responses = await Promise.all(
