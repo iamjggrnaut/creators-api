@@ -51,14 +51,34 @@ class UserController {
         let result = await transporter.sendMail({
             from: 'radar.analytica@mail.ru',
             to: email,
-            subject: 'Message from Node js',
-            text: 'This message was sent from Node js server.',
+            subject: 'Подтверждение регистрации',
+            text: 'Данное письмо отправлено с сервиса Radat Analytica',
             html:
-                `<p>Для подтверждения регистрации, перейдите по <a href="http://89.104.71.86:3000/confirmation/${email}/${confirmationCode}">ссылке</a>.</p>`,
+                `
+                <div style="display: flex; width: 100vw; justify-content: center;">
+                    <div style="max-width: 40vw; padding: 1rem; min-height: 500px;">
+                        <div style="background-color: white; padding: 1rem;">
+                            <h1>Здраствуйте, ${firstName}!</h1>
+                            <p style="color: #8C8C8C;">Осталось совсем чуть-чуть</p>
+                            <br>
+                            <p>Подтвердите регистрацию по ссылке:</p>
+                            <a style="color: #5329FF; font-weight: bold;" href="http://89.104.71.86:3000/confirmation/${email}/${confirmationCode}">Подтвердить</a>
+                            <br>
+                            <p>C наилучшими пожеланиями,</p>
+                            <p>Команда сервиса Radar Analytica</p>
+                        </div>
+                        <div style="background-color: lightgrey; padding: 1rem; border-radius: 4px;">
+                            <p>Вы получили это письмо, так как зарегистрировались на сайте</p>
+                            <a href="https://radar-analytica.ru">https://radar-analytica.ru</a>
+                            <br>
+                            <p>Если вы не проводили регистрацию, <span style="color: red; font-weight: 700;">не переходите по ссылке</span>. Вы так же можете обратиться в службу поддержки</p>
+                        </div>
+                    </div>
+                </div>`,
         });
 
 
-        // return res.json({ result: 'done' })
+        return res.json(null)
     }
 
     async confirm(req, res, next) {
