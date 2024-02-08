@@ -269,7 +269,7 @@ class UserController {
 
             for (let i = 0; i < urls.length; i++) {
                 try {
-                    const response = await axios.get(url, {
+                    const response = await axios.get(urls[i], {
                         headers: {
                             Authorization: `Bearer ${resToken}`
                         },
