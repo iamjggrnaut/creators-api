@@ -191,23 +191,84 @@ class UserController {
         const { id } = req.params
         const { dateFrom } = req.query.dateFrom
 
-        const user = await User.findOne({ where: { id } })
-        const decodedToken = jwt.decode(user.token, { complete: true })
-        const resToken = decodedToken && decodedToken.payload ? decodedToken.payload.token : null
+        // const user = await User.findOne({ where: { id } })
+        // const decodedToken = jwt.decode(user.token, { complete: true })
+        // const resToken = decodedToken && decodedToken.payload ? decodedToken.payload.token : null
 
-        const url = `https://statistics-api.wildberries.ru/api/v1/supplier/sales?dateFrom=${'2024-01-10'}`
-        const config = {
-            headers: {
-                Authorization: `Bearer ${resToken}`
-            }
-        }
+
+
+
+        // const url = `https://statistics-api.wildberries.ru/api/v1/supplier/sales?dateFrom=${'2024-01-10'}`
+        // const config = {
+        //     headers: {
+        //         Authorization: `Bearer ${resToken}`
+        //     }
+        // }
+
+        // try {
+        //     const response = await axios.get(url, config);
+        //     return res.json(response.data)
+        // } catch (error) {
+        //     console.error('Ошибка при запросе к API:', error);
+        //     throw error;
+        // }
+
 
         try {
-            const response = await axios.get(url, config);
-            return res.json(response.data)
+            const user = await User.findOne({ where: { id } });
+            if (!user) {
+                return res.status(404).json({ error: 'Пользователь не найден' });
+            }
+
+            const decodedToken = jwt.decode(user.token, { complete: true });
+            const resToken = decodedToken && decodedToken.payload ? decodedToken.payload.token : null;
+
+            const urls = [
+                'https://suppliers-api.wildberries.ru/api/v3/warehouses',
+                'https://suppliers-api.wildberries.ru/api/v3/supplies',
+                'https://suppliers-api.wildberries.ru/api/v3/supplies',
+                'https://suppliers-api.wildberries.ru/api/v3/supplies/orders/reshipment',
+                'https://statistics-api.wildberries.ru/api/v1/supplier/incomes',
+                'https://statistics-api.wildberries.ru/api/v1/supplier/stocks',
+                'https://statistics-api.wildberries.ru/api/v1/supplier/orders',
+                'https://statistics-api.wildberries.ru/api/v1/supplier/sales',
+                'https://statistics-api.wildberries.ru/api/v1/supplier/reportDetailByPeriod',
+                'https://suppliers-api.wildberries.ru/public/api/v1/info'
+            ];
+
+            const responses = await Promise.all(
+                urls.map(async (url) => {
+                    try {
+                        const response = await axios.get(url, {
+                            headers: {
+                                Authorization: `Bearer ${resToken}`
+                            }
+                        });
+                        return response.data;
+                    } catch (error) {
+                        console.error('Ошибка при запросе к API:', error.message);
+                        return null;
+                    }
+                })
+            );
+
+            const responseData = {
+                warehouses: responses[0],
+                supplies: responses[1],
+                resupplies: responses[2],
+                reshipmentOrders: responses[3],
+                incomes: responses[4],
+                stocks: responses[5],
+                orders: responses[6],
+                sales: responses[7],
+                reportDetailByPeriod: responses[8],
+                info: responses[9]
+            };
+
+            return res.json(responseData);
         } catch (error) {
-            console.error('Ошибка при запросе к API:', error);
-            throw error;
+            console.error('Ошибка при получении данных:', error.message);
+            return res.status(500).json({ error: 'Внутренняя ошибка сервера' });
         }
 
     }
