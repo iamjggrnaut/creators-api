@@ -58,7 +58,7 @@ class UserController {
                 <div style="display: flex; width: 100vw; justify-content: center;">
                     <div style="max-width: 100vw; padding: 1rem; min-height: 500px; background-color: white; ">
                         <div style="padding: 1rem;">
-                            <h1>Здраствуйте, ${firstName}!</h1>
+                            <h1>Здраствуйте, ${lastName}!</h1>
                             <p style="color: #8C8C8C;">Осталось совсем чуть-чуть</p>
                             <br>
                             <p>Подтвердите регистрацию по ссылке:</p>
