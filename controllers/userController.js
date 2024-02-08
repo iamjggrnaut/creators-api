@@ -190,6 +190,7 @@ class UserController {
 
         const user = await User.findOne({ where: { id } })
         const decodedToken = jwt.decode(user.token, { complete: true })
+        const resToken = decodedToken && decodedToken.payload ? decodedToken.payload.token : null
 
         console.log('---------------------');
         console.log(user);
@@ -198,10 +199,10 @@ class UserController {
         console.log('---------------------');
         console.log(id);
 
-        const url = `https://statistics-api.wildberries.ru/api/v1/supplier/sales?dateFrom=${dateFrom}`
+        const url = `https://statistics-api.wildberries.ru/api/v1/supplier/sales?dateFrom=${'2024-01-10'}`
         const config = {
             headers: {
-                Authorization: `Bearer ${decodedToken?.payload?.token}`
+                Authorization: `Bearer ${resToken}`
             }
         }
 
