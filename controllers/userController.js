@@ -98,7 +98,10 @@ class UserController {
             return next(ApiError.internal('Wrong password or email is not confirmed'))
         }
         const token = generateJWT(user.id, user.email, user.phone, user.role, user.firstName, user.lastName, user.isActive, user.image, user.patronym, user.stage, user.confirmed, user.isOnboarded, user.promoCode)
-        return res.json({ token })
+        if (user.confirmed) {
+            return res.json({ token })
+        }
+        return
     }
 
     async check(req, res) {
