@@ -166,32 +166,16 @@ class UserController {
     async getWBData(req, res) {
         const { token } = req.body
 
-        try {
-            // Выполняем запрос к API Wildberries с использованием токена
-            const response = await axios.get('https://statistics-api.wildberries.ru/api/v1/supplier/sales?dateFrom=2024-01-10', {
-                headers: {
-                    'content-type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                }
-            });
-            const data = response.data;
-            // Возвращаем данные клиенту
-            res.json(data);
-        } catch (error) {
-            console.error('Ошибка запроса к API Wildberries:', error);
-            res.status(500).json({ error: 'Ошибка запроса к API Wildberries' });
-        }
+        const res = await fetch(`https://statistics-api.wildberries.ru/api/v1/supplier/sales?dateFrom=2024-01-10`, {
+            method: 'GET',
+            headers: {
+                'content-type': 'application/json',
+                'authorization': 'Bearer ' + token
+            }
+        })
+        const data = await res.json()
 
-        // const res = await fetch(`https://statistics-api.wildberries.ru/api/v1/supplier/sales?dateFrom=2024-01-10`, {
-        //     method: 'GET',
-        //     headers: {
-        //         'content-type': 'application/json',
-        //         'authorization': 'Bearer ' + token
-        //     }
-        // })
-        // const data = await res.json()
-
-        return res.json({ token })
+        return res.json({ data })
     }
 
 }

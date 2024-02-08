@@ -11,7 +11,7 @@ const fs = require('fs')
 
 const app = express()
 
-// app.use('/static', express.static('static'))
+app.use('/static', express.static('static'))
 app.use(cors())
 
 // app.post('/api/uploadFile', upload.single('static'), (req, res) => {
