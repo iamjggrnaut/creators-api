@@ -268,20 +268,18 @@ class UserController {
             ]
 
             for (let i = 0; i < urls.length; i++) {
-                setTimeout(async () => {
-                    try {
-                        const response = await axios.get(urls[i], {
-                            headers: {
-                                Authorization: `Bearer ${resToken}`
-                            },
-                            timeout: 1000
-                        });
-                        responseData[names[i]] = response.data;
-                    } catch (error) {
-                        console.error('Ошибка при запросе к API:', error.message);
-                        responseData[names[i]] = null;
-                    }
-                }, 1000);
+                try {
+                    const response = await axios.get(urls[i], {
+                        headers: {
+                            Authorization: `Bearer ${resToken}`
+                        },
+                        timeout: 1000
+                    });
+                    responseData[names[i]] = response.data;
+                } catch (error) {
+                    console.error('Ошибка при запросе к API:', error.message);
+                    responseData[names[i]] = null;
+                }
             }
 
             return res.json(responseData);
