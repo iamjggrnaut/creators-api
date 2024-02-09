@@ -69,7 +69,7 @@ class UserController {
             subject: 'Подтверждение регистрации',
             text: 'Данное письмо отправлено с сервиса Radat Analytica',
             html:
-                `<div style="padding: 1rem; background-color: white; ">
+                `<div style="padding: 1rem; background-color: white; width: 420px;">
                         <div style="padding: 1rem;">
                             <h1>Здраствуйте, ${lastName}!</h1>
                             <p style="color: #8C8C8C;">Осталось совсем чуть-чуть</p>
@@ -81,12 +81,11 @@ class UserController {
                                 background-color: #5329FF;
                                 color: white;
                                 border-radius: 8px;
-                                width: 100%;
                                 padding: 20px 24px;
                                 margin: 10px 0;
                                 font-weight: 700;
                                 text-decoration: none;
-                                width: 380px;
+                                width: 400px;
                                 '>
                                     Подтвердить
                             </a>
