@@ -14,6 +14,10 @@ const app = express()
 app.use('/static', express.static('static'))
 app.use(cors())
 
+app.get('/logo', (req, res) => {
+    res.send('<img src="/static/logo.png" alt="Logo">');
+});
+
 // app.post('/api/uploadFile', upload.single('static'), (req, res) => {
 //     const fileType = req.file.mimetype.split('/')[1]
 //     const newName = req.file.filename + '.' + fileType
