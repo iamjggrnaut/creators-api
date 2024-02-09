@@ -83,7 +83,9 @@ class UserController {
                                 width: 100%;
                                 padding: 20px 24px;
                                 margin: 10px 0;
-                                font-weight: 700;'>
+                                font-weight: 700;
+                                text-decoration: none;
+                                '>
                                     Подтвердить
                             </a>
                             <br>
