@@ -52,7 +52,7 @@ class UserController {
         user.update({ confirmationCode: confirmationCode }, { where: { email: email } })
 
         let transporter = nodemailer.createTransport({
-            host: 'sm9.hosting.reg.ru',
+            host: 'smtp.radar-analytica.ru.',
             port: 465,
             secure: true,
             auth: {
