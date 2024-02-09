@@ -77,18 +77,8 @@ class UserController {
                             <p>Подтвердите регистрацию по ссылке:</p>
                             <a style="color: #5329FF; font-weight: bold;" href="https://radar-analytica.ru/development/confirmation/${email}/${confirmationCode}">Подтвердить</a>
                             <br>
-                            <a href="https://radar-analytica.ru/development/confirmation/${email}/${confirmationCode}" style='border: none;
-                                background-color: #5329FF;
-                                color: white;
-                                border-radius: 8px;
-                                padding: 20px 24px;
-                                margin: 10px 0;
-                                font-weight: 700;
-                                text-decoration: none;
-                                width: 400px;
-                                '>
-                                    Подтвердить
-                            </a>
+                            <a href="https://radar-analytica.ru/development/confirmation/${email}/${confirmationCode}" style='border: none;background-color: #5329FF; color: white; border-radius: 8px;padding: 20px 24px;margin: 10px 0;font-weight: 700;text-decoration: none;min-width: 400px;'>Подтвердить</a>
+                            <br>
                             <br>
                             <p>C наилучшими пожеланиями,</p>
                             <p>Команда сервиса Radar Analytica</p>
