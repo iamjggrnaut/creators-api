@@ -86,6 +86,7 @@ class UserController {
                                 margin: 10px 0;
                                 font-weight: 700;
                                 text-decoration: none;
+                                width: 380px;
                                 '>
                                     Подтвердить
                             </a>
@@ -93,7 +94,7 @@ class UserController {
                             <p>C наилучшими пожеланиями,</p>
                             <p>Команда сервиса Radar Analytica</p>
                         </div>
-                        <div style="background-color: lightgrey; padding: 1rem; border-radius: 4px;">
+                        <div style="background-color: lightgrey; padding: 1rem; border-radius: 4px; width: 400px;">
                             <p>Вы получили это письмо, так как зарегистрировались на сайте</p>
                             <a href="https://radar-analytica.ru">https://radar-analytica.ru</a>
                             <br>
