@@ -7,7 +7,8 @@ const uuid = require('uuid');
 const axios = require('axios');
 const fs = require('fs');
 
-
+const imagePath = '/static/logo.png';
+const logo = fs.readFileSync(imagePath, { encoding: 'base64' });
 
 
 async function fetchData(url, resToken) {
@@ -73,6 +74,7 @@ class UserController {
             html:
                 `<div style="padding: 1rem; background-color: white; ">
                         <div style="padding: 1rem;">
+                            <img src="data:image/svg+xml;base64,${logo}" alt="Your Image">
                             <h1>Здраствуйте, ${lastName}!</h1>
                             <p style="color: #8C8C8C;">Осталось совсем чуть-чуть</p>
                             <br>
