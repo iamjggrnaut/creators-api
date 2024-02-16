@@ -96,6 +96,59 @@ class UserController {
         return res.json(null)
     }
 
+    async restorePass(req, res, next) {
+        const { email } = req.body
+        const candidate = await User.findOne({ where: { email } })
+
+        const confirmationCode = uuid.v4();
+
+        candidate.update({ confirmationCode: confirmationCode }, { where: { email: email } })
+
+        let transporter = nodemailer.createTransport({
+            host: 'smtp.mail.ru',
+            port: 465,
+            secure: true,
+            auth: {
+                user: 'radar.analytica@mail.ru',
+                pass: 'mgKvHuuHK8xXZnt33SGM',
+            },
+        });
+
+
+        let result = await transporter.sendMail({
+            from: 'radar.analytica@mail.ru',
+            to: email,
+            subject: 'Подтверждение регистрации',
+            text: 'Данное письмо отправлено с сервиса Radat Analytica',
+            html:
+                `<div style="padding: 1rem; background-color: white; width: 420px;">
+                            <div style="padding: 1rem; width: 400px;">
+                                <h1>Восстановление пароля</h1>
+                                <p style="color: #8C8C8C;">Не переживайте, это несложно и безопасно</p>
+                                <br>
+                                <p>Здравствуйте! Для вашего аккаунта в сервисе Х создан запрос на восстановление пароля.</p>
+                                <p>Ваш логин: ${email}</p>
+                                <a style="color: #5329FF; font-weight: bold;" href="https://radar-analytica.ru/development/confirmation/${email}/${confirmationCode}">Подтвердить</a>
+                                <br>
+                                <p>Если этот запрос сделали вы, перейдите по <a href="https://radar-analytica.ru/development/restore/${email}/${confirmationCode}" style='border: none; font-weight: 700;text-decoration: none;min-width: 400px;'>данной</a> ссылке для сброса пароля. </p>
+                                <br>
+                                <br>
+                                <p>C наилучшими пожеланиями,</p>
+                                <p>Команда сервиса Radar Analytica</p>
+                            </div>
+                            <div style="background-color: lightgrey; padding: 1rem; border-radius: 4px; width: 400px;">
+                                <p>Вы получили это письмо, так как запросили восстановление пароля на сайте</p>
+                                <a href="https://radar-analytica.ru">https://radar-analytica.ru</a>
+                                <br>
+                                <p>Если вы не запрашивали такую информацию, просто игнорируйте это письмо. Вы так же можете обратиться в службу поддержки:support@gmail.com</p>
+                            </div>
+                        </div>`,
+        });
+
+
+        return res.json(null)
+    }
+
     async confirm(req, res, next) {
         const { email, code } = req.body
         const user = await User.findOne({ where: { email } })
@@ -104,6 +157,18 @@ class UserController {
         }
         return res.json({ confirmed: true })
     }
+
+    async confirmReset(req, res, next) {
+        const { email, code } = req.body
+        const user = await User.findOne({ where: { email } })
+        if (user && user.email === email && user.confirmationCode === code) {
+            user.update({ confirmed: true }, { where: { email } })
+            return res.json({ ...user.confirmed })
+        } else {
+            return res.json(null)
+        }
+    }
+
 
     async login(req, res, next) {
         const { email, password } = req.body
