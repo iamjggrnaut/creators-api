@@ -34,7 +34,7 @@ const generateJWT = (id, email, phone, stage, role, firstName, lastName, patrony
 class UserController {
 
     async register(req, res, next) {
-        const { email, password, phone, stage, role, firstName, lastName, patronym, confirmed, isOnboarded, promoCode, isActive, image, updatedAt } = req.body
+        const { email, password, phone, stage, role, firstName, lastName, patronym, confirmed, isOnboarded, promoCode, isActive, updatedAt } = req.body
         if (!email || !password) {
             return next(ApiError.badRequest('Incorrect email or password'))
         }
@@ -45,7 +45,7 @@ class UserController {
         const hashPass = await bcrypt.hash(password, 5)
         const user = await User.create({ email, phone, stage, role, firstName, lastName, patronym, confirmed, isOnboarded, promoCode, isActive, image, updatedAt, password: hashPass })
 
-        const token = generateJWT(user.id, user.email, user.role, user.firstName, user.lastName, user.isActive, user.image, user.patronym, user.stage, user.confirmed, user.isOnboarded, user.promoCode)
+        const token = generateJWT(user.id, user.email, user.role, user.firstName, user.lastName, user.isActive, user.patronym, user.stage, user.confirmed, user.isOnboarded, user.promoCode)
 
         const confirmationCode = uuid.v4();
         confirmationCodes[email] = confirmationCode;
@@ -115,7 +115,7 @@ class UserController {
         if (!comparePassword && !user.confirmed) {
             return next(ApiError.internal('Wrong password or email is not confirmed'))
         }
-        const token = generateJWT(user.id, user.email, user.phone, user.role, user.firstName, user.lastName, user.isActive, user.image, user.patronym, user.stage, user.confirmed, user.isOnboarded, user.promoCode)
+        const token = generateJWT(user.id, user.email, user.phone, user.firstName, user.lastName, user.isActive, user.patronym, user.stage, user.confirmed, user.isOnboarded, user.promoCode)
         if (user.confirmed) {
             return res.json({ token })
         }
