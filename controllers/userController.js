@@ -128,7 +128,6 @@ class UserController {
                                 <br>
                                 <p>Здравствуйте! Для вашего аккаунта в сервисе Х создан запрос на восстановление пароля.</p>
                                 <p>Ваш логин: ${email}</p>
-                                <a style="color: #5329FF; font-weight: bold;" href="https://radar-analytica.ru/development/confirmation/${email}/${confirmationCode}">Подтвердить</a>
                                 <br>
                                 <p>Если этот запрос сделали вы, перейдите по <a href="https://radar-analytica.ru/development/restore/${email}/${confirmationCode}" style='border: none; font-weight: 700;text-decoration: none;min-width: 400px;'>данной</a> ссылке для сброса пароля. </p>
                                 <br>
@@ -146,7 +145,7 @@ class UserController {
         });
 
 
-        return res.json(null)
+        return res.json({ sent: 'sent' })
     }
 
     async confirm(req, res, next) {
