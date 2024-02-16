@@ -118,7 +118,7 @@ class UserController {
         let result = await transporter.sendMail({
             from: 'radar.analytica@mail.ru',
             to: email,
-            subject: 'Подтверждение регистрации',
+            subject: 'Восстановление пароля',
             text: 'Данное письмо отправлено с сервиса Radat Analytica',
             html:
                 `<div style="padding: 1rem; background-color: white; width: 420px;">
