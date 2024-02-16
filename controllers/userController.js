@@ -151,7 +151,7 @@ class UserController {
         const user = await User.findOne({ where: { id } })
         try {
             const signedToken = jwt.sign({ token }, process.env.SECRET_KEY);
-            await User.update({ token: signedToken, brandName }, { where: { id } });
+            await User.update({ token: signedToken, brandName, isOnboarded: true }, { where: { id } });
             res.status(200).json({ success: true, message: 'Токен успешно обновлен и сохранен.' });
         } catch (error) {
             console.error('Ошибка при обновлении токена:', error);
