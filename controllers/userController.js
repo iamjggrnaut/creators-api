@@ -50,8 +50,6 @@ class UserController {
         const confirmationCode = uuid.v4();
         confirmationCodes[email] = confirmationCode;
 
-        console.log(user);
-
         user.update({ confirmationCode: confirmationCode }, { where: { email: email } })
 
         let transporter = nodemailer.createTransport({
@@ -117,6 +115,7 @@ class UserController {
         if (!comparePassword && !user.confirmed) {
             return next(ApiError.internal('Wrong password or email is not confirmed'))
         }
+        console.log(user);
         const token = generateJWT(user.id, user.email, user.phone, user.firstName, user.lastName, user.isActive, user.patronym, user.stage, user.confirmed, user.isOnboarded, user.promoCode)
         if (user.confirmed) {
             return res.json({ token })
