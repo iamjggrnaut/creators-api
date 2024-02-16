@@ -43,7 +43,7 @@ class UserController {
             return next(ApiError.badRequest('User with this email already exists'))
         }
         const hashPass = await bcrypt.hash(password, 5)
-        const user = await User.create({ email, phone, stage, role, firstName, lastName, patronym, confirmed, isOnboarded, promoCode, isActive, image, updatedAt, password: hashPass })
+        const user = await User.create({ email, phone, stage, role, firstName, lastName, patronym, confirmed, isOnboarded, promoCode, isActive, updatedAt, password: hashPass })
 
         const token = generateJWT(user.id, user.email, user.role, user.firstName, user.lastName, user.isActive, user.patronym, user.stage, user.confirmed, user.isOnboarded, user.promoCode)
 
