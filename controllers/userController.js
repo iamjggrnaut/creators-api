@@ -27,8 +27,8 @@ async function fetchData(url, resToken) {
 
 const confirmationCodes = {};
 
-const generateJWT = (id, email, phone, stage, role, firstName, lastName, patronym, confirmed, isOnboarded, promoCode, isActive, image, updatedAt) => {
-    return jwt.sign({ id, email, phone, stage, role, firstName, lastName, patronym, confirmed, isOnboarded, promoCode, isActive, image, updatedAt }, process.env.SECRET_KEY, { expiresIn: '24h' })
+const generateJWT = (id, email, phone, stage, role, firstName, lastName, patronym, confirmed, isOnboarded, promoCode, isActive, updatedAt) => {
+    return jwt.sign({ id, email, phone, stage, role, firstName, lastName, patronym, confirmed, isOnboarded, promoCode, isActive, updatedAt }, process.env.SECRET_KEY, { expiresIn: '24h' })
 }
 
 class UserController {
