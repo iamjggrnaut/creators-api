@@ -257,7 +257,7 @@ class UserController {
                         headers: {
                             Authorization: `Bearer ${resToken}`
                         },
-                        timeout: 1000
+                        timeout: 3000
                     });
                     responseData[names[i]] = response.data;
                 } catch (error) {
