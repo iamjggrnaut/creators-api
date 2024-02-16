@@ -50,6 +50,8 @@ class UserController {
         const confirmationCode = uuid.v4();
         confirmationCodes[email] = confirmationCode;
 
+        console.log(user);
+
         user.update({ confirmationCode: confirmationCode }, { where: { email: email } })
 
         let transporter = nodemailer.createTransport({
