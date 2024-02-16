@@ -216,7 +216,8 @@ class UserController {
         try {
             const signedToken = jwt.sign({ token }, process.env.SECRET_KEY);
             await User.update({ token: signedToken, brandName, isOnboarded: true }, { where: { id } });
-            res.status(200).json({ success: true, message: 'Токен успешно обновлен и сохранен.' });
+            const tkn = generateJWT(user.id, user.email, user.phone, user.stage, user.role, user.firstName, user.lastName, user.patronym, user.confirmed, user.isOnboarded, user.promoCode, user.isActive, user.updatedAt)
+            res.status(200).json({ token: tkn });
         } catch (error) {
             console.error('Ошибка при обновлении токена:', error);
             res.status(500).json({ success: false, message: 'Произошла ошибка при обновлении токена.' });
