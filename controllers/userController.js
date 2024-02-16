@@ -222,8 +222,6 @@ class UserController {
             const decodedToken = jwt.decode(user.token, { complete: true });
             const resToken = decodedToken && decodedToken.payload ? decodedToken.payload.token : null;
 
-            console.log(dateFrom);
-
             const urls = [
                 `https://suppliers-api.wildberries.ru/api/v3/warehouses`,
                 // `https://suppliers-api.wildberries.ru/api/v3/supplies?dateFrom=${dateFrom}`,
@@ -264,7 +262,7 @@ class UserController {
                     });
                     responseData[names[i]] = response.data;
                 } catch (error) {
-                    console.error('Ошибка при запросе к API:', error);
+                    console.error('Ошибка при запросе к API:', error.message);
                     responseData[names[i]] = null;
                 }
             }
