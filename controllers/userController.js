@@ -231,8 +231,14 @@ class UserController {
             user.update({ email: email })
         }
         if (password) {
-            const hashPass = await bcrypt.hash(password, 5)
-            user.update({ password: hashPass })
+            try {
+                const hashPass = await bcrypt.hash(password, 5)
+                user.update({ password: hashPass })
+                return res.status(200).json({ success: true, message: 'Пароль успешно обновлен' });
+            } catch (error) {
+                console.error('Ошибка при обновлении токена:', error);
+                res.status(500).json({ success: false, message: 'Произошла ошибка при обновлении пароля.' });
+            }
         }
         if (firstName) {
             user.update({ firstName: firstName })
