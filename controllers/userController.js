@@ -264,7 +264,7 @@ class UserController {
                     });
                     responseData[names[i]] = response.data;
                 } catch (error) {
-                    console.error('Ошибка при запросе к API:', error.message);
+                    console.error('Ошибка при запросе к API:', error);
                     responseData[names[i]] = null;
                 }
             }
