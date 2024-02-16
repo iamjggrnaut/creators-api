@@ -221,6 +221,8 @@ class UserController {
             const decodedToken = jwt.decode(user.token, { complete: true });
             const resToken = decodedToken && decodedToken.payload ? decodedToken.payload.token : null;
 
+            console.log(dateFrom);
+
             const urls = [
                 `https://suppliers-api.wildberries.ru/api/v3/warehouses?dateFrom=${dateFrom}`,
                 `https://suppliers-api.wildberries.ru/api/v3/supplies?dateFrom=${dateFrom}`,
