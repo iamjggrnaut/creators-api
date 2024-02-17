@@ -344,13 +344,13 @@ class UserController {
                 'info'
             ]
 
-            await Promise.all(urls.map(async (url, i) => {
+            dateFrom && dateTo && await Promise.all(urls.map(async (url, i) => {
                 try {
                     const response = await axios.get(url, {
                         headers: {
                             Authorization: `Bearer ${resToken}`
                         },
-                        timeout: 3000
+                        timeout: 5000
                     });
                     responseData[names[i]] = response.data;
                 } catch (error) {
