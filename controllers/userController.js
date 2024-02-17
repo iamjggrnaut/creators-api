@@ -316,8 +316,8 @@ class UserController {
 
             const urls = [
                 `https://suppliers-api.wildberries.ru/api/v3/warehouses`,
-                `https://suppliers-api.wildberries.ru/api/v3/supplies?dateFrom=${dateFrom}`,
-                `https://suppliers-api.wildberries.ru/api/v3/supplies?dateFrom=${dateFrom}`,
+                `https://suppliers-api.wildberries.ru/api/v3/supplies?dateFrom=${dateFrom}&limit=200&next=0`,
+                `https://suppliers-api.wildberries.ru/api/v3/orders/new`,
                 `https://suppliers-api.wildberries.ru/api/v3/supplies/orders/reshipment`,
                 `https://statistics-api.wildberries.ru/api/v1/supplier/incomes?dateFrom=${dateFrom}`,
                 `https://statistics-api.wildberries.ru/api/v1/supplier/stocks?dateFrom=${dateFrom}`,
