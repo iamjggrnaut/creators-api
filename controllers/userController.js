@@ -63,15 +63,25 @@ class UserController {
             },
         });
 
+        const imagePath = path.join(__dirname, '../static/logo.png');
+
 
         let result = await transporter.sendMail({
             from: 'radar.analytica@mail.ru',
             to: email,
             subject: 'Подтверждение регистрации',
             text: 'Данное письмо отправлено с сервиса Radat Analytica',
+            attachments: [
+                {
+                    filename: 'logo.png',
+                    path: imagePath,
+                    cid: 'unique-image-id' // Идентификатор изображения, используемый в HTML-коде письма
+                }
+            ],
             html:
                 `<div style="padding: 1rem; background-color: white; width: 420px;">
                         <div style="padding: 1rem; width: 400px;">
+                            <img src="cid:unique-image-id" alt="Изображение">
                             <h1>Здраствуйте, ${lastName}!</h1>
                             <p style="color: #8C8C8C;">Осталось совсем чуть-чуть</p>
                             <br>
@@ -137,7 +147,7 @@ class UserController {
                                 <h1>Восстановление пароля</h1>
                                 <p style="color: #8C8C8C;">Не переживайте, это несложно и безопасно</p>
                                 <br>
-                                <p>Здравствуйте! Для вашего аккаунта в сервисе Х создан запрос на восстановление пароля.</p>
+                                <p>Здравствуйте! Для вашего аккаунта в сервисе Radar Analytica создан запрос на восстановление пароля.</p>
                                 <p>Ваш логин: ${email}</p>
                                 <br>
                                 <p>Если этот запрос сделали вы, перейдите по <a href="https://radar-analytica.ru/development/restore/${email}/${confirmationCode}" style='border: none; font-weight: 700;text-decoration: none;min-width: 400px;'>данной</a> ссылке для сброса пароля. </p>
