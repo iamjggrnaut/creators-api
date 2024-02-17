@@ -6,6 +6,7 @@ const nodemailer = require('nodemailer');
 const uuid = require('uuid');
 const axios = require('axios');
 const fs = require('fs');
+const path = require('path');
 
 
 async function fetchData(url, resToken) {
@@ -114,7 +115,7 @@ class UserController {
             },
         });
 
-        const imagePath = '/static/logo.png';
+        const imagePath = path.join(__dirname, '../static/logo.png');
 
 
         let result = await transporter.sendMail({
