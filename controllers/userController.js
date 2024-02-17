@@ -114,7 +114,7 @@ class UserController {
             },
         });
 
-        const imagePath = '../static/logo.png';
+        const imagePath = '/static/logo.png';
 
 
         let result = await transporter.sendMail({
