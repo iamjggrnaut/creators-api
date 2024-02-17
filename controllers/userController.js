@@ -344,9 +344,9 @@ class UserController {
                 'info'
             ]
 
-            for (let i = 0; i < urls.length; i++) {
+            await Promise.all(urls.map(async (url, i) => {
                 try {
-                    const response = await axios.get(urls[i], {
+                    const response = await axios.get(url, {
                         headers: {
                             Authorization: `Bearer ${resToken}`
                         },
@@ -357,11 +357,11 @@ class UserController {
                     console.error('Ошибка при запросе к API:', error);
                     responseData[names[i]] = null;
                 }
-            }
+            }));
 
             return res.json(responseData);
         } catch (error) {
-            console.error('Ошибка при получении данных:', error.message);
+            console.error('Ошибка при получении данных:', error);
             return res.status(500).json({ error: 'Внутренняя ошибка сервера' });
         }
 
