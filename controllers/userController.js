@@ -163,6 +163,12 @@ class UserController {
                                 <p>Если вы не запрашивали такую информацию, просто игнорируйте это письмо. Вы так же можете обратиться в службу поддержки:support@gmail.com</p>
                             </div>
                         </div>`,
+        }, (error, info) => {
+            if (error) {
+                console.error('Ошибка отправки письма:', error);
+            } else {
+                console.log('Письмо отправлено успешно:', info.response);
+            }
         });
 
 
