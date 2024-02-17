@@ -114,15 +114,25 @@ class UserController {
             },
         });
 
+        const imagePath = '../static/logo.png';
+
 
         let result = await transporter.sendMail({
             from: 'radar.analytica@mail.ru',
             to: email,
             subject: 'Восстановление пароля',
             text: 'Данное письмо отправлено с сервиса Radat Analytica',
+            attachments: [
+                {
+                    filename: 'logo.png',
+                    path: imagePath,
+                    cid: 'unique-image-id' // Идентификатор изображения, используемый в HTML-коде письма
+                }
+            ],
             html:
                 `<div style="padding: 1rem; background-color: white; width: 420px;">
                             <div style="padding: 1rem; width: 400px;">
+                                <img src="cid:unique-image-id" alt="Изображение">
                                 <h1>Восстановление пароля</h1>
                                 <p style="color: #8C8C8C;">Не переживайте, это несложно и безопасно</p>
                                 <br>
