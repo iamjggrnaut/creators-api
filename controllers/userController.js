@@ -54,12 +54,12 @@ class UserController {
         user.update({ confirmationCode: confirmationCode }, { where: { email: email } })
 
         let transporter = nodemailer.createTransport({
-            host: 'smtp.mail.ru',
+            host: 'mail.hosting.reg.ru',
             port: 465,
             secure: true,
             auth: {
-                user: 'radar.analytica@mail.ru',
-                pass: 'mgKvHuuHK8xXZnt33SGM',
+                user: 'radar-analytica@radar-analytica.ru',
+                pass: 'glebarioO1!',
             },
         });
 
@@ -67,7 +67,7 @@ class UserController {
 
 
         let result = await transporter.sendMail({
-            from: 'radar.analytica@mail.ru',
+            from: 'radar-analytica@radar-analytica.ru',
             to: email,
             subject: 'Подтверждение регистрации',
             text: 'Данное письмо отправлено с сервиса Radat Analytica',
@@ -116,12 +116,12 @@ class UserController {
         candidate.update({ confirmationCode: confirmationCode }, { where: { email: email } })
 
         let transporter = nodemailer.createTransport({
-            host: 'smtp.mail.ru',
+            host: 'mail.hosting.reg.ru',
             port: 465,
             secure: true,
             auth: {
-                user: 'radar.analytica@mail.ru',
-                pass: 'mgKvHuuHK8xXZnt33SGM',
+                user: 'radar-analytica@radar-analytica.ru',
+                pass: 'glebarioO1!',
             },
         });
 
@@ -129,7 +129,7 @@ class UserController {
 
 
         let result = await transporter.sendMail({
-            from: 'radar.analytica@mail.ru',
+            from: 'radar-analytica@radar-analytica.ru',
             to: email,
             subject: 'Восстановление пароля',
             text: 'Данное письмо отправлено с сервиса Radat Analytica',
