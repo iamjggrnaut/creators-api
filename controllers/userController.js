@@ -200,9 +200,9 @@ class UserController {
         if (!comparePassword && !user.confirmed) {
             return next(ApiError.internal('Wrong password or email is not confirmed'))
         }
-        if (user) {
-            let vals = Object.values
-        }
+        // if (user) {
+        //     let vals = Object.values
+        // }
         const token = generateJWT(user.id, user.email, user.phone, user.stage, user.role, user.firstName, user.lastName, user.patronym, user.confirmed, user.isOnboarded, user.promoCode, user.isActive, user.updatedAt)
         if (user.confirmed && comparePassword) {
             return res.json({ token })
