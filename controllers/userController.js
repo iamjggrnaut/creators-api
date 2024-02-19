@@ -250,13 +250,9 @@ class UserController {
         const user = await User.findOne({ where: { email } })
         console.log(user);
         if (email && !password) {
-            console.log(password);
-            console.log('-----------------email');
             user.update({ email: email })
         }
         if (password && email) {
-            console.log('--------------password');
-            console.log(password);
             try {
                 const hashPass = await bcrypt.hash(password, 5)
                 user.update({ password: hashPass })
