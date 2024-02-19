@@ -250,6 +250,7 @@ class UserController {
         const user = await User.findOne({ where: { email } })
         console.log(user);
         if (email && !password) {
+            console.log(password);
             console.log('-----------------email');
             user.update({ email: email })
         }
