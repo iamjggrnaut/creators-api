@@ -196,7 +196,7 @@ class UserController {
             return next(ApiError.internal('User not found'))
         }
         let comparePassword = bcrypt.compareSync(password, user.password)
-        console.log(user.password);
+        console.log(comparePassword);
         if (!comparePassword) {
             res.status(500).json({ success: false, message: 'Неверный логин или пароль' })
         }
