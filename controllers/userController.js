@@ -247,7 +247,7 @@ class UserController {
 
     async updateUser(req, res) {
         const { id, email, password, phone, stage, role, firstName, lastName, patronym, confirmed, isOnboarded, promoCode, isActive, } = req.body
-        const user = await User.findOne({ where: { id } })
+        const user = await User.findOne({ where: { email } })
         if (email) {
             user.update({ email: email })
         }
