@@ -198,7 +198,7 @@ class UserController {
         }
         let comparePassword = bcrypt.compareSync(password, user.password)
         if (!comparePassword) {
-            return next(ApiError.internal('Wrong password or email is not confirmed'))
+            return res.status(500).json({ success: false, message: 'Неверный логин или пароль' });
         }
         if (user) {
             let vals = Object.values
