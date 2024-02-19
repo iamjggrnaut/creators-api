@@ -86,11 +86,9 @@ class UserController {
                             <p style="color: #8C8C8C;">Осталось совсем чуть-чуть</p>
                             <br>
                             <p>Подтвердите регистрацию:</p>
-                            <br>
                             <div style="display: flex; width: 400px; text-align: center;">
                             <a href="https://radar-analytica.ru/development/confirmation/${email}/${confirmationCode}" style='border: none; margin: 20px 0px; background-color: #5329FF; color: white; border-radius: 8px; padding: 20px 32px; font-weight: 700;text-decoration: none; width: 320px;'>Подтвердить</a>
                             </div>
-                            <br>
                             <br>
                             <p>C наилучшими пожеланиями,</p>
                             <p>Команда сервиса Radar Analytica</p>
