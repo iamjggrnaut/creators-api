@@ -251,7 +251,8 @@ class UserController {
         if (email) {
             user.update({ email: email })
         }
-        if (password) {
+        if (email && password) {
+            console.log(password);
             try {
                 const hashPass = await bcrypt.hash(password, 5)
                 user.update({ password: hashPass })
