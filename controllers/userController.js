@@ -197,7 +197,7 @@ class UserController {
             return next(ApiError.internal('User not found'))
         }
         let comparePassword = bcrypt.compareSync(password, user.password)
-        if (!comparePassword && !user.confirmed) {
+        if (!comparePassword) {
             return next(ApiError.internal('Wrong password or email is not confirmed'))
         }
         if (user) {
