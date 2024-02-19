@@ -204,7 +204,7 @@ class UserController {
             let vals = Object.values
         }
         const token = generateJWT(user.id, user.email, user.phone, user.stage, user.role, user.firstName, user.lastName, user.patronym, user.confirmed, user.isOnboarded, user.promoCode, user.isActive, user.updatedAt)
-        if (user.confirmed) {
+        if (user.confirmed && comparePassword) {
             return res.json({ token })
         }
         return
