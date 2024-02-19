@@ -248,10 +248,13 @@ class UserController {
     async updateUser(req, res) {
         const { id, email, password, phone, stage, role, firstName, lastName, patronym, confirmed, isOnboarded, promoCode, isActive, } = req.body
         const user = await User.findOne({ where: { email } })
+        console.log(user);
         if (email && !password) {
+            console.log('-----------------email');
             user.update({ email: email })
         }
         if (password && email) {
+            console.log('--------------password');
             console.log(password);
             try {
                 const hashPass = await bcrypt.hash(password, 5)
