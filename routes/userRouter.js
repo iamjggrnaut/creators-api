@@ -16,6 +16,7 @@ router.patch('/confirm', userController.confirm)
 router.patch('/confirm-reset', userController.confirmReset)
 router.post('/reset', userController.restorePass)
 router.get('/sales/:id', userController.getWBData)
+router.get('/exp/:id', userController.getTokenExp)
 // router.patch('/reset-password', userController.confirm)
 
 

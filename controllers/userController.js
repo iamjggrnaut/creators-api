@@ -368,6 +368,28 @@ class UserController {
 
     }
 
+    async getTokenExp(req, res) {
+        const { id } = req.params
+
+        try {
+            const user = await User.findOne({ where: { id } });
+            if (!user) {
+                return res.status(404).json({ error: 'Пользователь не найден' });
+            }
+
+            const decodedToken = jwt.decode(user.token, { complete: true });
+            const resToken = decodedToken && decodedToken.payload ? decodedToken.payload.token : null;
+
+            console.log(resToken);
+
+            return res.json();
+        } catch (error) {
+            console.error('Ошибка при получении данных:', error);
+            return res.status(500).json({ error: 'Внутренняя ошибка сервера' });
+        }
+
+    }
+
 }
 
 
