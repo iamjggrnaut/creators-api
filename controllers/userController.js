@@ -382,9 +382,7 @@ class UserController {
 
             let result = jwt.decode(resToken)
 
-            console.log(result);
-
-            return res.json();
+            return res.json(result?.exp);
         } catch (error) {
             console.error('Ошибка при получении данных:', error);
             return res.status(500).json({ error: 'Внутренняя ошибка сервера' });
