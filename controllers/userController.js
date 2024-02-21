@@ -74,7 +74,7 @@ class UserController {
             attachments: [
                 {
                     filename: 'logo.svg', // Имя файла может быть любым, но оно должно иметь расширение .svg
-                    content: fs.readFileSync(svgPath), // Содержимое SVG файла
+                    content: fs.readFileSync(svgPath, 'base64'), // Содержимое SVG файла
                     encoding: 'base64', // Кодировка содержимого
                     cid: 'unique-image-id'
                 }
@@ -136,7 +136,7 @@ class UserController {
             attachments: [
                 {
                     filename: 'logo.svg', // Имя файла может быть любым, но оно должно иметь расширение .svg
-                    content: fs.readFileSync(svgPath), // Содержимое SVG файла
+                    content: fs.readFileSync(svgPath, 'base64'), // Содержимое SVG файла
                     encoding: 'base64', // Кодировка содержимого
                     cid: 'unique-image-id'
                 }
