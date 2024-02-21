@@ -73,9 +73,10 @@ class UserController {
             text: 'Данное письмо отправлено с сервиса Radat Analytica',
             attachments: [
                 {
-                    filename: 'logo.png',
-                    path: imagePath,
-                    cid: 'unique-image-id' // Идентификатор изображения, используемый в HTML-коде письма
+                    filename: 'logo.svg', // Имя файла может быть любым, но оно должно иметь расширение .svg
+                    content: fs.readFileSync(svgPath), // Содержимое SVG файла
+                    encoding: 'base64', // Кодировка содержимого
+                    cid: 'unique-image-id'
                 }
             ],
             html:
@@ -134,9 +135,10 @@ class UserController {
             text: 'Данное письмо отправлено с сервиса Radat Analytica',
             attachments: [
                 {
-                    filename: 'logo.png',
-                    path: imagePath,
-                    cid: 'unique-image-id' // Идентификатор изображения, используемый в HTML-коде письма
+                    filename: 'logo.svg', // Имя файла может быть любым, но оно должно иметь расширение .svg
+                    content: fs.readFileSync(svgPath), // Содержимое SVG файла
+                    encoding: 'base64', // Кодировка содержимого
+                    cid: 'unique-image-id'
                 }
             ],
             html:
