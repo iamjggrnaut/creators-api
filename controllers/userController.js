@@ -126,16 +126,6 @@ class UserController {
 
         const imagePath = path.join(__dirname, '../static/logo.png');
 
-        const svgPath = path.join(__dirname, '../static/logo.svg');
-        const content = fs.readFileSync(svgPath, { encoding: 'base64' });
-        console.log(content);
-
-        function encodeSvgToBase64(filePath) {
-            const svgContent = fs.readFileSync(filePath, 'utf8');
-            return Buffer.from(svgContent).toString('base64');
-        }
-        const encodedSvg = encodeSvgToBase64(svgPath);
-
 
         let result = await transporter.sendMail({
             from: 'radar.analytica@mail.ru',
@@ -145,14 +135,14 @@ class UserController {
             attachments: [
                 {
                     filename: 'logo.png',
-                    path: encodedSvg,
+                    path: imagePath,
                     cid: 'unique-image-id' // Идентификатор изображения, используемый в HTML-коде письма
                 }
             ],
             html:
                 `<div style="padding: 1rem; background-color: white; width: 420px;">
                             <div style="padding: 1rem; width: 400px;">
-                                <img src="data:image/svg+xml;base64,${encodedSvg}" style="width: 200px;">
+                                <img src="cid:unique-image-id" alt="Изображение" style="width: 200px;">
                                 <h1>Восстановление пароля</h1>
                                 <p style="color: #8C8C8C;">Не переживайте, это несложно и безопасно</p>
                                 <br>
