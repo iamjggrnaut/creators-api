@@ -142,7 +142,7 @@ class UserController {
             html:
                 `<div style="padding: 1rem; background-color: white; width: 420px;">
                             <div style="padding: 1rem; width: 400px;">
-                                <img src="cid:unique-image-id" alt="Изображение">
+                                <img src="cid:unique-image-id" alt="Изображение" style="width: 200px">
                                 <h1>Восстановление пароля</h1>
                                 <p style="color: #8C8C8C;">Не переживайте, это несложно и безопасно</p>
                                 <br>
