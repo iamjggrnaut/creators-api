@@ -126,6 +126,10 @@ class UserController {
 
         const imagePath = path.join(__dirname, '../static/logo.png');
 
+        const svgPath = path.join(__dirname, '../static/logo.svg');
+        const content = fs.readFileSync(svgPath, { encoding: 'base64' });
+        console.log(content);
+
 
         let result = await transporter.sendMail({
             from: 'radar.analytica@mail.ru',
