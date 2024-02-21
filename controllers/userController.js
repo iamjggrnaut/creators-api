@@ -125,7 +125,7 @@ class UserController {
             },
         });
 
-        const imagePath = path.join(__dirname, '../static/logo.png');
+        const svgPath = path.join(__dirname, '../static/logo.svg');
 
 
         let result = await transporter.sendMail({
