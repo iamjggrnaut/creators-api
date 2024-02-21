@@ -63,7 +63,7 @@ class UserController {
             },
         });
 
-        const svgPath = path.join(__dirname, '../static/logo.svg');
+        const imagePath = path.join(__dirname, '../static/logo.png');
 
 
         let result = await transporter.sendMail({
@@ -73,10 +73,9 @@ class UserController {
             text: 'Данное письмо отправлено с сервиса Radat Analytica',
             attachments: [
                 {
-                    filename: 'logo.svg', // Имя файла может быть любым, но оно должно иметь расширение .svg
-                    content: fs.readFileSync(svgPath, 'base64'), // Содержимое SVG файла
-                    encoding: 'base64', // Кодировка содержимого
-                    cid: 'unique-image-id'
+                    filename: 'logo.png',
+                    path: imagePath,
+                    cid: 'unique-image-id' // Идентификатор изображения, используемый в HTML-коде письма
                 }
             ],
             html:
@@ -125,7 +124,7 @@ class UserController {
             },
         });
 
-        const svgPath = path.join(__dirname, '../static/logo.svg');
+        const imagePath = path.join(__dirname, '../static/logo.png');
 
 
         let result = await transporter.sendMail({
@@ -135,10 +134,9 @@ class UserController {
             text: 'Данное письмо отправлено с сервиса Radat Analytica',
             attachments: [
                 {
-                    filename: 'logo.svg', // Имя файла может быть любым, но оно должно иметь расширение .svg
-                    content: fs.readFileSync(svgPath, 'base64'), // Содержимое SVG файла
-                    encoding: 'base64', // Кодировка содержимого
-                    cid: 'unique-image-id'
+                    filename: 'logo.png',
+                    path: imagePath,
+                    cid: 'unique-image-id' // Идентификатор изображения, используемый в HTML-коде письма
                 }
             ],
             html:
