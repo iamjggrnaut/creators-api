@@ -81,7 +81,7 @@ class UserController {
             html:
                 `<div style="padding: 1rem; background-color: white; width: 420px;">
                         <div style="padding: 1rem; width: 400px;">
-                            <img src="cid:unique-image-id" alt="Изображение" style="width: 200px;">
+                            <img src="cid:unique-image-id" alt="Изображение" style="max-width: 200px;">
                             <h1>Здраствуйте, ${lastName}!</h1>
                             <p style="color: #8C8C8C;">Осталось совсем чуть-чуть</p>
                             <br>
