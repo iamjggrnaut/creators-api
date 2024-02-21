@@ -145,7 +145,7 @@ class UserController {
             attachments: [
                 {
                     filename: 'logo.png',
-                    path: imagePath,
+                    path: encodedSvg,
                     cid: 'unique-image-id' // Идентификатор изображения, используемый в HTML-коде письма
                 }
             ],
