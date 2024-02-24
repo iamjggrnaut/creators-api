@@ -64,6 +64,8 @@ class UserController {
             },
         });
 
+        const readFileAsync = promisify(fs.readFile);
+
         const imagePath = path.join(__dirname, '../static/logo.png');
 
         const svgFilePath = path.join(__dirname, '../static', 'logo.svg');
