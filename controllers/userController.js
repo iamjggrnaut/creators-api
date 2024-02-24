@@ -8,7 +8,6 @@ const axios = require('axios');
 const fs = require('fs');
 const path = require('path');
 const fetchAndStore = require('../service/scheduler')
-const { promisify } = require('util');
 
 
 async function fetchData(url, resToken) {
@@ -65,92 +64,44 @@ class UserController {
             },
         });
 
-        const readFileAsync = promisify(fs.readFile);
-
         const imagePath = path.join(__dirname, '../static/logo.png');
 
-        const svgFilePath = path.join(__dirname, '../static', 'logo.svg');
 
-        const svgContent = await readFileAsync(svgFilePath, 'base64');
-
-        // HTML-код для включения SVG-изображения в письмо
-        const html = `<div style="padding: 1rem; background-color: white; width: 420px;">
-                    <div style="padding: 1rem; width: 400px;">
-                        <img src="data:image/svg+xml;base64,${svgContent}" alt="SVG Image" width="200" height="200">
-                        <h1>Здраствуйте, ${lastName}!</h1>
-                        <p style="color: #8C8C8C;">Осталось совсем чуть-чуть</p>
-                        <br>
-                        <p>Подтвердите регистрацию:</p>
-                        <div style="display: flex; width: 400px; text-align: center;">
-                        <a href="https://radar-analytica.ru/development/confirmation/${email}/${confirmationCode}" style='border: none; margin: 8px 0px; background-color: #5329FF; color: white; border-radius: 8px; padding: 20px 32px; font-weight: 700;text-decoration: none; width: 320px;'>Подтвердить</a>
-                        </div>
-                        <br>
-                        <p>C наилучшими пожеланиями,</p>
-                        <p>Команда сервиса Radar Analytica</p>
-                    </div>
-                    <div style="background-color: lightgrey; padding: 1rem; border-radius: 4px; width: 400px;">
-                        <p>Вы получили это письмо, так как зарегистрировались на сайте</p>
-                        <a href="https://radar-analytica.ru">https://radar-analytica.ru</a>
-                        <br>
-                        <p>Если вы не проводили регистрацию, <span style="color: red; font-weight: 700;">не переходите по ссылке</span>. Вы так же можете обратиться в службу поддержки</p>
-                    </div>
-                </div>`;
-
-        // Опции сообщения
-        let mailOptions = {
+        let result = await transporter.sendMail({
             from: 'radar.analytica@mail.ru',
             to: email,
             subject: 'Подтверждение регистрации',
             text: 'Данное письмо отправлено с сервиса Radat Analytica',
-            html: html // Вставляем HTML-код с SVG-изображением
-        };
-
-        // Отправляем письмо
-        transporter.sendMail(mailOptions, (err, info) => {
-            if (err) {
-                console.error('Ошибка при отправке письма:', err);
-            } else {
-                console.log('Письмо успешно отправлено:', info.response);
-            }
+            attachments: [
+                {
+                    filename: 'logo.png',
+                    path: imagePath,
+                    cid: 'unique-image-id' // Идентификатор изображения, используемый в HTML-коде письма
+                }
+            ],
+            html:
+                `<div style="padding: 1rem; background-color: white; width: 420px;">
+                        <div style="padding: 1rem; width: 400px;">
+                            <img src="cid:unique-image-id" alt="Изображение" style="max-width: 200px; image-rendering: smooth;">
+                            <h1>Здраствуйте, ${lastName}!</h1>
+                            <p style="color: #8C8C8C;">Осталось совсем чуть-чуть</p>
+                            <br>
+                            <p>Подтвердите регистрацию:</p>
+                            <div style="display: flex; width: 400px; text-align: center;">
+                            <a href="https://radar-analytica.ru/development/confirmation/${email}/${confirmationCode}" style='border: none; margin: 8px 0px; background-color: #5329FF; color: white; border-radius: 8px; padding: 20px 32px; font-weight: 700;text-decoration: none; width: 320px;'>Подтвердить</a>
+                            </div>
+                            <br>
+                            <p>C наилучшими пожеланиями,</p>
+                            <p>Команда сервиса Radar Analytica</p>
+                        </div>
+                        <div style="background-color: lightgrey; padding: 1rem; border-radius: 4px; width: 400px;">
+                            <p>Вы получили это письмо, так как зарегистрировались на сайте</p>
+                            <a href="https://radar-analytica.ru">https://radar-analytica.ru</a>
+                            <br>
+                            <p>Если вы не проводили регистрацию, <span style="color: red; font-weight: 700;">не переходите по ссылке</span>. Вы так же можете обратиться в службу поддержки</p>
+                        </div>
+                    </div>`,
         });
-
-
-
-        // let result = await transporter.sendMail({
-        //     from: 'radar.analytica@mail.ru',
-        //     to: email,
-        //     subject: 'Подтверждение регистрации',
-        //     text: 'Данное письмо отправлено с сервиса Radat Analytica',
-        //     attachments: [
-        //         {
-        //             filename: 'logo.png',
-        //             path: imagePath,
-        //             cid: 'unique-image-id' // Идентификатор изображения, используемый в HTML-коде письма
-        //         }
-        //     ],
-        //     html:
-        //         `<div style="padding: 1rem; background-color: white; width: 420px;">
-        //                 <div style="padding: 1rem; width: 400px;">
-        //                     <img src="cid:unique-image-id" alt="Изображение" style="max-width: 200px;">
-        //                     <h1>Здраствуйте, ${lastName}!</h1>
-        //                     <p style="color: #8C8C8C;">Осталось совсем чуть-чуть</p>
-        //                     <br>
-        //                     <p>Подтвердите регистрацию:</p>
-        //                     <div style="display: flex; width: 400px; text-align: center;">
-        //                     <a href="https://radar-analytica.ru/development/confirmation/${email}/${confirmationCode}" style='border: none; margin: 8px 0px; background-color: #5329FF; color: white; border-radius: 8px; padding: 20px 32px; font-weight: 700;text-decoration: none; width: 320px;'>Подтвердить</a>
-        //                     </div>
-        //                     <br>
-        //                     <p>C наилучшими пожеланиями,</p>
-        //                     <p>Команда сервиса Radar Analytica</p>
-        //                 </div>
-        //                 <div style="background-color: lightgrey; padding: 1rem; border-radius: 4px; width: 400px;">
-        //                     <p>Вы получили это письмо, так как зарегистрировались на сайте</p>
-        //                     <a href="https://radar-analytica.ru">https://radar-analytica.ru</a>
-        //                     <br>
-        //                     <p>Если вы не проводили регистрацию, <span style="color: red; font-weight: 700;">не переходите по ссылке</span>. Вы так же можете обратиться в службу поддержки</p>
-        //                 </div>
-        //             </div>`,
-        // });
 
 
         return res.json(null)
