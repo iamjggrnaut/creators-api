@@ -1,4 +1,4 @@
-const { User } = require('../models/models')
+const { User, DataCollection } = require('../models/models')
 const ApiError = require('../error/ApiError')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
@@ -7,6 +7,7 @@ const uuid = require('uuid');
 const axios = require('axios');
 const fs = require('fs');
 const path = require('path');
+const fetchAndStore = require('../service/scheduler')
 
 
 async function fetchData(url, resToken) {
@@ -237,6 +238,7 @@ class UserController {
         try {
             const signedToken = jwt.sign({ token }, process.env.SECRET_KEY);
             await User.update({ token: signedToken, brandName, isOnboarded: true }, { where: { id } });
+            await fetchAndStore(user)
             const tkn = generateJWT(user.id, user.email, user.phone, user.stage, user.role, user.firstName, user.lastName, user.patronym, user.confirmed, user.isOnboarded, user.promoCode, user.isActive, user.updatedAt)
             res.status(200).json({ token: tkn });
         } catch (error) {
@@ -362,6 +364,19 @@ class UserController {
 
             return res.json(responseData);
         } catch (error) {
+            console.error('Ошибка при получении данных:', error);
+            return res.status(500).json({ error: 'Внутренняя ошибка сервера' });
+        }
+
+    }
+
+    async getData(req, res) {
+        const { id } = req.params;
+        try {
+            const data = await DataCollection.findOne({ where: { userId: id } })
+            return req.json(data)
+        }
+        catch (error) {
             console.error('Ошибка при получении данных:', error);
             return res.status(500).json({ error: 'Внутренняя ошибка сервера' });
         }

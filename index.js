@@ -8,6 +8,7 @@ const PORT = process.env.PORT || 5000
 const cors = require('cors')
 const router = require('./routes/index')
 const fs = require('fs')
+require('./service/scheduler');
 
 const app = express()
 

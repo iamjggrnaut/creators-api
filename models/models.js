@@ -20,7 +20,27 @@ const User = sequelize.define('user', {
     token: { type: DataTypes.TEXT, },
 })
 
+const DataCollection = sequelize.define('dataCollection', {
+    id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true }, // Идентификатор
+    userId: { type: DataTypes.INTEGER, allowNull: false }, // Поле для связи с пользователем
+    date: { type: DataTypes.DATEONLY, defaultValue: DataTypes.NOW }, // Дата записи
+    warehouses: { type: DataTypes.INTEGER }, // Склады
+    supplies: { type: DataTypes.INTEGER }, // Поставки
+    newOrders: { type: DataTypes.INTEGER }, // Новые заказы
+    reshipmentOrders: { type: DataTypes.INTEGER }, // Переотправка заказов
+    incomes: { type: DataTypes.FLOAT }, // Доходы
+    stocks: { type: DataTypes.INTEGER }, // Складские запасы
+    orders: { type: DataTypes.INTEGER }, // Заказы
+    sales: { type: DataTypes.FLOAT }, // Продажи
+    reportDetailByPeriod: { type: DataTypes.JSONB }, // Отчет по деталям за период
+    info: { type: DataTypes.JSONB } // Информация
+});
+
+// Определение связи между пользователями и собранными данными
+User.hasMany(DataCollection); // Один пользователь может иметь много записей о сборе данных
+DataCollection.belongsTo(User); // Каждая запись о сборе данных принадлежит определённому пользователю
 
 module.exports = {
-    User
-}
+    User,
+    DataCollection
+};

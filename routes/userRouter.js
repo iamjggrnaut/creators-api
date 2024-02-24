@@ -15,7 +15,7 @@ router.post('/signup', userController.register)
 router.patch('/confirm', userController.confirm)
 router.patch('/confirm-reset', userController.confirmReset)
 router.post('/reset', userController.restorePass)
-router.get('/sales/:id', authMiddleware, userController.getWBData)
+router.get('/sales/:id', authMiddleware, userController.getData)
 router.get('/exp/:id', authMiddleware, userController.getTokenExp)
 // router.patch('/reset-password', userController.confirm)
 
