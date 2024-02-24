@@ -76,7 +76,7 @@ class UserController {
         // HTML-код для включения SVG-изображения в письмо
         const html = `<div style="padding: 1rem; background-color: white; width: 420px;">
                     <div style="padding: 1rem; width: 400px;">
-                        <img src="data:image/svg+xml;base64,${svgContent}" alt="SVG Image">
+                        <img src="data:image/svg+xml;base64,${svgContent}" alt="SVG Image" width="200" height="200">
                         <h1>Здраствуйте, ${lastName}!</h1>
                         <p style="color: #8C8C8C;">Осталось совсем чуть-чуть</p>
                         <br>
