@@ -24,8 +24,8 @@ async function fetchAndStore(user) {
 
     try {
         const id = user.id
-        const dateTo = new Date(new Date().setDate(new Date().getDate())).toLocaleDateString('ru')?.split('.').reverse().join('-')
-        const dateFrom = new Date(new Date().setDate(new Date().getDate() - 92)).toLocaleDateString('ru')?.split('.').reverse().join('-')
+        const dateTo = new Date(new Date().setDate(new Date().getDate())).toLocaleDateString('ru').split('.').reverse().join('-')
+        const dateFrom = new Date(new Date().setDate(new Date().getDate() - 92)).toLocaleDateString('ru').split('.').reverse().join('-')
 
         // Поиск пользователя
         const user = await User.findOne({ where: { id } });
