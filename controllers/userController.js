@@ -66,7 +66,7 @@ class UserController {
 
         const imagePath = path.join(__dirname, '../static/logo.png');
 
-        const svgFilePath = path.join(__dirname, 'static', 'logo.svg');
+        const svgFilePath = path.join(__dirname, '../static', 'logo.svg');
 
         fs.readFile(svgFilePath, 'utf8', (err, data) => {
             if (err) {
