@@ -68,19 +68,12 @@ class UserController {
 
         const svgFilePath = path.join(__dirname, '../static', 'logo.svg');
 
-        fs.readFile(svgFilePath, 'utf8', (err, data) => {
-            if (err) {
-                console.error('Ошибка чтения файла SVG:', err);
-                return;
-            }
+        const svgContent = await readFileAsync(svgFilePath, 'base64');
 
-            // Содержимое SVG-изображения
-            const svgContent = data;
-
-            // HTML-код для включения SVG-изображения в письмо
-            const html = `<div style="padding: 1rem; background-color: white; width: 420px;">
+        // HTML-код для включения SVG-изображения в письмо
+        const html = `<div style="padding: 1rem; background-color: white; width: 420px;">
                     <div style="padding: 1rem; width: 400px;">
-                        ${svgContent}
+                        <img src="data:image/svg+xml;base64,${svgContent}" alt="SVG Image">
                         <h1>Здраствуйте, ${lastName}!</h1>
                         <p style="color: #8C8C8C;">Осталось совсем чуть-чуть</p>
                         <br>
@@ -100,24 +93,24 @@ class UserController {
                     </div>
                 </div>`;
 
-            // Опции сообщения
-            let mailOptions = {
-                from: 'radar.analytica@mail.ru',
-                to: email,
-                subject: 'Подтверждение регистрации',
-                text: 'Данное письмо отправлено с сервиса Radat Analytica',
-                html: html // Вставляем HTML-код с SVG-изображением
-            };
+        // Опции сообщения
+        let mailOptions = {
+            from: 'radar.analytica@mail.ru',
+            to: email,
+            subject: 'Подтверждение регистрации',
+            text: 'Данное письмо отправлено с сервиса Radat Analytica',
+            html: html // Вставляем HTML-код с SVG-изображением
+        };
 
-            // Отправляем письмо
-            transporter.sendMail(mailOptions, (err, info) => {
-                if (err) {
-                    console.error('Ошибка при отправке письма:', err);
-                } else {
-                    console.log('Письмо успешно отправлено:', info.response);
-                }
-            });
+        // Отправляем письмо
+        transporter.sendMail(mailOptions, (err, info) => {
+            if (err) {
+                console.error('Ошибка при отправке письма:', err);
+            } else {
+                console.log('Письмо успешно отправлено:', info.response);
+            }
         });
+
 
 
         // let result = await transporter.sendMail({
