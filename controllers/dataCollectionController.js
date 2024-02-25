@@ -33,6 +33,7 @@ function filterArrays(obj, days) {
                 });
             }
         }
+        console.log(obj[key].length);
     }
     return obj
 }
