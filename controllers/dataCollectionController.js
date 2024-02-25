@@ -13,6 +13,7 @@ class DataCollectionController {
         const { days } = req.query
         const data = await DataCollection.findOne({ where: { userId: id } })
         const filtered = filterArrays(data, days)
+        console.log(filtered);
         return res.json(filtered)
     }
 
@@ -33,7 +34,6 @@ function filterArrays(obj, days) {
                 });
             }
         }
-        console.log(obj[key].length);
     }
     return obj
 }
