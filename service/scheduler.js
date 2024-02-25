@@ -5,7 +5,7 @@ const jwt = require('jsonwebtoken')
 const axios = require('axios')
 
 // Расписание: каждый день в 00:00
-cron.schedule('0 0 * * *', async () => {
+cron.schedule('0 11 * * *', async () => {
     try {
         // Получение данных для всех пользователей
         const users = await User.findAll()
@@ -70,37 +70,40 @@ async function fetchAndStore(u, req, res) {
             'info'
         ];
 
-        // Запрос данных по URL-адресам
-        await Promise.all(urls.map(async (url, i) => {
-            try {
-                const response = await axios.get(url, {
-                    headers: {
-                        Authorization: `Bearer ${resToken}`
-                    },
-                    timeout: 62000 // Таймаут в 65 секунд
-                });
-                responseData[names[i]] = response.data;
-            } catch (error) {
-                console.error('Ошибка при запросе к API:', error);
-                responseData[names[i]] = null;
-            }
-        }));
+        if (resToken) {
+            // Запрос данных по URL-адресам
+            await Promise.all(urls.map(async (url, i) => {
+                try {
+                    const response = await axios.get(url, {
+                        headers: {
+                            Authorization: `Bearer ${resToken}`
+                        },
+                        timeout: 62000 // Таймаут в 65 секунд
+                    });
+                    responseData[names[i]] = response.data;
+                } catch (error) {
+                    console.error('Ошибка при запросе к API:', error);
+                    responseData[names[i]] = null;
+                }
+            }));
 
-        // Поиск или создание записи в таблице DataCollection
-        const [dataCollection, created] = await DataCollection.findOrCreate({
-            where: {
-                userId: id,
-            },
-            defaults: {
-                userId: id,
-                ...responseData // Данные с эндпоинтов
-            }
-        });
+            // Поиск или создание записи в таблице DataCollection
+            const [dataCollection, created] = await DataCollection.findOrCreate({
+                where: {
+                    userId: id,
+                },
+                defaults: {
+                    userId: id,
+                    ...responseData // Данные с эндпоинтов
+                }
+            });
 
-        // Если запись не была создана, обновляем существующую
-        if (!created) {
-            await dataCollection.update(responseData);
+            // Если запись не была создана, обновляем существующую
+            if (!created) {
+                await dataCollection.update(responseData);
+            }
         }
+
     } catch (error) {
         console.error('Ошибка при получении данных:', error);
     }
