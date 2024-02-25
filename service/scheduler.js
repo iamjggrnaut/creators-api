@@ -22,6 +22,8 @@ cron.schedule('0 0 * * *', async () => {
 
 async function fetchAndStore(user) {
 
+    const user = user
+
     try {
         const id = user.id
         const dateTo = new Date(new Date().setDate(new Date().getDate())).toLocaleDateString('ru').split('.').reverse().join('-')
