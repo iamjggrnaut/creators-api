@@ -1,5 +1,4 @@
 const cron = require('node-cron');
-const userController = require('../controllers/userController')
 const { User, DataCollection } = require('../models/models')
 const jwt = require('jsonwebtoken')
 const axios = require('axios')

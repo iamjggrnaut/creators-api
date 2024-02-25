@@ -4,5 +4,6 @@ const router = new Router()
 
 
 router.get('/:id', dataCollectionController.getDataCollection)
+router.get('/filtered/:id', dataCollectionController.getFilteredCollection)
 
 module.exports = router
