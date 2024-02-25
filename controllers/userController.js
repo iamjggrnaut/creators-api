@@ -72,13 +72,13 @@ class UserController {
             to: email,
             subject: 'Подтверждение регистрации',
             text: 'Данное письмо отправлено с сервиса Radat Analytica',
-            attachments: [
-                {
-                    filename: 'logo.png',
-                    path: imagePath,
-                    cid: 'unique-image-id' // Идентификатор изображения, используемый в HTML-коде письма
-                }
-            ],
+            // attachments: [
+            //     {
+            //         filename: 'logo.png',
+            //         path: imagePath,
+            //         cid: 'unique-image-id' // Идентификатор изображения, используемый в HTML-коде письма
+            //     }
+            // ],
             html:
                 `<div style="padding: 1rem; background-color: white; width: 420px;">
                         <div style="padding: 1rem; width: 400px;">
