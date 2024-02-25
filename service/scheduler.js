@@ -5,7 +5,7 @@ const jwt = require('jsonwebtoken')
 const axios = require('axios')
 
 // Расписание: каждый день в 00:00
-cron.schedule('0 11 * * *', async () => {
+cron.schedule('0 0 * * *', async () => {
     try {
         // Получение данных для всех пользователей
         const users = await User.findAll()
@@ -97,15 +97,10 @@ async function fetchAndStore(u, req, res) {
                     ...responseData // Данные с эндпоинтов
                 }
             });
-            console.log('-------------------------');
-            console.log(dataCollection);
-            console.log('-------------------------');
 
             // Если запись не была создана, обновляем существующую
             if (!created) {
                 await dataCollection.update(responseData);
-                console.log('-------------------------');
-                console.log(created);
             }
         }
 
