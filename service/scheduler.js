@@ -1,6 +1,8 @@
 const cron = require('node-cron');
 const userController = require('../controllers/userController')
-const { User } = require('../models/models')
+const { User, DataCollection } = require('../models/models')
+const jwt = require('jsonwebtoken')
+const axios = require('axios')
 
 // Расписание: каждый день в 00:00
 cron.schedule('0 0 * * *', async () => {
