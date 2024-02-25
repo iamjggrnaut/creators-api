@@ -4,3 +4,5 @@ const router = new Router()
 
 
 router.get('/', dataCollectionController.getAll)
+
+module.exports = router
