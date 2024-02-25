@@ -12,6 +12,8 @@ class DataCollectionController {
         const { id } = req.params
         const { days } = req.query
         const data = await DataCollection.findOne({ where: { userId: id } })
+        console.log(data);
+        console.log("----------------------------------------------------------");
         const filtered = filterArrays(data, days)
         console.log(filtered);
         return res.json(filtered)
