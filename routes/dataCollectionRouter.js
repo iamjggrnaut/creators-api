@@ -3,6 +3,6 @@ const dataCollectionController = require('../controllers/dataCollectionControlle
 const router = new Router()
 
 
-router.get('/', dataCollectionController.getAll)
+router.get('/:id', dataCollectionController.getDataCollection)
 
 module.exports = router

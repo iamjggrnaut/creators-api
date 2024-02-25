@@ -30,7 +30,7 @@ async function fetchData(url, resToken) {
 
 const confirmationCodes = {};
 
-const generateJWT = (id, email, phone, stage, role, firstName, lastName, patronym, confirmed, isOnboarded, promoCode, isActive, updatedAt) => {
+const generateJWT = (id, email, phone, stage, role, firstName, lastName, patronym, confirmed, isOnboarded, promoCode, isActive, updatedAt, brandName) => {
     return jwt.sign({ id, email, phone, stage, role, firstName, lastName, patronym, confirmed, isOnboarded, promoCode, isActive, updatedAt }, process.env.SECRET_KEY, { expiresIn: '24h' })
 }
 
@@ -240,7 +240,7 @@ class UserController {
             const signedToken = jwt.sign({ token }, process.env.SECRET_KEY);
             await User.update({ token: signedToken, brandName, isOnboarded: true }, { where: { id } });
             await fetchAndStore(user)
-            const tkn = generateJWT(user.id, user.email, user.phone, user.stage, user.role, user.firstName, user.lastName, user.patronym, user.confirmed, user.isOnboarded, user.promoCode, user.isActive, user.updatedAt)
+            const tkn = generateJWT(user.id, user.email, user.phone, user.stage, user.role, user.firstName, user.lastName, user.patronym, user.confirmed, user.isOnboarded, user.promoCode, user.isActive, user.updatedAt, user.brandName)
             res.status(200).json({ token: tkn });
         } catch (error) {
             console.error('Ошибка при обновлении токена:', error);
