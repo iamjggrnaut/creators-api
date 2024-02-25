@@ -28,7 +28,7 @@ const DataCollection = sequelize.define('dataCollection', {
     supplies: { type: DataTypes.JSONB }, // Поставки
     newOrders: { type: DataTypes.JSONB }, // Новые заказы
     reshipmentOrders: { type: DataTypes.JSONB }, // Переотправка заказов
-    incomes: { type: DataTypes.FLOAT }, // Доходы
+    incomes: { type: DataTypes.JSONB }, // Доходы
     stocks: { type: DataTypes.JSONB }, // Складские запасы
     orders: { type: DataTypes.JSONB }, // Заказы
     sales: { type: DataTypes.JSONB }, // Продажи
