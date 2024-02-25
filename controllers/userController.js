@@ -8,6 +8,7 @@ const axios = require('axios');
 const fs = require('fs');
 const path = require('path');
 const { fetchAndStore } = require('../service/scheduler')
+const Queue = require('bull');
 
 
 async function fetchData(url, resToken) {

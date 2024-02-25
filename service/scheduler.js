@@ -97,10 +97,15 @@ async function fetchAndStore(u, req, res) {
                     ...responseData // Данные с эндпоинтов
                 }
             });
+            console.log('-------------------------');
+            console.log(dataCollection);
+            console.log('-------------------------');
 
             // Если запись не была создана, обновляем существующую
             if (!created) {
                 await dataCollection.update(responseData);
+                console.log('-------------------------');
+                console.log(created);
             }
         }
 
