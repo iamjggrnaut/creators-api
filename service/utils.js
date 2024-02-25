@@ -1,4 +1,4 @@
-export function filterArrays(obj, days) {
+function filterArrays(obj, days) {
     for (let key in obj) {
         if (Array.isArray(obj[key] && key !== 'warehouses')) {
             if (obj[key].length) {
@@ -12,3 +12,6 @@ export function filterArrays(obj, days) {
     }
     return obj
 }
+
+
+module.exports = { filterArrays }
