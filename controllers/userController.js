@@ -7,7 +7,7 @@ const uuid = require('uuid');
 const axios = require('axios');
 const fs = require('fs');
 const path = require('path');
-const fetchAndStore = require('../service/scheduler')
+const { fetchAndStore } = require('../service/scheduler')
 
 
 async function fetchData(url, resToken) {
