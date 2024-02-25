@@ -24,14 +24,14 @@ const DataCollection = sequelize.define('dataCollection', {
     id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true }, // Идентификатор
     userId: { type: DataTypes.INTEGER, allowNull: false }, // Поле для связи с пользователем
     date: { type: DataTypes.DATEONLY, defaultValue: DataTypes.NOW }, // Дата записи
-    warehouses: { type: DataTypes.INTEGER }, // Склады
-    supplies: { type: DataTypes.INTEGER }, // Поставки
-    newOrders: { type: DataTypes.INTEGER }, // Новые заказы
-    reshipmentOrders: { type: DataTypes.INTEGER }, // Переотправка заказов
+    warehouses: { type: DataTypes.JSONB }, // Склады
+    supplies: { type: DataTypes.JSONB }, // Поставки
+    newOrders: { type: DataTypes.JSONB }, // Новые заказы
+    reshipmentOrders: { type: DataTypes.JSONB }, // Переотправка заказов
     incomes: { type: DataTypes.FLOAT }, // Доходы
-    stocks: { type: DataTypes.INTEGER }, // Складские запасы
-    orders: { type: DataTypes.INTEGER }, // Заказы
-    sales: { type: DataTypes.FLOAT }, // Продажи
+    stocks: { type: DataTypes.JSONB }, // Складские запасы
+    orders: { type: DataTypes.JSONB }, // Заказы
+    sales: { type: DataTypes.JSONB }, // Продажи
     reportDetailByPeriod: { type: DataTypes.JSONB }, // Отчет по деталям за период
     info: { type: DataTypes.JSONB } // Информация
 });
