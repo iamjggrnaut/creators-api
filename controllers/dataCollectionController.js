@@ -1,4 +1,5 @@
 const { User, DataCollection } = require('../models/models')
+const { filterArrays } = require('../service/utils')
 
 class DataCollectionController {
 
@@ -21,19 +22,3 @@ class DataCollectionController {
 
 
 module.exports = new DataCollectionController()
-
-
-function filterArrays(obj, days) {
-    for (let key in obj) {
-        if (Array.isArray(obj[key])) {
-            if (obj[key].length) {
-                obj[key] = obj[key].filter(item => {
-                    const date = item.date ? new Date(item.date) : item.lastChangeDate ? new Date(item.lastChangeDate) : new Date(item.create_dt);
-                    const weekAgo = new Date(Date.now() - days * 24 * 60 * 60 * 1000);
-                    return date >= weekAgo;
-                });
-            }
-        }
-    }
-    return obj
-}
