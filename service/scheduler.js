@@ -22,7 +22,7 @@ cron.schedule('0 0 * * *', async () => {
 });
 
 
-async function fetchAndStore(u) {
+async function fetchAndStore(u, req, res) {
 
 
     try {
@@ -101,11 +101,8 @@ async function fetchAndStore(u) {
         if (!created) {
             await dataCollection.update(responseData);
         }
-
-        return res.json(responseData); // Возвращаем полученные данные
     } catch (error) {
         console.error('Ошибка при получении данных:', error);
-        return res.status(500).json({ error: 'Внутренняя ошибка сервера' });
     }
 }
 
