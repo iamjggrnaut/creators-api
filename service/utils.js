@@ -79,41 +79,34 @@ function calculateOrders(data, days) {
 
 function calculateReturn(data, days) {
 
-    data = data.filter(item => item.sale_dt && item.return_amount)
+    data = data.filter(item => item.sale_dt && item.return_amount !== null && item.delivery_amount !== null)
 
     const currentDate = new Date();
-    const lastDaysDate = new Date(currentDate);
-    lastDaysDate.setDate(lastDaysDate.getDate() - days);
-    const previousDaysDate = new Date(lastDaysDate);
-    previousDaysDate.setDate(previousDaysDate.getDate() - days);
-    const lastDays = getDatesInInterval(lastDaysDate, currentDate);
-    const previousDays = getDatesInInterval(previousDaysDate, lastDaysDate);
+    const previousDate = new Date(currentDate);
+    previousDate.setDate(previousDate.getDate() - days);
 
-    const dataInLastDays = data.filter(item => {
-        const itemDate = new Date(item.sale_dt);
-        return lastDays.some(date => dateMatches(itemDate, date));
-    });
+    // Фильтруем данные по текущему и предыдущему периодам
+    const currentPeriodData = data.filter(item => new Date(item.sale_dt) >= previousDate && new Date(item.sale_dt) <= currentDate);
+    const previousPeriodData = data.filter(item => new Date(item.sale_dt) < previousDate);
 
-    const dataInPreviousDays = data.filter(item => {
-        const itemDate = new Date(item.sale_dt);
-        return previousDays.some(date => dateMatches(itemDate, date));
-    });
+    // Подсчет суммы возвратов и их количества для текущего периода
+    const currentReturnsSum = currentPeriodData.reduce((total, item) => total + item.return_amount * item.retail_price, 0);
+    const currentReturnsCount = currentPeriodData.reduce((total, item) => total + item.return_amount, 0);
 
-    const getTotalReturn = data => data.reduce((total, item) => total + item.retail_price * item.return_amount, 0);
-    const totalReturnInLastDays = getTotalReturn(dataInLastDays);
-    const totalReturnInPreviousDays = getTotalReturn(dataInPreviousDays);
+    // Подсчет суммы возвратов и их количества для предыдущего периода
+    const previousReturnsSum = previousPeriodData.reduce((total, item) => total + item.return_amount * item.retail_price, 0);
+    const previousReturnsCount = previousPeriodData.reduce((total, item) => total + item.return_amount, 0);
 
-    const totalReturnQuantityInLastDays = dataInLastDays.reduce((total, item) => total + item.return_amount, 0);
-    const totalReturnQuantityInPreviousDays = dataInPreviousDays.reduce((total, item) => total + item.return_amount, 0);
+    // Подсчет доли роста суммы возвратов и количества возвратов
+    const returnsSumGrowth = ((currentReturnsSum - previousReturnsSum) / previousReturnsSum) * 100;
+    const returnsCountGrowth = ((currentReturnsCount - previousReturnsCount) / previousReturnsCount) * 100;
 
-    const percentReturnQuantityChange = ((totalReturnQuantityInLastDays - totalReturnQuantityInPreviousDays) / totalReturnQuantityInPreviousDays) * 100;
-    const percentReturnSumChange = ((totalReturnInLastDays - totalReturnInPreviousDays) / totalReturnInPreviousDays) * 100;
-
+    // Возвращаем результаты
     return {
-        sum: totalReturnInLastDays.toFixed(2),
-        amount: totalReturnQuantityInLastDays,
-        percentAmount: percentReturnQuantityChange.toFixed(2),
-        percentSum: percentReturnSumChange.toFixed(2),
+        currentReturnsSum,
+        currentReturnsCount,
+        returnsSumGrowth,
+        returnsCountGrowth
     };
 }
 
