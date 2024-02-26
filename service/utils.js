@@ -159,12 +159,12 @@ function calculateCanceled(data, days) {
         return previousDays.some(date => dateMatches(itemDate, date));
     });
 
-    const canceledInLastDays = data.filter(item => {
+    const canceledInLastDays = canceled.filter(item => {
         const itemDate = new Date(item.date);
         return lastDays.some(date => dateMatches(itemDate, date));
     });
 
-    const canceledInPreviousDays = data.filter(item => {
+    const canceledInPreviousDays = canceled.filter(item => {
         const itemDate = new Date(item.date);
         return previousDays.some(date => dateMatches(itemDate, date));
     });

@@ -18,8 +18,8 @@ class DataCollectionController {
         let content = {
             orderStat: calculateOrders(data.orders, days),
             salesStat: calculateOrders(data.sales, days),
-            returned: calculateReturn(data.reportDetailByPeriod),
-            buyout: calculateCanceled(data.orders),
+            returned: calculateReturn(data.reportDetailByPeriod, days),
+            buyout: calculateCanceled(data.orders, days),
             averageCheck: null,
             chartData: null,
             initialPrice: null,
