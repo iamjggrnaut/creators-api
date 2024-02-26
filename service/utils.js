@@ -117,36 +117,49 @@ function calculateReturn(data, days) {
     };
 }
 
-function calculateBuyout(data, days) {
+function calculateBuyout(orders, days) {
 
-    const currentDate = new Date();
-    const lastDaysDate = new Date(currentDate);
-    lastDaysDate.setDate(lastDaysDate.getDate() - days);
-    const previousDaysDate = new Date(lastDaysDate);
-    previousDaysDate.setDate(previousDaysDate.getDate() - days);
-    const lastDays = getDatesInInterval(lastDaysDate, currentDate);
-    const previousDays = getDatesInInterval(previousDaysDate, lastDaysDate);
+    const totalOrders = orders.length;
 
-    const dataInLastDays = data.filter(item => {
-        const itemDate = new Date(item.date);
-        return lastDays.some(date => dateMatches(itemDate, date));
+    // Подсчет количества отмененных заказов
+    const canceledOrders = orders.filter(order => order.isCancel === true);
+    const canceledOrdersCount = canceledOrders.length;
+
+    // Вычисление доли выкупа
+    const purchaseRate = (totalOrders - canceledOrdersCount) / totalOrders;
+
+    // Получение доли выкупа для текущего периода
+    const currentPeriodOrders = orders.filter(order => {
+        const orderDate = new Date(order.date);
+        const currentDate = new Date();
+        const daysAgo = new Date(currentDate.setDate(currentDate.getDate() - days));
+        return orderDate >= daysAgo && orderDate <= new Date();
     });
 
-    const dataInPreviousDays = data.filter(item => {
-        const itemDate = new Date(item.date);
-        return previousDays.some(date => dateMatches(itemDate, date));
+    const totalCurrentPeriodOrders = currentPeriodOrders.length;
+    const canceledCurrentPeriodOrders = currentPeriodOrders.filter(order => order.isCancel === true).length;
+    const purchaseRateCurrentPeriod = (totalCurrentPeriodOrders - canceledCurrentPeriodOrders) / totalCurrentPeriodOrders;
+
+    // Получение доли выкупа для предыдущего периода
+    const previousPeriodOrders = orders.filter(order => {
+        const orderDate = new Date(order.date);
+        const currentDate = new Date();
+        const daysAgo = new Date(currentDate.setDate(currentDate.getDate() - (2 * days)));
+        const daysBeforeAgo = new Date(currentDate.setDate(currentDate.getDate() - days));
+        return orderDate >= daysAgo && orderDate <= daysBeforeAgo;
     });
 
-    const totalItemsInLastDays = dataInLastDays.length;
-    const totalItemsInPreviousDays = dataInPreviousDays.length;
+    const totalPreviousPeriodOrders = previousPeriodOrders.length;
+    const canceledPreviousPeriodOrders = previousPeriodOrders.filter(order => order.isCancel === true).length;
+    const purchaseRatePreviousPeriod = (totalPreviousPeriodOrders - canceledPreviousPeriodOrders) / totalPreviousPeriodOrders;
 
-    const purchaseShare = (totalItemsInLastDays / totalItemsInPreviousDays) * 100;
+    // Вычисление процентного роста
+    const percentGrowth = ((purchaseRateCurrentPeriod - purchaseRatePreviousPeriod) / purchaseRatePreviousPeriod) * 100;
 
-    const percentGrowth = ((totalItemsInLastDays - totalItemsInPreviousDays) / totalItemsInPreviousDays) * 100;
-
+    // Возвращаем результаты
     return {
-        purchaseShare: purchaseShare.toFixed(2),
-        percentGrowth: percentGrowth.toFixed(2),
+        purchaseRate: purchaseRate.toFixed(2),
+        percentGrowth: percentGrowth.toFixed(2)
     };
 }
 
