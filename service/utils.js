@@ -79,20 +79,15 @@ function calculateOrders(data, days) {
 
 function calculateReturn(data, days) {
 
+    data = data.filter(item => item.sale_dt)
+
     const currentDate = new Date();
-    // Получение даты 14 дней назад
     const lastDaysDate = new Date(currentDate);
     lastDaysDate.setDate(lastDaysDate.getDate() - days);
-    // Получение даты 28 дней назад (предыдущие days дней)
     const previousDaysDate = new Date(lastDaysDate);
     previousDaysDate.setDate(previousDaysDate.getDate() - days);
-    // Получение всех дней в последних 14 днях и предыдущих 14 днях
     const lastDays = getDatesInInterval(lastDaysDate, currentDate);
     const previousDays = getDatesInInterval(previousDaysDate, lastDaysDate);
-
-    function dateMatches(date1, date2) {
-        return date1.toISOString().split('T')[0] === date2.toISOString().split('T')[0];
-    }
 
     const dataInLastDays = data.filter(item => {
         const itemDate = new Date(item.sale_dt);
@@ -104,50 +99,33 @@ function calculateReturn(data, days) {
         return previousDays.some(date => dateMatches(itemDate, date));
     });
 
-    function getTotalCostInPeriod(data) {
-        return data.reduce((total, item) => total + (item.retail_price * item.return_amount), 0);
-    }
+    const getTotalReturn = data => data.reduce((total, item) => total + item.retail_price * item.return_amount, 0);
+    const totalReturnInLastDays = getTotalReturn(dataInLastDays);
+    const totalReturnInPreviousDays = getTotalReturn(dataInPreviousDays);
 
-    const totalCostInLastDays = getTotalCostInPeriod(dataInLastDays);
-    const totalCostInPreviousDays = getTotalCostInPeriod(dataInPreviousDays);
-    const percentPriceChange = ((totalCostInLastDays - totalCostInPreviousDays) / totalCostInPreviousDays) * 100;
-    const percentAmountChange = ((dataInLastDays.length - dataInPreviousDays.length) / dataInPreviousDays.length) * 100;
+    const totalReturnQuantityInLastDays = dataInLastDays.reduce((total, item) => total + item.return_amount, 0);
+    const totalReturnQuantityInPreviousDays = dataInPreviousDays.reduce((total, item) => total + item.return_amount, 0);
 
-    let amount = dataInLastDays.length
-    let priceArrayCurrent = dataInLastDays.map(item => (item.retail_price * item.return_amount))
-    let sum = priceArrayCurrent.reduce((a, b) => a + b, 0)
-
-    const revenueIncrease = (totalCostInLastDays - totalCostInPreviousDays) / lastDays.length;
-    const amountIncrease = (dataInLastDays.length - dataInPreviousDays.length) / lastDays.length;
+    const percentReturnQuantityChange = ((totalReturnQuantityInLastDays - totalReturnQuantityInPreviousDays) / totalReturnQuantityInPreviousDays) * 100;
+    const percentReturnSumChange = ((totalReturnInLastDays - totalReturnInPreviousDays) / totalReturnInPreviousDays) * 100;
 
     return {
-        amount: amount,
-        sum: sum,
-        sumPercent: percentPriceChange.toFixed(2),
-        amountPercent: percentAmountChange.toFixed(2),
-        revenueIncrese: revenueIncrease,
-        amountIncrese: amountIncrease,
-    }
+        sum: totalReturnInLastDays.toFixed(2),
+        amount: totalReturnQuantityInLastDays,
+        percentAmount: percentReturnQuantityChange.toFixed(2),
+        percentSum: percentReturnSumChange.toFixed(2),
+    };
 }
 
-function calculateCanceled(data, days) {
+function calculateBuyout(data, days) {
 
     const currentDate = new Date();
-    // Получение даты 14 дней назад
     const lastDaysDate = new Date(currentDate);
     lastDaysDate.setDate(lastDaysDate.getDate() - days);
-    // Получение даты 28 дней назад (предыдущие days дней)
     const previousDaysDate = new Date(lastDaysDate);
     previousDaysDate.setDate(previousDaysDate.getDate() - days);
-    // Получение всех дней в последних 14 днях и предыдущих 14 днях
     const lastDays = getDatesInInterval(lastDaysDate, currentDate);
     const previousDays = getDatesInInterval(previousDaysDate, lastDaysDate);
-
-    function dateMatches(date1, date2) {
-        return date1.toISOString().split('T')[0] === date2.toISOString().split('T')[0];
-    }
-
-    const canceled = data.filter(i => i.isCancel === true)
 
     const dataInLastDays = data.filter(item => {
         const itemDate = new Date(item.date);
@@ -159,41 +137,17 @@ function calculateCanceled(data, days) {
         return previousDays.some(date => dateMatches(itemDate, date));
     });
 
-    const canceledInLastDays = canceled.filter(item => {
-        const itemDate = new Date(item.date);
-        return lastDays.some(date => dateMatches(itemDate, date));
-    });
+    const totalItemsInLastDays = dataInLastDays.length;
+    const totalItemsInPreviousDays = dataInPreviousDays.length;
 
-    const canceledInPreviousDays = canceled.filter(item => {
-        const itemDate = new Date(item.date);
-        return previousDays.some(date => dateMatches(itemDate, date));
-    });
+    const purchaseShare = (totalItemsInLastDays / totalItemsInPreviousDays) * 100;
 
-    function getTotalCostInPeriod(data) {
-        return data.reduce((total, item) => total + item.finishedPrice, 0);
-    }
-
-    const totalCostInLastDays = getTotalCostInPeriod(dataInLastDays);
-    const totalCanceledCostInLastDays = getTotalCostInPeriod(canceledInLastDays);
-    const totalCostInPreviousDays = getTotalCostInPeriod(dataInPreviousDays);
-    const totalCanceledCostInPrevDays = getTotalCostInPeriod(canceledInPreviousDays);
-    // const percentPriceChange = ((totalCostInLastDays - totalCostInPreviousDays) / totalCostInPreviousDays) * 100;
-    // const percentAmountChange = ((dataInLastDays.length - dataInPreviousDays.length) / dataInPreviousDays.length) * 100;
-
-    // let amount = dataInLastDays.length
-    let priceArrayCurrent = dataInLastDays.map(item => item.finishedPrice)
-    let canceledPriceArrayCurrent = canceledInLastDays.map(item => item.finishedPrice)
-
-    let sumOrders = priceArrayCurrent.reduce((a, b) => a + b, 0)
-    let sumCanceled = canceledPriceArrayCurrent.reduce((a, b) => a + b, 0)
-    let buyoutPercent = sumCanceled / (sumOrders / 100)
-
-    const revenueIncrease = (totalCanceledCostInLastDays - totalCanceledCostInPrevDays) / lastDays.length;
+    const percentGrowth = ((totalItemsInLastDays - totalItemsInPreviousDays) / totalItemsInPreviousDays) * 100;
 
     return {
-        buyoutPercent,
-        revenueIncrease
-    }
+        purchaseShare: purchaseShare.toFixed(2),
+        percentGrowth: percentGrowth.toFixed(2),
+    };
 }
 
 
@@ -201,5 +155,5 @@ module.exports = {
     filterArrays,
     calculateOrders,
     calculateReturn,
-    calculateCanceled
+    calculateBuyout
 }

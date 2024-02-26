@@ -1,5 +1,5 @@
 const { User, DataCollection } = require('../models/models')
-const { filterArrays, calculateOrders, calculateReturn, calculateCanceled } = require('../service/utils')
+const { filterArrays, calculateOrders, calculateReturn, calculateBuyout } = require('../service/utils')
 
 class DataCollectionController {
 
@@ -19,7 +19,7 @@ class DataCollectionController {
             orderStat: calculateOrders(data.orders, days),
             salesStat: calculateOrders(data.sales, days),
             returned: calculateReturn(data.reportDetailByPeriod, days),
-            buyout: calculateCanceled(data.orders, days),
+            buyout: null,
             averageCheck: null,
             chartData: null,
             initialPrice: null,
