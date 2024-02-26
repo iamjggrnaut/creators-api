@@ -52,7 +52,7 @@ class DataCollectionController {
         }
         // const filtered = filterArrays(data.dataValues, days)
         // console.log(filtered);
-        return res.json({ ...data.dataValues, ...content })
+        return res.json({ ...data.dataValues, content: content })
     }
 
 }
