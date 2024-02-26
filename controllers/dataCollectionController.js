@@ -1,5 +1,5 @@
 const { User, DataCollection } = require('../models/models')
-const { filterArrays, calculateOrders } = require('../service/utils')
+const { filterArrays, calculateOrders, calculateReturn, calculateCanceled } = require('../service/utils')
 
 class DataCollectionController {
 
@@ -13,11 +13,13 @@ class DataCollectionController {
         const { id } = req.params
         const { days } = req.query
 
+        const data = await DataCollection.findOne({ where: { userId: id } })
+
         let content = {
-            orders: null,
-            sales: null,
-            returned: null,
-            buyout: null,
+            orderStat: calculateOrders(data.orders, days),
+            salesStat: calculateOrders(data.sales, days),
+            returned: calculateReturn(data.reportDetailByPeriod),
+            buyout: calculateCanceled(data.orders),
             averageCheck: null,
             chartData: null,
             initialPrice: null,
@@ -48,12 +50,9 @@ class DataCollectionController {
             logisticsFromProfit: null,
             abcAnalysis: null,
         }
-
-        const data = await DataCollection.findOne({ where: { userId: id } })
-        const stats = calculateOrders(data.orders, days)
         // const filtered = filterArrays(data.dataValues, days)
         // console.log(filtered);
-        return res.json({ ...data.dataValues, stats })
+        return res.json({ ...data.dataValues, ...content })
     }
 
 }
