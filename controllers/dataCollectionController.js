@@ -50,7 +50,7 @@ class DataCollectionController {
         }
 
         const data = await DataCollection.findOne({ where: { userId: id } })
-        const stats = calculateOrders(data, days)
+        const stats = calculateOrders(data.orders, days)
         // const filtered = filterArrays(data.dataValues, days)
         // console.log(filtered);
         return res.json({ data, stats })
