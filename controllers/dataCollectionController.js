@@ -19,7 +19,7 @@ class DataCollectionController {
             orderStat: calculateOrders(data.orders, days),
             salesStat: calculateOrders(data.sales, days),
             returned: calculateReturn(data.reportDetailByPeriod, days),
-            buyout: calculateBuyout(),
+            buyout: calculateBuyout(data.orders, days),
             averageCheck: null,
             chartData: null,
             initialPrice: null,
