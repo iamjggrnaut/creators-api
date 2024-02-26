@@ -53,7 +53,7 @@ class DataCollectionController {
         const stats = calculateOrders(data.orders, days)
         // const filtered = filterArrays(data.dataValues, days)
         // console.log(filtered);
-        return res.json({ data, stats })
+        return res.json({ ...data, stats })
     }
 
 }
