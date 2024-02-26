@@ -79,23 +79,21 @@ function calculateOrders(data, days) {
 
 function calculateReturn(data, days) {
 
-    data = data.filter(item => item.sale_dt && item.return_amount !== null && item.delivery_amount !== null)
-
     const currentDate = new Date();
     const previousDate = new Date(currentDate);
     previousDate.setDate(previousDate.getDate() - days);
 
     // Фильтруем данные по текущему и предыдущему периодам
-    const currentPeriodData = data.filter(item => new Date(item.sale_dt) >= previousDate && new Date(item.sale_dt) <= currentDate);
-    const previousPeriodData = data.filter(item => new Date(item.sale_dt) < previousDate);
+    const currentPeriodData = data.filter(item => new Date(item.date) >= previousDate && new Date(item.date) <= currentDate);
+    const previousPeriodData = data.filter(item => new Date(item.date) < previousDate);
 
     // Подсчет суммы возвратов и их количества для текущего периода
-    const currentReturnsSum = currentPeriodData.reduce((total, item) => total + item.return_amount * item.retail_price, 0);
-    const currentReturnsCount = currentPeriodData.reduce((total, item) => total + item.return_amount, 0);
+    const currentReturnsSum = currentPeriodData.reduce((total, item) => total + (item.isCancel ? item.finishedPrice : 0), 0);
+    const currentReturnsCount = currentPeriodData.filter(item => item.isCancel).length;
 
     // Подсчет суммы возвратов и их количества для предыдущего периода
-    const previousReturnsSum = previousPeriodData.reduce((total, item) => total + item.return_amount * item.retail_price, 0);
-    const previousReturnsCount = previousPeriodData.reduce((total, item) => total + item.return_amount, 0);
+    const previousReturnsSum = previousPeriodData.reduce((total, item) => total + (item.isCancel ? item.finishedPrice : 0), 0);
+    const previousReturnsCount = previousPeriodData.filter(item => item.isCancel).length;
 
     // Подсчет доли роста суммы возвратов и количества возвратов
     const returnsSumGrowth = ((currentReturnsSum - previousReturnsSum) / previousReturnsSum) * 100;
