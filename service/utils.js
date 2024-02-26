@@ -79,7 +79,7 @@ function calculateOrders(data, days) {
 
 function calculateReturn(data, days) {
 
-    data = data.filter(item => item.sale_dt || item.return_amount)
+    data = data.filter(item => item.sale_dt || (item.return_amount && item.retail_price))
 
     const currentDate = new Date();
     const lastDaysDate = new Date(currentDate);
