@@ -79,7 +79,7 @@ function calculateOrders(data, days) {
 
 function calculateReturn(data, days) {
 
-    data = data.filter(item => item.sale_dt)
+    data = data.filter(item => item.sale_dt || item.return_amount)
 
     const currentDate = new Date();
     const lastDaysDate = new Date(currentDate);
@@ -138,10 +138,7 @@ function calculateBuyout(orders, days) {
 
     const totalCurrentPeriodOrders = currentPeriodOrders.length;
     const canceledCurrentPeriodOrders = currentPeriodOrders.filter(order => order.isCancel === true).length;
-    console.log(totalCurrentPeriodOrders);
-    console.log(canceledCurrentPeriodOrders);
     const purchaseRateCurrentPeriod = (totalCurrentPeriodOrders - canceledCurrentPeriodOrders) / (totalCurrentPeriodOrders || 1);
-    console.log(purchaseRateCurrentPeriod);
 
     // Получение доли выкупа для предыдущего периода
     const previousPeriodOrders = orders.filter(order => {
@@ -155,10 +152,6 @@ function calculateBuyout(orders, days) {
     const totalPreviousPeriodOrders = previousPeriodOrders.length;
     const canceledPreviousPeriodOrders = previousPeriodOrders.filter(order => order.isCancel === true).length;
     const purchaseRatePreviousPeriod = (totalPreviousPeriodOrders - canceledPreviousPeriodOrders) / (totalPreviousPeriodOrders || 1);
-    console.log('_________________________________');
-    console.log(totalPreviousPeriodOrders);
-    console.log(canceledPreviousPeriodOrders);
-    console.log(purchaseRatePreviousPeriod);
 
     // Вычисление процентного роста
     const percentGrowth = ((purchaseRateCurrentPeriod - purchaseRatePreviousPeriod) / (purchaseRatePreviousPeriod || 1)) * 100;
