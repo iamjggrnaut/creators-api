@@ -445,7 +445,7 @@ function calculatePurchasePercentage(sales, report, days) {
     });
 
     // Считаем общее количество проданных товаров за указанный период
-    const totalSalesAmount = salesInPeriod.reduce((total, sale) => total + sale.quantity, 0);
+    const totalSalesAmount = salesInPeriod.length;
 
     // Считаем общее количество возвратов за указанный период
     const totalReturnAmount = report
@@ -531,7 +531,10 @@ function calculateGrossProfit(salesData, deliveryData, days) {
     // Вычисляем валовую прибыль
     const grossProfit = totalSalesCost - totalDeliveryCost;
 
-    return (grossProfit / totalSalesCost) * 100;
+    return {
+        percent: (grossProfit / totalSalesCost) * 100,
+        amount: grossProfit
+    };
 }
 
 function calculateToClients(data, days) {
@@ -679,8 +682,87 @@ const abcAnalysis = (products) => {
     }
 }
 
+function calculateAdvertisementMetrics(advertisementData, revenue, days) {
+    const currentDate = new Date();
+    const periodStartDate = new Date(currentDate.getTime() - days * 24 * 60 * 60 * 1000);
+
+    const filteredDataCurrentPeriod = advertisementData.filter(item => new Date(item.updTime) >= periodStartDate && new Date(item.updTime) <= currentDate);
+
+    const expensesCurrentPeriod = filteredDataCurrentPeriod.reduce((total, item) => total + item.updSum, 0);
+    const expensesPercentageCurrentPeriod = (expensesCurrentPeriod / revenue) * 100;
+
+    // Теперь аналогично для предыдущего периода
+    const previousPeriodEndDate = new Date(periodStartDate.getTime() - 24 * 60 * 60 * 1000);
+    const previousPeriodStartDate = new Date(previousPeriodEndDate.getTime() - days * 24 * 60 * 60 * 1000);
+
+    const filteredDataPreviousPeriod = advertisementData.filter(item => new Date(item.updTime) >= previousPeriodStartDate && new Date(item.updTime) <= previousPeriodEndDate);
+
+    const expensesPreviousPeriod = filteredDataPreviousPeriod.reduce((total, item) => total + item.updSum, 0);
+    const expensesPercentagePreviousPeriod = (expensesPreviousPeriod / revenue) * 100;
+
+    // Вычисление прироста
+    const growthPercentageExpenses = ((expensesCurrentPeriod - expensesPreviousPeriod) / expensesPreviousPeriod) * 100;
+    const growthPercentageExpensesPercentage = ((expensesPercentageCurrentPeriod - expensesPercentagePreviousPeriod) / expensesPercentagePreviousPeriod) * 100;
+
+    return {
+        expensesCurrentPeriod: expensesCurrentPeriod,
+        growthPercentageExpenses: growthPercentageExpenses,
+        expensesPercentageCurrentPeriod: expensesPercentageCurrentPeriod,
+        growthPercentageExpensesPercentage: growthPercentageExpensesPercentage
+    };
+}
+
+function findFBSFBO(orders, warehouses, days) {
+    const currentDate = new Date();
+    const periodStartDate = new Date(currentDate.getTime() - days * 24 * 60 * 60 * 1000);
+
+    // Функция для фильтрации заказов по складам
+    function filterOrdersByWarehouses(orders, warehouses) {
+        return orders.filter(order => warehouses.includes(order.warehouseName));
+    }
+    function missOrdersByWarehouses(orders, warehouses) {
+        return orders.filter(order => !warehouses.includes(order.warehouseName));
+    }
+
+    // Функция для подсчета суммы заказов
+    function calculateTotalAmount(orders) {
+        return orders.reduce((total, order) => total + order.totalPrice, 0);
+    }
+
+    // Фильтрация заказов по складам в текущем периоде
+    const currentPeriodOrders = orders.filter(order => new Date(order.date) >= periodStartDate && new Date(order.date) <= currentDate);
+    const currentPeriodFilteredOrders = filterOrdersByWarehouses(currentPeriodOrders, warehouses);
+    const currentPeriodTotalAmount = calculateTotalAmount(currentPeriodFilteredOrders);
+
+    const currentPeriodFBO = missOrdersByWarehouses(currentPeriodOrders, warehouses)
+    const currentPeriodFBOAmount = calculateTotalAmount(currentPeriodFBO);
+
+    // Фильтрация заказов по складам в предыдущем периоде
+    const previousPeriodStartDate = new Date(currentDate.getTime() - days * 2 * 24 * 60 * 60 * 1000); // Удвоение для предыдущего периода
+    const previousPeriodEndDate = new Date(currentDate.getTime() - days * 24 * 60 * 60 * 1000);
+    const previousPeriodOrders = orders.filter(order => new Date(order.date) >= previousPeriodStartDate && new Date(order.date) <= previousPeriodEndDate);
+    const previousPeriodFilteredOrders = filterOrdersByWarehouses(previousPeriodOrders, warehouses);
+    const previousPeriodTotalAmount = calculateTotalAmount(previousPeriodFilteredOrders);
+
+    const previousPeriodFilteredFBO = filterOrdersByWarehouses(previousPeriodOrders, warehouses);
+    const previousPeriodFBOAmount = calculateTotalAmount(previousPeriodFilteredFBO);
+
+    const percentageGrowth = ((currentPeriodTotalAmount - previousPeriodTotalAmount) / previousPeriodTotalAmount) * 100;
+
+    const percentageGrowthFBO = ((currentPeriodFBOAmount - previousPeriodFBOAmount) / previousPeriodFBOAmount) * 100
+
+    return {
+        fbs: currentPeriodTotalAmount,
+        fbsPercent: percentageGrowth,
+        fbo: currentPeriodFBOAmount,
+        fboPercent: percentageGrowthFBO,
+    };
+}
+
 
 module.exports = {
+    findFBSFBO,
+    calculateAdvertisementMetrics,
     calculateToClients,
     calculateCommissionFromProfit,
     calculateROI,

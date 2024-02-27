@@ -19,7 +19,9 @@ const {
     calculateCommissionFromProfit,
     calculateCommissionFromDelivery,
     calculatePurchasePercentage,
-    abcAnalysis
+    abcAnalysis,
+    calculateAdvertisementMetrics,
+    findFBSFBO
 } = require('../service/utils')
 
 class DataCollectionController {
@@ -54,12 +56,12 @@ class DataCollectionController {
             vpProfitMargin: calculateGrossProfit(data.sales, data.reportDetailByPeriod, days),
             opProfitMargin: calculateGrossProfit(data.sales, data.reportDetailByPeriod, days),
             yearProfitMargin: null,
-            fbo: null,
-            fbs: null,
+            fbo: findFBSFBO(data.orders, data.warehouses, days),
+            fbs: findFBSFBO(data.orders, data.warehouses, days),
             toClient: data.stocks.filter(i => i.inWayToClient),
             fromClient: data.stocks.filter(i => i.inWayFromClient),
             notSorted: calculateToClients(data.stocks, days),
-            advertisment: null,
+            advertisment: calculateAdvertisementMetrics(data.add, calculateOrders(data.sales, days).sum, days),
             commissionFromProfit: calculateCommissionFromProfit(data.reportDetailByPeriod, days),
             logisticsFromProfit: calculateCommissionFromDelivery(data.reportDetailByPeriod, days),
             abcAnalysis: abcAnalysis(filterArrays(data.sales, days)),
@@ -72,8 +74,6 @@ class DataCollectionController {
         const { days } = req.query
 
         const data = await DataCollection.findOne({ where: { userId: id } })
-
-        console.log(data);
 
         let content = {
             orderStat: calculateOrders(data.orders, days),
@@ -100,12 +100,12 @@ class DataCollectionController {
             vpProfitMargin: calculateGrossProfit(data.sales, data.reportDetailByPeriod, days),
             opProfitMargin: calculateGrossProfit(data.sales, data.reportDetailByPeriod, days),
             yearProfitMargin: null,
-            fbo: null,
-            fbs: null,
+            fbo: findFBSFBO(data.orders, data.warehouses, days),
+            fbs: findFBSFBO(data.orders, data.warehouses, days),
             toClient: data.stocks.filter(i => i.inWayToClient),
             fromClient: data.stocks.filter(i => i.inWayFromClient),
             notSorted: calculateToClients(data.stocks, days),
-            advertisment: null,
+            advertisment: calculateAdvertisementMetrics(data.add, calculateOrders(data.sales, days).sum, days),
             commissionFromProfit: calculateCommissionFromProfit(data.reportDetailByPeriod, days),
             logisticsFromProfit: calculateCommissionFromDelivery(data.reportDetailByPeriod, days),
             abcAnalysis: abcAnalysis(filterArrays(data.sales, days)),
