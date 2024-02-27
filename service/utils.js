@@ -278,23 +278,37 @@ function calculateCommission(data, days) {
 
 function calculateDeliveryCost(data, days) {
     const currentDate = new Date();
-    // Получение даты days дней назад
     const lastDaysDate = new Date(currentDate);
     lastDaysDate.setDate(lastDaysDate.getDate() - days);
 
-    // Функция для проверки, попадает ли дата объекта в заданный период
     function isWithinPeriod(item) {
-        const itemDate = new Date(item.rr_dt); // Используем дату создания записи
+        const itemDate = new Date(item.rr_dt);
         return itemDate >= lastDaysDate && itemDate <= currentDate;
     }
 
-    // Фильтрация данных для получения записей, попадающих в заданный период
     const dataInPeriod = data.filter(isWithinPeriod);
+    const totalDeliveryCostCurrentPeriod = dataInPeriod.reduce((total, item) => total + item.delivery_rub, 0);
 
-    // Используем reduce для вычисления суммы расходов на логистику
-    const totalDeliveryCost = dataInPeriod.reduce((total, item) => total + item.delivery_rub, 0);
+    const previousPeriodDate = new Date(lastDaysDate);
+    const previousPeriodStartDate = new Date(previousPeriodDate);
+    previousPeriodStartDate.setDate(previousPeriodStartDate.getDate() - days);
+    const previousPeriodEndDate = new Date(previousPeriodDate);
+    previousPeriodEndDate.setDate(previousPeriodEndDate.getDate() - 1);
 
-    return totalDeliveryCost;
+    const dataInPreviousPeriod = data.filter(item => {
+        const itemDate = new Date(item.rr_dt);
+        return itemDate >= previousPeriodStartDate && itemDate <= previousPeriodEndDate;
+    });
+
+    const totalDeliveryCostPreviousPeriod = dataInPreviousPeriod.reduce((total, item) => total + item.delivery_rub, 0);
+
+    const percentageGrowth = ((totalDeliveryCostCurrentPeriod - totalDeliveryCostPreviousPeriod) / totalDeliveryCostPreviousPeriod) * 100;
+
+    return {
+        totalDeliveryCostCurrentPeriod,
+        totalDeliveryCostPreviousPeriod,
+        percentageGrowth
+    };
 }
 
 function calculateMarginalProfit(data, days) {
