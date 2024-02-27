@@ -64,7 +64,7 @@ class DataCollectionController {
             advertisment: calculateAdvertisementMetrics(data.add, calculateOrders(data.sales, days).sum, days),
             commissionFromProfit: calculateCommissionFromProfit(data.reportDetailByPeriod, days),
             logisticsFromProfit: calculateCommissionFromDelivery(data.reportDetailByPeriod, days),
-            abcAnalysis: abcAnalysis(filterArrays({ key: data.sales }, days).sales),
+            abcAnalysis: abcAnalysis(filterArrays({ key: data }, days).sales),
         }
         return res.json({ ...data.dataValues, content: content })
     }
@@ -74,6 +74,9 @@ class DataCollectionController {
         const { days } = req.query
 
         const data = await DataCollection.findOne({ where: { userId: id } })
+
+        const filtered = filterArrays(data.sales, days)
+        let sls = filtered.sales
 
         let content = {
             orderStat: calculateOrders(data.orders, days),
@@ -108,7 +111,7 @@ class DataCollectionController {
             advertisment: calculateAdvertisementMetrics(data.add, calculateOrders(data.sales, days).sum, days),
             commissionFromProfit: calculateCommissionFromProfit(data.reportDetailByPeriod, days),
             logisticsFromProfit: calculateCommissionFromDelivery(data.reportDetailByPeriod, days),
-            abcAnalysis: abcAnalysis(filterArrays({ key: data.sales }, days).sales),
+            abcAnalysis: abcAnalysis(filterArrays({ key: data }, days).sales),
         }
         // const filtered = filterArrays(data.dataValues, days)
         // console.log(filtered);
