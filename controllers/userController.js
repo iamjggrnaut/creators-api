@@ -328,6 +328,7 @@ class UserController {
                 `https://statistics-api.wildberries.ru/api/v1/supplier/orders?dateFrom=${dateFrom}`,
                 `https://statistics-api.wildberries.ru/api/v1/supplier/sales?dateFrom=${dateFrom}`,
                 `https://statistics-api.wildberries.ru/api/v1/supplier/reportDetailByPeriod?dateFrom=${dateFrom}&dateTo=${dateTo}`,
+                `https://advert-api.wb.ru/adv/v1/upd?dateFrom=${dateFrom}&dateTo=${dateTo}`,
                 `https://suppliers-api.wildberries.ru/public/api/v1/info`
             ];
 
@@ -345,6 +346,7 @@ class UserController {
                 'orders',
                 'sales',
                 'reportDetailByPeriod',
+                'add',
                 'info'
             ]
 

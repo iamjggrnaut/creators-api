@@ -41,6 +41,7 @@ async function fetchAndStore(u, req, res) {
         // Создание массива URL-адресов эндпоинтов
         const urls = [
             `https://suppliers-api.wildberries.ru/api/v3/warehouses`,
+            `https://suppliers-api.wildberries.ru/api/v3/offices`,
             `https://suppliers-api.wildberries.ru/api/v3/supplies?dateFrom=${dateFrom}&limit=200&next=0`,
             `https://suppliers-api.wildberries.ru/api/v3/orders/new`,
             `https://suppliers-api.wildberries.ru/api/v3/supplies/orders/reshipment`,
@@ -49,6 +50,7 @@ async function fetchAndStore(u, req, res) {
             `https://statistics-api.wildberries.ru/api/v1/supplier/orders?dateFrom=${dateFrom}`,
             `https://statistics-api.wildberries.ru/api/v1/supplier/sales?dateFrom=${dateFrom}`,
             `https://statistics-api.wildberries.ru/api/v1/supplier/reportDetailByPeriod?dateFrom=${dateFrom}&dateTo=${dateTo}`,
+            `https://advert-api.wb.ru/adv/v1/upd?dateFrom=${dateFrom}&dateTo=${dateTo}`,
             `https://suppliers-api.wildberries.ru/public/api/v1/info`
         ];
 
@@ -58,6 +60,7 @@ async function fetchAndStore(u, req, res) {
         // Массив названий для идентификации данных
         const names = [
             'warehouses',
+            'warehousesWB',
             'supplies',
             'newOrders',
             'reshipmentOrders',
@@ -66,6 +69,7 @@ async function fetchAndStore(u, req, res) {
             'orders',
             'sales',
             'reportDetailByPeriod',
+            'add',
             'info'
         ];
 
@@ -77,7 +81,7 @@ async function fetchAndStore(u, req, res) {
                         headers: {
                             Authorization: `Bearer ${resToken}`
                         },
-                        timeout: 62000 // Таймаут в 65 секунд
+                        timeout: 62000 // Таймаут в 62 секунд
                     });
                     responseData[names[i]] = response.data;
                 } catch (error) {
