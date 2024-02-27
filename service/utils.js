@@ -501,13 +501,16 @@ function calculateGrossProfit(salesData, deliveryData, days) {
 
         const getDateProp = (item) => {
             if (item.date) {
-                return item.data
+                return item.date
             } else if (item.rr_dt) {
                 return item.rr_dt
             }
         }
 
-        return data.filter(item => lastDaysDates.includes(getDateProp(item).split('T')[0] || getDateProp(item).split('T')[0]));
+        return data.filter(item => {
+            let date = getDateProp(item)
+            return lastDaysDates.includes(date.split('T')[0] || date.split('T')[0])
+        });
     }
 
     // Получаем даты последних days дней
