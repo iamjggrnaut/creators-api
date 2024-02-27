@@ -238,10 +238,10 @@ function calculateAdditionalPayment(data, days) {
 
 function calculateCommission(data, days) {
 
-    data = data.filter(item => item.retail_price && item.rr_dt)
+    data = data.filter(item => item.retail_price && item.rr_dt);
 
     const currentDate = new Date();
-    // Получение даты days дней назад
+    // Получаем дату days дней назад
     const lastDaysDate = new Date(currentDate);
     lastDaysDate.setDate(lastDaysDate.getDate() - days);
 
@@ -251,13 +251,29 @@ function calculateCommission(data, days) {
         return itemDate >= lastDaysDate && itemDate <= currentDate;
     }
 
-    // Фильтрация данных для получения записей, попадающих в заданный период
-    const dataInPeriod = data.filter(isWithinPeriod);
+    // Фильтруем данные для получения записей, попадающих в текущий период
+    const currentPeriodData = data.filter(isWithinPeriod);
 
-    // Используем reduce для вычисления суммы комиссии
-    const totalCommission = dataInPeriod.reduce((total, item) => total + (item.quantity * item.retail_price * item.commission_percent), 0);
+    // Вычисляем комиссию за текущий период
+    const currentPeriodCommission = currentPeriodData.reduce((total, item) => total + (item.quantity * item.retail_price * item.commission_percent), 0);
 
-    return totalCommission;
+    // Фильтруем данные для получения записей, попадающих в прошлый период
+    const previousPeriodData = data.filter(item => {
+        const itemDate = new Date(item.rr_dt);
+        return itemDate < lastDaysDate;
+    });
+
+    // Вычисляем комиссию за прошлый период
+    const previousPeriodCommission = previousPeriodData.reduce((total, item) => total + (item.quantity * item.retail_price * item.commission_percent), 0);
+
+    // Вычисляем долю роста значения текущего периода по отношению к предыдущему
+    const growthPercentage = ((currentPeriodCommission - previousPeriodCommission) / previousPeriodCommission) * 100;
+
+    return {
+        currentPeriodCommission,
+        previousPeriodCommission,
+        growthPercentage
+    };
 }
 
 function calculateDeliveryCost(data, days) {

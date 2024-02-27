@@ -108,8 +108,6 @@ class DataCollectionController {
             commissionFromProfit: calculateCommissionFromProfit(data.reportDetailByPeriod, days),
             logisticsFromProfit: calculateCommissionFromDelivery(data.reportDetailByPeriod, days),
         }
-        // const filtered = filterArrays(data.dataValues, days)
-        // console.log(filtered);
         return res.json({ ...data.dataValues, content: content })
     }
 
