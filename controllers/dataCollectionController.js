@@ -17,7 +17,8 @@ const {
     calculateToClients,
     calculateMargin,
     calculateCommissionFromProfit,
-    calculateCommissionFromDelivery
+    calculateCommissionFromDelivery,
+    calculatePurchasePercentage
 } = require('../service/utils')
 
 class DataCollectionController {
