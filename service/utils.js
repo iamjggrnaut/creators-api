@@ -726,7 +726,7 @@ function findFBSFBO(orders, warehouses, days) {
 
     // Функция для подсчета суммы заказов
     function calculateTotalAmount(orders) {
-        return orders.reduce((total, order) => total + order.totalPrice, 0);
+        return orders.reduce((total, order) => total + order.finishedPrice, 0);
     }
 
     // Фильтрация заказов по складам в текущем периоде
