@@ -29,6 +29,8 @@ class DataCollectionController {
         const { days } = req.query
         const data = await DataCollection.findOne({ where: { userId: id } })
 
+        console.log(data);
+
         let content = {
             orderStat: calculateOrders(data.orders, days),
             salesStat: calculateOrders(data.sales, days),
