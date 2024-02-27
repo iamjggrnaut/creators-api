@@ -744,43 +744,52 @@ function calculateAdvertisementMetrics(advertisementData, revenue, days) {
 
 function findFBSFBO(orders, warehouses, days) {
     const currentDate = new Date();
-    // Получение даты days дней назад
-    const lastDaysDate = new Date(currentDate);
-    lastDaysDate.setDate(lastDaysDate.getDate() - days);
+    const periodStartDate = new Date(currentDate.getTime() - days * 24 * 60 * 60 * 1000);
 
-    // Функция для проверки, попадает ли дата объекта в заданный период
-    function isWithinPeriod(item, startDate, endDate) {
-        const itemDate = new Date(item.date); // Используем дату создания записи
-        return itemDate >= startDate && itemDate <= endDate;
+    // Функция для фильтрации заказов по складам
+    function filterOrdersByWarehouses(orders, warehouses) {
+        return orders.filter(order => warehouses.includes(order.warehouseName));
+    }
+    function missOrdersByWarehouses(orders, warehouses) {
+        return orders.filter(order => !warehouses.includes(order.warehouseName));
     }
 
-    // Получаем склады из данных о складах
-    const warehouseNames = warehouseData.map(warehouse => warehouse.name);
+    // Функция для подсчета суммы заказов
+    function calculateTotalAmount(orders) {
+        return orders.reduce((total, order) => total + order.finishedPrice, 0);
+    }
 
-    // Фильтруем данные по складам и периоду
-    const dataInPeriod = data.filter(item => isWithinPeriod(item, lastDaysDate, currentDate) && warehouseNames.includes(item.warehouseName));
+    // Фильтрация заказов по складам в текущем периоде
+    const currentPeriodOrders = orders.filter(order => new Date(order.date) >= periodStartDate && new Date(order.date) <= currentDate);
+    const currentPeriodFilteredOrders = filterOrdersByWarehouses(currentPeriodOrders, warehouses);
+    const currentPeriodTotalAmount = calculateTotalAmount(currentPeriodFilteredOrders);
+    const currentPeriodlength = currentPeriodFilteredOrders.length
 
-    // Вычисляем количество и общую сумму FBO и FBS
-    let fboCount = 0;
-    let fboTotalAmount = 0;
-    let fbsCount = 0;
-    let fbsTotalAmount = 0;
+    const currentPeriodFBO = missOrdersByWarehouses(currentPeriodOrders, warehouses)
+    const currentPeriodFBOAmount = calculateTotalAmount(currentPeriodFBO);
+    const currentPeriodFBOlength = currentPeriodFBO.length
 
-    dataInPeriod.forEach(item => {
-        if (item.deliveryType === 1) { // Проверяем тип доставки (1 - FBO, 2 - FBS)
-            fboCount++;
-            fboTotalAmount += item.totalPrice;
-        } else if (item.deliveryType === 2) {
-            fbsCount++;
-            fbsTotalAmount += item.totalPrice;
-        }
-    });
+    // Фильтрация заказов по складам в предыдущем периоде
+    const previousPeriodStartDate = new Date(currentDate.getTime() - days * 2 * 24 * 60 * 60 * 1000); // Удвоение для предыдущего периода
+    const previousPeriodEndDate = new Date(currentDate.getTime() - days * 24 * 60 * 60 * 1000);
+    const previousPeriodOrders = orders.filter(order => new Date(order.date) >= previousPeriodStartDate && new Date(order.date) <= previousPeriodEndDate);
+    const previousPeriodFilteredOrders = filterOrdersByWarehouses(previousPeriodOrders, warehouses);
+    const previousPeriodTotalAmount = calculateTotalAmount(previousPeriodFilteredOrders);
+
+    const previousPeriodFilteredFBO = filterOrdersByWarehouses(previousPeriodOrders, warehouses);
+    const previousPeriodFBOAmount = calculateTotalAmount(previousPeriodFilteredFBO);
+
+    const percentageGrowth = ((currentPeriodTotalAmount - previousPeriodTotalAmount) / previousPeriodTotalAmount) * 100;
+
+    const percentageGrowthFBO = ((currentPeriodFBOAmount - previousPeriodFBOAmount) / previousPeriodFBOAmount) * 100
 
     return {
-        fboCount,
-        fbsCount,
-        fboTotalAmount,
-        fbsTotalAmount
+        fbs: currentPeriodTotalAmount,
+        fbsPercent: percentageGrowth,
+        fbsAmount: currentPeriodlength,
+        fbo: currentPeriodFBOAmount,
+        fboPercent: percentageGrowthFBO,
+        fboAmount: currentPeriodFBOlength
     };
 }
 
