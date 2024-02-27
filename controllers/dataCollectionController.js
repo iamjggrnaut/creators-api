@@ -64,7 +64,7 @@ class DataCollectionController {
             advertisment: calculateAdvertisementMetrics(data.add, calculateOrders(data.sales, days).sum, days),
             commissionFromProfit: calculateCommissionFromProfit(data.reportDetailByPeriod, days),
             logisticsFromProfit: calculateCommissionFromDelivery(data.reportDetailByPeriod, days),
-            abcAnalysis: abcAnalysis(filterArrays({ key: data.sales }, days)),
+            abcAnalysis: abcAnalysis(filterArrays({ key: data.sales }, days).sales),
         }
         return res.json({ ...data.dataValues, content: content })
     }
@@ -108,7 +108,7 @@ class DataCollectionController {
             advertisment: calculateAdvertisementMetrics(data.add, calculateOrders(data.sales, days).sum, days),
             commissionFromProfit: calculateCommissionFromProfit(data.reportDetailByPeriod, days),
             logisticsFromProfit: calculateCommissionFromDelivery(data.reportDetailByPeriod, days),
-            abcAnalysis: abcAnalysis(filterArrays({ key: data.sales }, days)),
+            abcAnalysis: abcAnalysis(filterArrays({ key: data.sales }, days).sales),
         }
         // const filtered = filterArrays(data.dataValues, days)
         // console.log(filtered);
