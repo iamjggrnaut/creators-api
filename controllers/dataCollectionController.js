@@ -31,9 +31,6 @@ class DataCollectionController {
         const { days } = req.query
         const data = await DataCollection.findOne({ where: { userId: id } })
 
-        const filtered = filterArrays(data.sales, days)
-        let sls = filtered.sales
-
         let content = {
             orderStat: calculateOrders(data.orders, days),
             salesStat: calculateOrders(data.sales, days),
@@ -67,7 +64,6 @@ class DataCollectionController {
             advertisment: calculateAdvertisementMetrics(data.add, calculateOrders(data.sales, days).sum, days),
             commissionFromProfit: calculateCommissionFromProfit(data.reportDetailByPeriod, days),
             logisticsFromProfit: calculateCommissionFromDelivery(data.reportDetailByPeriod, days),
-            abcAnalysis: abcAnalysis(sls),
         }
         return res.json({ ...data.dataValues, content: content })
     }
@@ -78,9 +74,6 @@ class DataCollectionController {
 
         const data = await DataCollection.findOne({ where: { userId: id } })
 
-        const filtered = filterArrays(data.sales, days)
-        let sls = filtered.sales
-
         let content = {
             orderStat: calculateOrders(data.orders, days),
             salesStat: calculateOrders(data.sales, days),
@@ -114,7 +107,6 @@ class DataCollectionController {
             advertisment: calculateAdvertisementMetrics(data.add, calculateOrders(data.sales, days).sum, days),
             commissionFromProfit: calculateCommissionFromProfit(data.reportDetailByPeriod, days),
             logisticsFromProfit: calculateCommissionFromDelivery(data.reportDetailByPeriod, days),
-            abcAnalysis: abcAnalysis(sls),
         }
         // const filtered = filterArrays(data.dataValues, days)
         // console.log(filtered);
