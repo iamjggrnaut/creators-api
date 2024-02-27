@@ -498,7 +498,16 @@ function calculateGrossProfit(salesData, deliveryData, days) {
 
     // Функция для фильтрации данных за последние days дней
     function filterDataByLastDays(data, lastDaysDates) {
-        return data.filter(item => lastDaysDates.includes(item.date?.split('T')[0] || item.rr_dt?.split('T')[0]));
+
+        const getDateProp = (item) => {
+            if (item.date) {
+                return item.data
+            } else if (item.rr_dt) {
+                return item.rr_dt
+            }
+        }
+
+        return data.filter(item => lastDaysDates.includes(getDateProp(item).split('T')[0] || getDateProp(item).split('T')[0]));
     }
 
     // Получаем даты последних days дней
