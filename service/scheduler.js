@@ -28,6 +28,7 @@ async function fetchAndStore(u, req, res) {
         const id = u.id
         const dateTo = new Date(new Date().setDate(new Date().getDate())).toLocaleDateString('ru').split('.').reverse().join('-')
         const dateFrom = new Date(new Date().setDate(new Date().getDate() - 92)).toLocaleDateString('ru').split('.').reverse().join('-')
+        const from = new Date(new Date().setDate(new Date().getDate() - 30)).toLocaleDateString('ru').split('.').reverse().join('-')
 
         // Поиск пользователя
         const user = await User.findOne({ where: { id } });
@@ -50,7 +51,7 @@ async function fetchAndStore(u, req, res) {
             `https://statistics-api.wildberries.ru/api/v1/supplier/orders?dateFrom=${dateFrom}`,
             `https://statistics-api.wildberries.ru/api/v1/supplier/sales?dateFrom=${dateFrom}`,
             `https://statistics-api.wildberries.ru/api/v1/supplier/reportDetailByPeriod?dateFrom=${dateFrom}&dateTo=${dateTo}`,
-            `https://advert-api.wb.ru/adv/v1/upd?from=${dateFrom}&to=${dateTo}`,
+            `https://advert-api.wb.ru/adv/v1/upd?from=${from}&to=${dateTo}`,
             `https://suppliers-api.wildberries.ru/public/api/v1/info`
         ];
 
