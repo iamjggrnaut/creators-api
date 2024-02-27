@@ -33,6 +33,7 @@ const DataCollection = sequelize.define('dataCollection', {
     orders: { type: DataTypes.JSONB }, // Заказы
     sales: { type: DataTypes.JSONB }, // Продажи
     reportDetailByPeriod: { type: DataTypes.JSONB }, // Отчет по деталям за период
+    add: { type: DataTypes.JSONB }, // Информация
     info: { type: DataTypes.JSONB } // Информация
 });
 
