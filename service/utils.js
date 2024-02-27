@@ -670,9 +670,9 @@ const abcAnalysis = (products) => {
         });
     });
     return {
-        categoryA: { totalAmount: categoryA[0]?.abcTotalAmount, totalSales: categoryA[0]?.abcTotalSales, quantityPercentage: categoryA[0]?.quantityPercentage, salesPercentage: categoryA[0]?.salesPercentage },
-        categoryB: { totalAmount: categoryB[0]?.abcTotalAmount, totalSales: categoryB[0]?.abcTotalSales, quantityPercentage: categoryB[0]?.quantityPercentage, salesPercentage: categoryB[0]?.salesPercentage },
-        categoryC: { totalAmount: categoryC[0]?.abcTotalAmount, totalSales: categoryC[0]?.abcTotalSales, quantityPercentage: categoryC[0]?.quantityPercentage, salesPercentage: categoryC[0]?.salesPercentage }
+        categoryA: { totalAmount: categoryA[0].abcTotalAmount, totalSales: categoryA[0].abcTotalSales, quantityPercentage: categoryA[0].quantityPercentage, salesPercentage: categoryA[0].salesPercentage },
+        categoryB: { totalAmount: categoryB[0].abcTotalAmount, totalSales: categoryB[0].abcTotalSales, quantityPercentage: categoryB[0].quantityPercentage, salesPercentage: categoryB[0].salesPercentage },
+        categoryC: { totalAmount: categoryC[0].abcTotalAmount, totalSales: categoryC[0].abcTotalSales, quantityPercentage: categoryC[0].quantityPercentage, salesPercentage: categoryC[0].salesPercentage }
     }
 }
 
