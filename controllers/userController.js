@@ -338,10 +338,11 @@ class UserController {
                 return res.status(404).json({ error: 'Пользователь не найден' });
             }
 
-            const decodedToken = jwt.decode(user.token, { complete: true });
-            const resToken = decodedToken && decodedToken.payload ? decodedToken.payload.token : null;
+            const decodedTokens = user.tokens.map(token => ({ brandName: token.brandName, token: jwt.decode(token.token, { complete: true }) }))
+            const resTokens = decodedTokens && decodedTokens.length ? decodedTokens.map(token => ({ brandName: token.brandName, token: token.token.payload.token })) : [];
 
-            let result = jwt.decode(resToken)
+
+            let result = resTokens.map(token => jwt.decode(token.token))
 
             return res.json(result);
         } catch (error) {
