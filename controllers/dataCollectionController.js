@@ -26,10 +26,17 @@ const {
 
 class DataCollectionController {
 
+    async getBrandNames(req, res) {
+        const { id } = req.params
+        const data = await DataCollection.findAll({ where: { userId: id } })
+        const names = data.map(el => el.brandName)
+        return res.json(names)
+    }
+
     async getDataCollection(req, res) {
         const { id } = req.params
-        const { days } = req.query
-        const data = await DataCollection.findOne({ where: { userId: id } })
+        const { days, brandName } = req.query
+        const data = await DataCollection.findOne({ where: { userId: id, brandName } })
 
         let content = {
             orderStat: calculateOrders(data.orders, days),
