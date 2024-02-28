@@ -238,7 +238,19 @@ class UserController {
         const user = await User.findOne({ where: { id } })
         try {
             const signedToken = jwt.sign({ token }, process.env.SECRET_KEY);
-            await User.update({ token: signedToken, brandName, isOnboarded: true }, { where: { id } });
+            const newToken = {
+                token: signedToken,
+                brandName: brandName
+            }
+            const userTokens = user.tokens
+            if (userTokens.length) {
+                const tokens = [...user.tokens, newToken]
+                await User.update({ tokens: tokens, isOnboarded: true }, { where: { id } });
+            }
+            if (!userTokens.length) {
+                const tokens = [newToken]
+                await User.update({ tokens: tokens, isOnboarded: true }, { where: { id } });
+            }
             await fetchAndStore(user)
             const tkn = generateJWT(user.id, user.email, user.phone, user.stage, user.role, user.firstName, user.lastName, user.patronym, user.confirmed, user.isOnboarded, user.promoCode, user.isActive, user.updatedAt, user.brandName)
             res.status(200).json({ token: tkn });
@@ -302,75 +314,6 @@ class UserController {
         const users = await User.findAll()
         users.forEach(x => x.password = '')
         return res.json(users)
-    }
-
-    async getWBData(req, res) {
-        const { id } = req.params
-        const { dateFrom } = req.query
-        const { dateTo } = req.query
-
-        try {
-            const user = await User.findOne({ where: { id } });
-            if (!user) {
-                return res.status(404).json({ error: 'Пользователь не найден' });
-            }
-
-            const decodedToken = jwt.decode(user.token, { complete: true });
-            const resToken = decodedToken && decodedToken.payload ? decodedToken.payload.token : null;
-
-            const urls = [
-                `https://suppliers-api.wildberries.ru/api/v3/warehouses`,
-                `https://suppliers-api.wildberries.ru/api/v3/supplies?dateFrom=${dateFrom}&limit=200&next=0`,
-                `https://suppliers-api.wildberries.ru/api/v3/orders/new`,
-                `https://suppliers-api.wildberries.ru/api/v3/supplies/orders/reshipment`,
-                `https://statistics-api.wildberries.ru/api/v1/supplier/incomes?dateFrom=${dateFrom}`,
-                `https://statistics-api.wildberries.ru/api/v1/supplier/stocks?dateFrom=${dateFrom}`,
-                `https://statistics-api.wildberries.ru/api/v1/supplier/orders?dateFrom=${dateFrom}`,
-                `https://statistics-api.wildberries.ru/api/v1/supplier/sales?dateFrom=${dateFrom}`,
-                `https://statistics-api.wildberries.ru/api/v1/supplier/reportDetailByPeriod?dateFrom=${dateFrom}&dateTo=${dateTo}`,
-                `https://advert-api.wb.ru/adv/v1/upd?dateFrom=${dateFrom}&dateTo=${dateTo}`,
-                `https://suppliers-api.wildberries.ru/public/api/v1/info`
-            ];
-
-            // const responses = await Promise.all(urls.map(url => fetchData(url, resToken)));
-
-            const responseData = {};
-
-            const names = [
-                'warehouses',
-                'supplies',
-                'newOrders',
-                'reshipmentOrders',
-                'incomes',
-                'stocks',
-                'orders',
-                'sales',
-                'reportDetailByPeriod',
-                'add',
-                'info'
-            ]
-
-            dateFrom && dateTo && await Promise.all(urls.map(async (url, i) => {
-                try {
-                    const response = await axios.get(url, {
-                        headers: {
-                            Authorization: `Bearer ${resToken}`
-                        },
-                        timeout: 5000
-                    });
-                    responseData[names[i]] = response.data;
-                } catch (error) {
-                    console.error('Ошибка при запросе к API:', error);
-                    responseData[names[i]] = null;
-                }
-            }));
-
-            return res.json(responseData);
-        } catch (error) {
-            console.error('Ошибка при получении данных:', error);
-            return res.status(500).json({ error: 'Внутренняя ошибка сервера' });
-        }
-
     }
 
     async getData(req, res) {

@@ -36,8 +36,8 @@ async function fetchAndStore(u, req, res) {
             return res.status(404).json({ error: 'Пользователь не найден' });
         }
 
-        const decodedToken = jwt.decode(user.token, { complete: true });
-        const resToken = decodedToken && decodedToken.payload ? decodedToken.payload.token : null;
+        const decodedTokens = user.tokens.map(token => ({ brandName: token.brandName, token: jwt.decode(token.token, { complete: true }) }))
+        const resTokens = decodedTokens && decodedTokens.length ? decodedTokens.map(token => ({ brandName: token.brandName, token: token.token.payload.token })) : [];
 
         // Создание массива URL-адресов эндпоинтов
         const urls = [
@@ -55,9 +55,6 @@ async function fetchAndStore(u, req, res) {
             `https://suppliers-api.wildberries.ru/public/api/v1/info`
         ];
 
-        // Объект для хранения полученных данных
-        const responseData = {};
-
         // Массив названий для идентификации данных
         const names = [
             'warehouses',
@@ -74,37 +71,43 @@ async function fetchAndStore(u, req, res) {
             'info'
         ];
 
-        if (resToken) {
+        if (resTokens && resTokens.length) {
             // Запрос данных по URL-адресам
-            await Promise.all(urls.map(async (url, i) => {
-                try {
-                    const response = await axios.get(url, {
-                        headers: {
-                            Authorization: `Bearer ${resToken}`
-                        },
-                        timeout: 62000 // Таймаут в 62 секунд
-                    });
-                    responseData[names[i]] = response.data;
-                } catch (error) {
-                    console.error('Ошибка при запросе к API:', error);
-                    responseData[names[i]] = null;
-                }
-            }));
+            for (let item in resTokens) {
+                // Объект для хранения полученных данных
+                const responseData = {};
+                await Promise.all(urls.map(async (url, i) => {
+                    try {
+                        const response = await axios.get(url, {
+                            headers: {
+                                Authorization: `Bearer ${resTokens[item].token}`
+                            },
+                            timeout: 62000 // Таймаут в 62 секунд
+                        });
+                        responseData[names[i]] = response.data;
+                    } catch (error) {
+                        console.error('Ошибка при запросе к API:', error);
+                        responseData[names[i]] = null;
+                    }
+                }));
 
-            // Поиск или создание записи в таблице DataCollection
-            const [dataCollection, created] = await DataCollection.findOrCreate({
-                where: {
-                    userId: id,
-                },
-                defaults: {
-                    userId: id,
-                    ...responseData // Данные с эндпоинтов
-                }
-            });
+                // Поиск или создание записи в таблице DataCollection
+                const [dataCollection, created] = await DataCollection.findOrCreate({
+                    where: {
+                        userId: id,
+                        brandName: resTokens[item].brandName
+                    },
+                    defaults: {
+                        userId: id,
+                        brandName: resTokens[item].brandName,
+                        ...responseData // Данные с эндпоинтов
+                    }
+                });
 
-            // Если запись не была создана, обновляем существующую
-            if (!created) {
-                await dataCollection.update(responseData);
+                // Если запись не была создана, обновляем существующую
+                if (!created) {
+                    await dataCollection.update(responseData);
+                }
             }
         }
 

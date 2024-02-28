@@ -17,7 +17,6 @@ router.patch('/confirm-reset', userController.confirmReset)
 router.post('/reset', userController.restorePass)
 router.get('/sales/:id', authMiddleware, userController.getData)
 router.get('/exp/:id', authMiddleware, userController.getTokenExp)
-// router.patch('/reset-password', userController.confirm)
 
 
 module.exports = router
