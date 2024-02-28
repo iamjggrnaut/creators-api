@@ -77,9 +77,9 @@ class DataCollectionController {
 
     async getFilteredCollection(req, res) {
         const { id } = req.params
-        const { days } = req.query
+        const { days, brandName } = req.query
 
-        const data = await DataCollection.findOne({ where: { userId: id } })
+        const data = await DataCollection.findOne({ where: { userId: id, brandName } })
 
         let content = {
             orderStat: calculateOrders(data.orders, days),
