@@ -27,7 +27,7 @@ async function fetchAndStore(u, req, res) {
     try {
         const id = u.id
         const dateTo = new Date(new Date().setDate(new Date().getDate())).toLocaleDateString('ru').split('.').reverse().join('-')
-        const dateFrom = new Date(new Date().setDate(new Date().getDate() - 92)).toLocaleDateString('ru').split('.').reverse().join('-')
+        const dateFrom = new Date(new Date().setDate(new Date().getDate() - 182)).toLocaleDateString('ru').split('.').reverse().join('-')
         const from = new Date(new Date().setDate(new Date().getDate() - 30)).toLocaleDateString('ru').split('.').reverse().join('-')
 
         // Поиск пользователя
