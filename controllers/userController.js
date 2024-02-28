@@ -243,11 +243,11 @@ class UserController {
                 brandName: brandName
             }
             const userTokens = user.tokens
-            if (userTokens.length) {
+            if (userTokens && userTokens.length) {
                 const tokens = [...user.tokens, newToken]
                 await User.update({ tokens: tokens, isOnboarded: true }, { where: { id } });
             }
-            if (!userTokens.length) {
+            if (!userTokens) {
                 const tokens = [newToken]
                 await User.update({ tokens: tokens, isOnboarded: true }, { where: { id } });
             }
