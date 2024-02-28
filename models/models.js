@@ -23,6 +23,7 @@ const User = sequelize.define('user', {
 const DataCollection = sequelize.define('dataCollection', {
     id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true }, // Идентификатор
     userId: { type: DataTypes.INTEGER, allowNull: false }, // Поле для связи с пользователем
+    brandName: { type: DataTypes.STRING, allowNull: false }, // Поле для связи с пользователем
     date: { type: DataTypes.DATEONLY, defaultValue: DataTypes.NOW }, // Дата записи
     warehouses: { type: DataTypes.JSONB }, // Склады
     supplies: { type: DataTypes.JSONB }, // Поставки
