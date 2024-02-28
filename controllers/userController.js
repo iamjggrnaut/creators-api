@@ -342,7 +342,7 @@ class UserController {
             const resTokens = decodedTokens && decodedTokens.length ? decodedTokens.map(token => ({ brandName: token.brandName, token: token.token.payload.token })) : [];
 
 
-            let result = resTokens.map(token => jwt.decode(token.token))
+            let result = resTokens.map(token => ({ brandName: token.brandName, token: jwt.decode(token.token) }))
 
             return res.json(result);
         } catch (error) {
