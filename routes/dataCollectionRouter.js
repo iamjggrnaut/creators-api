@@ -4,6 +4,7 @@ const router = new Router()
 
 
 router.get('/:id', dataCollectionController.getDataCollection)
+router.get('/user/:id', dataCollectionController.getAllForUser)
 router.get('/filtered/:id', dataCollectionController.getFilteredCollection)
 router.get('/names/:id', dataCollectionController.getBrandNames)
 

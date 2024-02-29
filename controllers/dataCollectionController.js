@@ -33,6 +33,12 @@ class DataCollectionController {
         return res.json(names)
     }
 
+    async getAllForUser(req, res) {
+        const { id } = req.params
+        const data = await DataCollection.findAll({ where: { userId: id } })
+        return res.json(data)
+    }
+
     async getDataCollection(req, res) {
         const { id } = req.params
         const { days, brandName } = req.query
