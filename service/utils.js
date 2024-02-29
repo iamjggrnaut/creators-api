@@ -8,7 +8,7 @@ function getDatesInInterval(startDate, endDate) {
     return dates;
 }
 
-function filterArrays(obj, days) {
+async function filterArrays(obj, days) {
     for (let key in obj) {
         if (Array.isArray(obj[key])) {
             console.log(key);
@@ -24,7 +24,7 @@ function filterArrays(obj, days) {
     return obj
 }
 
-function calculateOrders(data, days) {
+async function calculateOrders(data, days) {
 
     const currentDate = new Date();
     // Получение даты 14 дней назад
@@ -77,7 +77,7 @@ function calculateOrders(data, days) {
     }
 }
 
-function calculateReturn(data, days) {
+async function calculateReturn(data, days) {
 
     const currentDate = new Date();
     const previousDate = new Date(currentDate);
@@ -108,7 +108,7 @@ function calculateReturn(data, days) {
     };
 }
 
-function calculateBuyout(orders, days) {
+async function calculateBuyout(orders, days) {
 
     function filterOrdersByPeriod(orders, startDate, endDate) {
         return orders.filter(order => {
@@ -151,7 +151,7 @@ function dateMatches(date1, date2) {
     return date1.toISOString().split('T')[0] === date2.toISOString().split('T')[0];
 }
 
-function calculateAverageReceipt(data, days) {
+async function calculateAverageReceipt(data, days) {
     // Функция для фильтрации данных по периоду
     function filterDataByPeriod(data, startDate, endDate) {
         return data.filter(item => {
@@ -191,7 +191,7 @@ function calculateAverageReceipt(data, days) {
     };
 }
 
-function calculatePenalty(data, days) {
+async function calculatePenalty(data, days) {
     data = data.filter(item => item.rr_dt)
     const currentDate = new Date();
     const lastDaysDate = new Date(currentDate);
@@ -214,7 +214,7 @@ function calculatePenalty(data, days) {
     return totalPenalty;
 }
 
-function calculateAdditionalPayment(data, days) {
+async function calculateAdditionalPayment(data, days) {
     const currentDate = new Date();
     // Получение даты days дней назад
     const lastDaysDate = new Date(currentDate);
@@ -235,7 +235,7 @@ function calculateAdditionalPayment(data, days) {
     return totalAdditionalPayment;
 }
 
-function calculateCommission(data, days) {
+async function calculateCommission(data, days) {
 
     data = data.filter(item => item.retail_price && item.rr_dt);
 
@@ -275,7 +275,7 @@ function calculateCommission(data, days) {
     };
 }
 
-function calculateDeliveryCost(data, days) {
+async function calculateDeliveryCost(data, days) {
     const currentDate = new Date();
     const lastDaysDate = new Date(currentDate);
     lastDaysDate.setDate(lastDaysDate.getDate() - days);
@@ -310,7 +310,7 @@ function calculateDeliveryCost(data, days) {
     };
 }
 
-function calculateMarginalProfit(data, days) {
+async function calculateMarginalProfit(data, days) {
 
     // data = data.filter(item => item.ppvz_for_pay)
 
@@ -354,7 +354,7 @@ function calculateMarginalProfit(data, days) {
     };
 }
 
-function calculateMargin(data, days) {
+async function calculateMargin(data, days) {
     // Функция для вычисления маржинальной стоимости
     function calculateGrossMargin(deliveryRub, retailPrice) {
         return retailPrice - deliveryRub;
@@ -396,7 +396,7 @@ function calculateMargin(data, days) {
     };
 }
 
-function calculateNetProfit(data, days) {
+async function calculateNetProfit(data, days) {
     // Функция для вычисления маржинальной стоимости
     function calculateGrossMargin(deliveryRub, retailPrice) {
         return retailPrice - deliveryRub;
@@ -429,7 +429,7 @@ function calculateNetProfit(data, days) {
     };
 }
 
-function calculateAverageProfit(data, days) {
+async function calculateAverageProfit(data, days) {
     const currentDate = new Date();
     const lastDaysDate = new Date(currentDate);
     lastDaysDate.setDate(lastDaysDate.getDate() - days);
@@ -462,7 +462,7 @@ function calculateAverageProfit(data, days) {
     };
 }
 
-function calculatePurchasePercentage(sales, report, days) {
+async function calculatePurchasePercentage(sales, report, days) {
 
     const currentDate = new Date();
     const fromDate = new Date(currentDate);
@@ -490,7 +490,7 @@ function calculatePurchasePercentage(sales, report, days) {
     return purchasePercentage;
 }
 
-function calculateROI(data, days) {
+async function calculateROI(data, days) {
     // Фильтрация данных за указанный период
     const currentDate = new Date();
     const startDate = new Date(currentDate);
@@ -512,7 +512,7 @@ function calculateROI(data, days) {
     return roi;
 }
 
-function calculateGrossProfit(salesData, deliveryData, days) {
+async function calculateGrossProfit(salesData, deliveryData, days) {
     // Функция для получения дат последних days дней
     function getLastDaysDates(days) {
         const currentDate = new Date();
@@ -566,7 +566,7 @@ function calculateGrossProfit(salesData, deliveryData, days) {
     };
 }
 
-function calculateToClients(data, days) {
+async function calculateToClients(data, days) {
 
     data = data.filter(item => item.inWayToClient)
 
@@ -590,7 +590,7 @@ function calculateToClients(data, days) {
     return goodsInTransit;
 }
 
-function calculateCommissionFromProfit(data, days) {
+async function calculateCommissionFromProfit(data, days) {
     // Фильтруем объекты за указанный период
     const filteredData = data.filter(item => {
         const currentDate = new Date(item.rr_dt);
@@ -635,7 +635,7 @@ function calculateCommissionFromProfit(data, days) {
     };
 }
 
-function calculateCommissionFromDelivery(data, days) {
+async function calculateCommissionFromDelivery(data, days) {
     // Фильтруем объекты за указанный период
     const filteredData = data.filter(item => {
         const itemDate = new Date(item.rr_dt);
@@ -711,7 +711,7 @@ const abcAnalysis = (products) => {
     }
 }
 
-function calculateAdvertisementMetrics(advertisementData, revenue, days) {
+async function calculateAdvertisementMetrics(advertisementData, revenue, days) {
     const currentDate = new Date();
     const periodStartDate = new Date(currentDate.getTime() - days * 24 * 60 * 60 * 1000);
 
@@ -741,7 +741,7 @@ function calculateAdvertisementMetrics(advertisementData, revenue, days) {
     };
 }
 
-function findFBSFBO(orders, warehouses, days) {
+async function findFBSFBO(orders, warehouses, days) {
     const currentDate = new Date();
     const periodStartDate = new Date(currentDate.getTime() - days * 24 * 60 * 60 * 1000);
 
