@@ -110,46 +110,38 @@ function calculateReturn(data, days) {
 
 function calculateBuyout(orders, days) {
 
-    const totalOrders = orders.length;
+    function filterOrdersByPeriod(orders, startDate, endDate) {
+        return orders.filter(order => {
+            const orderDate = new Date(order.date);
+            return orderDate >= startDate && orderDate <= endDate;
+        });
+    }
 
-    // Подсчет количества отмененных заказов
-    const canceledOrders = orders.filter(order => order.isCancel === true);
-    const canceledOrdersCount = canceledOrders.length;
+    // Получаем текущую дату и дату days дней назад
+    const currentDate = new Date();
+    const currentPeriodEndDate = new Date(currentDate);
+    const currentPeriodStartDate = new Date(currentDate.getTime() - days * 24 * 60 * 60 * 1000);
 
-    // Вычисление доли выкупа
-    const purchaseRate = (totalOrders - canceledOrdersCount) / totalOrders;
+    // Фильтрация заказов по текущему периоду
+    const currentPeriodOrders = filterOrdersByPeriod(orders, currentPeriodStartDate, currentPeriodEndDate);
 
-    // Получение доли выкупа для текущего периода
-    const currentPeriodOrders = orders.filter(order => {
-        const orderDate = new Date(order.date);
-        const currentDate = new Date();
-        const daysAgo = new Date(currentDate.setDate(currentDate.getDate() - days));
-        return orderDate >= daysAgo && orderDate <= new Date();
-    });
+    // Получаем даты для предыдущего периода (days дней назад)
+    const previousPeriodEndDate = new Date(currentPeriodStartDate.getTime() - 24 * 60 * 60 * 1000);
+    const previousPeriodStartDate = new Date(previousPeriodEndDate.getTime() - days * 24 * 60 * 60 * 1000);
 
-    const totalCurrentPeriodOrders = currentPeriodOrders.length;
-    const canceledCurrentPeriodOrders = currentPeriodOrders.filter(order => order.isCancel === true).length;
-    const purchaseRateCurrentPeriod = (totalCurrentPeriodOrders - canceledCurrentPeriodOrders) / (totalCurrentPeriodOrders || 1);
+    // Фильтрация заказов по предыдущему периоду
+    const previousPeriodOrders = filterOrdersByPeriod(orders, previousPeriodStartDate, previousPeriodEndDate);
 
-    // Получение доли выкупа для предыдущего периода
-    const previousPeriodOrders = orders.filter(order => {
-        const orderDate = new Date(order.date);
-        const currentDate = new Date();
-        const daysAgo = new Date(currentDate.setDate(currentDate.getDate() - (2 * days)));
-        const daysBeforeAgo = new Date(currentDate.setDate(currentDate.getDate() - days));
-        return orderDate >= daysAgo && orderDate <= daysBeforeAgo;
-    });
+    // Подсчет суммы выкупов для текущего и предыдущего периода
+    const totalBuyoutCurrentPeriod = currentPeriodOrders.reduce((total, order) => total + (order.isCancel ? 0 : 1), 0);
+    const totalBuyoutPreviousPeriod = previousPeriodOrders.reduce((total, order) => total + (order.isCancel ? 0 : 1), 0);
 
-    const totalPreviousPeriodOrders = previousPeriodOrders.length;
-    const canceledPreviousPeriodOrders = previousPeriodOrders.filter(order => order.isCancel === true).length;
-    const purchaseRatePreviousPeriod = (totalPreviousPeriodOrders - canceledPreviousPeriodOrders) / (totalPreviousPeriodOrders || 1);
-
-    // Вычисление процентного роста
-    const percentGrowth = ((purchaseRateCurrentPeriod - purchaseRatePreviousPeriod) / (purchaseRatePreviousPeriod || 1)) * 100;
+    // Вычисление процентного роста суммы выкупов
+    const percentGrowth = ((totalBuyoutCurrentPeriod - totalBuyoutPreviousPeriod) / (totalBuyoutPreviousPeriod || 1)) * 100;
 
     // Возвращаем результаты
     return {
-        purchaseRate: purchaseRate.toFixed(2),
+        purchaseRate: totalBuyoutCurrentPeriod,
         percentGrowth: percentGrowth.toFixed(2)
     };
 }
@@ -160,35 +152,42 @@ function dateMatches(date1, date2) {
 }
 
 function calculateAverageReceipt(data, days) {
+    // Функция для фильтрации данных по периоду
+    function filterDataByPeriod(data, startDate, endDate) {
+        return data.filter(item => {
+            const itemDate = new Date(item.date);
+            return itemDate >= startDate && itemDate <= endDate;
+        });
+    }
+
+    // Получаем текущую дату и дату days дней назад
     const currentDate = new Date();
-    const lastDaysDate = new Date(currentDate);
-    lastDaysDate.setDate(lastDaysDate.getDate() - days);
-    const previousDaysDate = new Date(lastDaysDate);
-    previousDaysDate.setDate(previousDaysDate.getDate() - days);
+    const currentPeriodEndDate = new Date(currentDate);
+    const currentPeriodStartDate = new Date(currentDate.getTime() - days * 24 * 60 * 60 * 1000);
 
-    const lastDays = getDatesInInterval(lastDaysDate, currentDate);
-    const previousDays = getDatesInInterval(previousDaysDate, lastDaysDate);
+    // Фильтрация данных по текущему периоду
+    const dataInCurrentPeriod = filterDataByPeriod(data, currentPeriodStartDate, currentPeriodEndDate);
 
-    const dataInLastDays = data.filter(item => {
-        const itemDate = new Date(item.date);
-        return lastDays.some(date => dateMatches(itemDate, date));
-    });
+    // Получаем даты для предыдущего периода (days дней назад)
+    const previousPeriodEndDate = new Date(currentPeriodStartDate.getTime() - 24 * 60 * 60 * 1000);
+    const previousPeriodStartDate = new Date(previousPeriodEndDate.getTime() - days * 24 * 60 * 60 * 1000);
 
-    const dataInPreviousDays = data.filter(item => {
-        const itemDate = new Date(item.date);
-        return previousDays.some(date => dateMatches(itemDate, date));
-    });
+    // Фильтрация данных по предыдущему периоду
+    const dataInPreviousPeriod = filterDataByPeriod(data, previousPeriodStartDate, previousPeriodEndDate);
 
-    const sumLastDays = dataInLastDays.reduce((sum, item) => sum + item.forPay, 0);
-    const sumPreviousDays = dataInPreviousDays.reduce((sum, item) => sum + item.forPay, 0);
-    const averageReceiptLastDays = sumLastDays / dataInLastDays.length;
-    const averageReceiptPreviousDays = sumPreviousDays / dataInPreviousDays.length;
+    // Вычисление среднего чека для текущего и предыдущего периода
+    const sumCurrentPeriod = dataInCurrentPeriod.reduce((sum, item) => sum + item.forPay, 0);
+    const sumPreviousPeriod = dataInPreviousPeriod.reduce((sum, item) => sum + item.forPay, 0);
+    const averageReceiptCurrentPeriod = sumCurrentPeriod / (dataInCurrentPeriod.length || 1);
+    const averageReceiptPreviousPeriod = sumPreviousPeriod / (dataInPreviousPeriod.length || 1);
 
-    const growthRate = ((averageReceiptLastDays - averageReceiptPreviousDays) / averageReceiptPreviousDays) * 100;
+    // Вычисление процентного роста среднего чека
+    const growthRate = ((averageReceiptCurrentPeriod - averageReceiptPreviousPeriod) / (averageReceiptPreviousPeriod || 1)) * 100;
 
+    // Возвращаем результаты
     return {
-        averageReceiptLastDays,
-        growthRate
+        averageReceiptLastDays: averageReceiptCurrentPeriod.toFixed(2),
+        growthRate: growthRate.toFixed(2)
     };
 }
 
