@@ -251,7 +251,9 @@ class UserController {
                 const tokens = [newToken]
                 await User.update({ tokens: tokens, isOnboarded: true }, { where: { id } });
             }
-            await fetchAndStore(user)
+            setTimeout(async () => {
+                await fetchAndStore(user)
+            }, 61000);
             const tkn = generateJWT(user.id, user.email, user.phone, user.stage, user.role, user.firstName, user.lastName, user.patronym, user.confirmed, user.isOnboarded, user.promoCode, user.isActive, user.updatedAt, user.brandName)
             res.status(200).json({ token: tkn });
         } catch (error) {
