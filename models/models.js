@@ -41,61 +41,73 @@ const DataCollection = sequelize.define('dataCollection', {
 const Warehouse = sequelize.define('Warehouse', {
     id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
     data: { type: DataTypes.JSONB },
+    brandName: { type: DataTypes.STRING },
 });
 
 const WarehouseWB = sequelize.define('WarehouseWB', {
     id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
     data: { type: DataTypes.JSONB },
+    brandName: { type: DataTypes.STRING },
 });
 
 const Supply = sequelize.define('Supply', {
     id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
     data: { type: DataTypes.JSONB },
+    brandName: { type: DataTypes.STRING },
 });
 
 const NewOrder = sequelize.define('NewOrder', {
     id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
     data: { type: DataTypes.JSONB },
+    brandName: { type: DataTypes.STRING },
 });
 
 const ReshipmentOrder = sequelize.define('ReshipmentOrder', {
     id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
     data: { type: DataTypes.JSONB },
+    brandName: { type: DataTypes.STRING },
 });
 
 const Income = sequelize.define('Income', {
     id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
     data: { type: DataTypes.JSONB },
+    brandName: { type: DataTypes.STRING },
 });
 
 const Stock = sequelize.define('Stock', {
     id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
     data: { type: DataTypes.JSONB },
+    brandName: { type: DataTypes.STRING },
 });
 
 const Order = sequelize.define('Order', {
     id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
     data: { type: DataTypes.JSONB },
+    brandName: { type: DataTypes.STRING },
 });
 
 const Sale = sequelize.define('Sale', {
     id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
     data: { type: DataTypes.JSONB },
+    brandName: { type: DataTypes.STRING },
 });
 
 const ReportDetailByPeriod = sequelize.define('ReportDetailByPeriod', {
     id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
     data: { type: DataTypes.JSONB },
+    brandName: { type: DataTypes.STRING },
 });
 
 const Add = sequelize.define('Add', {
     id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
     data: { type: DataTypes.JSONB },
+    brandName: { type: DataTypes.STRING },
 });
 
 const Info = sequelize.define('Info', {
     id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
     data: { type: DataTypes.JSONB },
+    brandName: { type: DataTypes.STRING },
 });
 
 // Определение связи между пользователями и собранными данными
