@@ -1,4 +1,4 @@
-const { User, DataCollection } = require('../models/models')
+const { User, DataCollection, Order } = require('../models/models')
 const {
     filterArrays,
     calculateOrders,
@@ -35,7 +35,7 @@ class DataCollectionController {
 
     async getAllForUser(req, res) {
         const { id } = req.params
-        const data = await DataCollection.findAll({ where: { userId: id } })
+        const data = await Order.findAll({ where: { userId: id } })
         return res.json(data)
     }
 
