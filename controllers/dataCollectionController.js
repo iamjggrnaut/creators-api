@@ -43,7 +43,7 @@ class DataCollectionController {
 
     async getBrandNames(req, res) {
         const { id } = req.params
-        const data = await DataCollection.findAll({ where: { userId: id } })
+        const data = await Warehouse.findAll({ where: { userId: id } })
         const names = data.map(el => el.brandName)
         return res.json(names)
     }
