@@ -147,7 +147,7 @@ async function fetchDataAndUpsert(Model, id) {
                     await Model.upsert({
                         userId: id,
                         brandName: resTokens[item].brandName,
-                        data: JSON.stringify(data)
+                        data: data
                     });
 
                     console.log(`Data from ${url} upserted successfully.`);
