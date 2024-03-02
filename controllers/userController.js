@@ -7,7 +7,7 @@ const uuid = require('uuid');
 const axios = require('axios');
 const fs = require('fs');
 const path = require('path');
-const { fetchAndStore } = require('../service/scheduler')
+const { fetchAllData } = require('../service/scheduler')
 const Queue = require('bull');
 
 
@@ -252,7 +252,7 @@ class UserController {
                 await User.update({ tokens: tokens, isOnboarded: true }, { where: { id } });
             }
             setTimeout(async () => {
-                await fetchAndStore(user)
+                await fetchAllData(user)
             }, 61000);
             const tkn = generateJWT(user.id, user.email, user.phone, user.stage, user.role, user.firstName, user.lastName, user.patronym, user.confirmed, user.isOnboarded, user.promoCode, user.isActive, user.updatedAt, user.brandName)
             res.status(200).json({ token: tkn });

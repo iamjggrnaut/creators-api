@@ -38,11 +38,95 @@ const DataCollection = sequelize.define('dataCollection', {
     info: { type: DataTypes.JSONB } // Информация
 });
 
+const Warehouse = sequelize.define('Warehouse', {
+    id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+    data: { type: DataTypes.JSONB },
+});
+
+const WarehouseWB = sequelize.define('WarehouseWB', {
+    id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+    data: { type: DataTypes.JSONB },
+});
+
+const Supply = sequelize.define('Supply', {
+    id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+    data: { type: DataTypes.JSONB },
+});
+
+const NewOrder = sequelize.define('NewOrder', {
+    id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+    data: { type: DataTypes.JSONB },
+});
+
+const ReshipmentOrder = sequelize.define('ReshipmentOrder', {
+    id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+    data: { type: DataTypes.JSONB },
+});
+
+const Income = sequelize.define('Income', {
+    id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+    data: { type: DataTypes.JSONB },
+});
+
+const Stock = sequelize.define('Stock', {
+    id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+    data: { type: DataTypes.JSONB },
+});
+
+const Order = sequelize.define('Order', {
+    id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+    data: { type: DataTypes.JSONB },
+});
+
+const Sale = sequelize.define('Sale', {
+    id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+    data: { type: DataTypes.JSONB },
+});
+
+const ReportDetailByPeriod = sequelize.define('ReportDetailByPeriod', {
+    id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+    data: { type: DataTypes.JSONB },
+});
+
+const Add = sequelize.define('Add', {
+    id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+    data: { type: DataTypes.JSONB },
+});
+
+const Info = sequelize.define('Info', {
+    id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+    data: { type: DataTypes.JSONB },
+});
+
 // Определение связи между пользователями и собранными данными
 User.hasMany(DataCollection); // Один пользователь может иметь много записей о сборе данных
 DataCollection.belongsTo(User); // Каждая запись о сборе данных принадлежит определённому пользователю
+Warehouse.belongsTo(User);
+WarehouseWB.belongsTo(User);
+Supply.belongsTo(User);
+NewOrder.belongsTo(User);
+ReshipmentOrder.belongsTo(User);
+Income.belongsTo(User);
+Stock.belongsTo(User);
+Order.belongsTo(User);
+Sale.belongsTo(User);
+ReportDetailByPeriod.belongsTo(User);
+Add.belongsTo(User);
+Info.belongsTo(User);
 
 module.exports = {
     User,
-    DataCollection
+    DataCollection,
+    Warehouse,
+    WarehouseWB,
+    Supply,
+    NewOrder,
+    ReshipmentOrder,
+    Income,
+    Stock,
+    Order,
+    Sale,
+    ReportDetailByPeriod,
+    Add,
+    Info
 };
