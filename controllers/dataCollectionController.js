@@ -104,7 +104,7 @@ class DataCollectionController {
         //     commissionFromProfit: await calculateCommissionFromProfit(data.reportDetailByPeriod, days),
         //     logisticsFromProfit: await calculateCommissionFromDelivery(data.reportDetailByPeriod, days),
         // }
-        return res.json(warehouses, warehousesWB, supplies, newOrders, reshipmentOrders, incomes, stocks, orders, sales, reportDetailByPeriod, add, info)
+        return res.json({ warehouses, warehousesWB, supplies, newOrders, reshipmentOrders, incomes, stocks, orders, sales, reportDetailByPeriod, add, info })
     }
 
     async getFilteredCollection(req, res) {
