@@ -26,6 +26,7 @@ const DataCollection = sequelize.define('dataCollection', {
     brandName: { type: DataTypes.STRING, allowNull: false }, // Поле для связи с пользователем
     date: { type: DataTypes.DATEONLY, defaultValue: DataTypes.NOW }, // Дата записи
     warehouses: { type: DataTypes.JSONB }, // Склады
+    warehousesWB: { type: DataTypes.JSONB }, // Склады
     supplies: { type: DataTypes.JSONB }, // Поставки
     newOrders: { type: DataTypes.JSONB }, // Новые заказы
     reshipmentOrders: { type: DataTypes.JSONB }, // Переотправка заказов
