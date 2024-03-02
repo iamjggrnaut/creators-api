@@ -57,7 +57,7 @@ class DataCollectionController {
     async getDataCollection(req, res) {
         const { id } = req.params
         const { days, brandName } = req.query
-        const warehouses = await Warehouse.findOne({ where: { userId: id, brandName } })
+        const warehouses = await Warehouse.findOne({ where: { userId: id } })
         const warehousesWB = await WarehouseWB.findOne({ where: { userId: id } })
         const supplies = await Supply.findOne({ where: { userId: id } })
         const newOrders = await NewOrder.findOne({ where: { userId: id } })
