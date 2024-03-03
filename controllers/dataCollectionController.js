@@ -257,6 +257,16 @@ class DataCollectionController {
         return res.json({ warehouses, warehousesWB, supplies, newOrders, reshipmentOrders, incomes, stocks, orders, sales, reportDetailByPeriod, add, info, content })
     }
 
+    async getGeographyData(req, res) {
+        const { id } = req.params
+        const { days, brandName } = req.query
+
+        const orders = await Order.findOne({ where: { userId: id, brandName } })
+        const sales = await Sale.findOne({ where: { userId: id, brandName } })
+
+        return res.json({ orders, sales })
+    }
+
 }
 
 
