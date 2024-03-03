@@ -368,8 +368,8 @@ class DataCollectionController {
         const salesByWarehouseTotal = warehouseNames && state && state.sales ? warehouseNames.map(fo => state.sales.data.filter(item => item.warehouseName === fo)).sort().reverse() : []
 
 
-        let ordersByWarehouse = warehouseNames && state.orders.data ? warehouseNames.map(fo => ({ warehouse: fo, data: state.orders.data.filter(item => item.warehouseName === fo) })).sort((a, b) => b.data.length - a.data.length) : []
-        let salesByWarehouse = warehouseNames && state.sales.data ? warehouseNames.map(fo => ({ warehouse: fo, data: state.sales.data.filter(item => item.warehouseName === fo) })).sort((a, b) => b.data.length - a.data.length) : []
+        let ordersByWarehouse = warehouseNames && data.orders ? warehouseNames.map(fo => ({ warehouse: fo, data: data.orders.filter(item => item.warehouseName === fo) })).sort((a, b) => b.data.length - a.data.length) : []
+        let salesByWarehouse = warehouseNames && data.sales ? warehouseNames.map(fo => ({ warehouse: fo, data: data.sales.filter(item => item.warehouseName === fo) })).sort((a, b) => b.data.length - a.data.length) : []
 
         const ordersDataWarehouse = {
             labels: ordersByWarehouse.map(item => item.warehouse.split(' ')).slice(0, 5),
