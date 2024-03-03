@@ -340,6 +340,9 @@ class DataCollectionController {
                     borderRadius: 10
                 },
             ],
+            extraData: {
+                data: ordersTableData.slice(0, 5)
+            }
         }
 
         const salesData = {
@@ -360,6 +363,9 @@ class DataCollectionController {
                     borderRadius: 10
                 },
             ],
+            extraData: {
+                data: salesTableData.slice(0, 5)
+            }
         }
 
         const warehouseNames = orders ? [...new Set(orders.map(item => item.warehouseName))] : []
@@ -386,13 +392,16 @@ class DataCollectionController {
                     borderRadius: 10
                 },
             ],
+            extraData: {
+                data: ordersByWarehouse.slice(0, 5)
+            }
         }
 
         const salesDataWarehouse = {
             labels: salesByWarehouse.map(item => item.warehouse.split(' ')).slice(0, 5),
             datasets: [
                 {
-                    data: ordersByWarehouse.map(item => item.data.reduce((acc, item) => acc + item.finishedPrice, 0)).slice(0, 5),
+                    data: salesByWarehouse.map(item => item.data.reduce((acc, item) => acc + item.finishedPrice, 0)).slice(0, 5),
                     backgroundColor: [
                         'rgba(129, 172, 255, 1)',
                         'rgba(255, 153, 114, 1)',
@@ -403,6 +412,9 @@ class DataCollectionController {
                     borderRadius: 10
                 },
             ],
+            extraData: {
+                data: salesByWarehouse.slice(0, 5)
+            }
         }
 
         const ordersWarehouseTable = ordersByWarehouse ? ordersByWarehouse.map((item, i) => item.data.reduce((acc, obj) => {
