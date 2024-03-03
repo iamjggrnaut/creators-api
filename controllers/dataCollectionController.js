@@ -427,3 +427,36 @@ class DataCollectionController {
 
 
 module.exports = new DataCollectionController()
+
+
+function calculateGrowthPercentageGeo(data, days) {
+    // Получаем текущую дату
+    const currentDate = new Date();
+
+    // Вычисляем дату days дней назад
+    const pastDate = new Date(currentDate.getTime() - days * 24 * 60 * 60 * 1000);
+
+    // Вычисляем сумму товаров за текущий период и предыдущий период
+    let currentPeriodSum = 0;
+    let pastPeriodSum = 0;
+
+    data.forEach(item => {
+        // Преобразуем дату из строки в объект Date
+        const itemDate = new Date(item.date);
+
+        // Если дата товара попадает в текущий период
+        if (itemDate >= pastDate && itemDate <= currentDate) {
+            currentPeriodSum += item.finishedPrice;
+        }
+
+        // Если дата товара попадает в прошлый период
+        if (itemDate < pastDate) {
+            pastPeriodSum += item.finishedPrice;
+        }
+    });
+
+    // Вычисляем процентный рост
+    const growthPercentage = ((currentPeriodSum - pastPeriodSum) / pastPeriodSum) * 100;
+
+    return growthPercentage;
+}
