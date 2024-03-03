@@ -264,15 +264,27 @@ class DataCollectionController {
         const ordersRes = await Order.findOne({ where: { userId: id, brandName } })
         const salesRes = await Sale.findOne({ where: { userId: id, brandName } })
 
+        const lastDate = new Date().setDate(new Date().getDate() - days);
+
+        function filterByDate(obj, field) {
+            return obj.filter(item => {
+                const itemDate = new Date(item[field]);
+                return itemDate >= lastDate && itemDate <= new Date();
+            });
+        }
+
         const state = {
             orders: ordersRes.dataValues,
             sales: salesRes.dataValues,
         }
 
-        const data = filterArraysNoData(state, days)
+        const data = {
+            orders: filterByDate(state.orders.data, 'date'),
+            sales: filterByDate(state.sales.data, 'date'),
+        }
 
-        const orders = data.orders.data
-        const sales = data.sales.data
+        const orders = data.orders
+        const sales = data.sales
 
         const fos = orders ? orders.map(item => item.oblastOkrugName) : []
         const uniqueFos = fos ? [...new Set(fos)] : []
