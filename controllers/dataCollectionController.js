@@ -409,7 +409,7 @@ class DataCollectionController {
             return acc
         }, {})) : null
 
-        return res.json({
+        const object = {
             orders,
             sales,
             ordersData,
@@ -420,7 +420,11 @@ class DataCollectionController {
             salesTableData,
             ordersWarehouseTable,
             salesWarehouseTable
-        })
+        }
+
+        const filtered = filterArraysNoData(object, days)
+
+        return res.json(filtered)
     }
 
 }
@@ -459,4 +463,19 @@ function calculateGrowthPercentageGeo(data, days) {
     const growthPercentage = ((currentPeriodSum - pastPeriodSum) / pastPeriodSum) * 100;
 
     return growthPercentage;
+}
+
+function filterArraysNoData(obj, days) {
+    for (let key in obj) {
+        if (obj[key] && Array.isArray(obj[key]) && (key !== 'warehouses' && key !== 'info')) {
+            if (typeof obj[key] === 'object' && obj[key].length) {
+                obj[key] = obj[key].filter(item => {
+                    const date = item.date ? new Date(item.date) : item.lastChangeDate ? new Date(item.lastChangeDate) : item.sale_dt ? new Date(item.sale_dt) : new Date(item.create_dt);
+                    const weekAgo = new Date(Date.now() - days * 24 * 60 * 60 * 1000);
+                    return date >= weekAgo;
+                });
+            }
+        }
+    }
+    return obj
 }
