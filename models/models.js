@@ -20,24 +20,6 @@ const User = sequelize.define('user', {
     tokens: { type: DataTypes.JSONB, },
 })
 
-const DataCollection = sequelize.define('dataCollection', {
-    id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true }, // Идентификатор
-    userId: { type: DataTypes.INTEGER, allowNull: false }, // Поле для связи с пользователем
-    brandName: { type: DataTypes.STRING, allowNull: false }, // Поле для связи с пользователем
-    date: { type: DataTypes.DATEONLY, defaultValue: DataTypes.NOW }, // Дата записи
-    warehouses: { type: DataTypes.JSONB }, // Склады
-    supplies: { type: DataTypes.JSONB }, // Поставки
-    newOrders: { type: DataTypes.JSONB }, // Новые заказы
-    reshipmentOrders: { type: DataTypes.JSONB }, // Переотправка заказов
-    incomes: { type: DataTypes.JSONB }, // Доходы
-    stocks: { type: DataTypes.JSONB }, // Складские запасы
-    orders: { type: DataTypes.JSONB }, // Заказы
-    sales: { type: DataTypes.JSONB }, // Продажи
-    reportDetailByPeriod: { type: DataTypes.JSONB }, // Отчет по деталям за период
-    add: { type: DataTypes.JSONB }, // Информация
-    info: { type: DataTypes.JSONB } // Информация
-});
-
 const Warehouse = sequelize.define('Warehouse', {
     id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
     data: { type: DataTypes.JSONB },

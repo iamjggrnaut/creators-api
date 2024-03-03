@@ -1,7 +1,6 @@
 const cron = require('node-cron');
 const {
     User,
-    DataCollection,
     Warehouse,
     WarehouseWB,
     Supply,
@@ -95,39 +94,6 @@ async function fetchDataAndUpsert(Model, id) {
         const decodedTokens = user.tokens.map(token => ({ brandName: token.brandName, token: jwt.decode(token.token, { complete: true }) }))
         const resTokens = decodedTokens && decodedTokens.length ? decodedTokens.map(token => ({ brandName: token.brandName, token: token.token.payload.token })) : [];
 
-        // // Создание массива URL-адресов эндпоинтов
-        // const urls = [
-        //     `https://suppliers-api.wildberries.ru/api/v3/warehouses`,
-        //     `https://suppliers-api.wildberries.ru/api/v3/offices`,
-        //     `https://suppliers-api.wildberries.ru/api/v3/supplies?dateFrom=${dateFrom}&limit=200&next=0`,
-        //     `https://suppliers-api.wildberries.ru/api/v3/orders/new`,
-        //     `https://suppliers-api.wildberries.ru/api/v3/supplies/orders/reshipment`,
-        //     `https://statistics-api.wildberries.ru/api/v1/supplier/incomes?dateFrom=${dateFrom}`,
-        //     `https://statistics-api.wildberries.ru/api/v1/supplier/stocks?dateFrom=${dateFrom}`,
-        //     `https://statistics-api.wildberries.ru/api/v1/supplier/orders?dateFrom=${dateFrom}`,
-        //     `https://statistics-api.wildberries.ru/api/v1/supplier/sales?dateFrom=${dateFrom}`,
-        //     `https://statistics-api.wildberries.ru/api/v1/supplier/reportDetailByPeriod?dateFrom=${dateFrom}&dateTo=${dateTo}`,
-        //     `https://advert-api.wb.ru/adv/v1/upd?from=${from}&to=${dateTo}`,
-        //     `https://suppliers-api.wildberries.ru/public/api/v1/info`
-        // ];
-
-        // // Массив названий для идентификации данных
-        // const names = [
-        //     'warehouses',
-        //     'warehousesWB',
-        //     'supplies',
-        //     'newOrders',
-        //     'reshipmentOrders',
-        //     'incomes',
-        //     'stocks',
-        //     'orders',
-        //     'sales',
-        //     'reportDetailByPeriod',
-        //     'add',
-        //     'info'
-        // ];
-
-
 
         if (resTokens && resTokens.length) {
             // Запрос данных по URL-адресам
@@ -154,44 +120,6 @@ async function fetchDataAndUpsert(Model, id) {
                 } catch (error) {
                     console.error(`Error fetching data from ${url}: ${error}`);
                 }
-
-
-
-
-                // Объект для хранения полученных данных
-                // const responseData = {};
-                // await Promise.all(urls.map(async (url, i) => {
-                //     try {
-                //         const response = await axios.get(url, {
-                //             headers: {
-                //                 Authorization: `Bearer ${resTokens[item].token}`
-                //             },
-                //             timeout: 62000 // Таймаут в 62 секунд
-                //         });
-                //         responseData[names[i]] = response.data;
-                //     } catch (error) {
-                //         console.error('Ошибка при запросе к API:', error);
-                //         responseData[names[i]] = null;
-                //     }
-                // }));
-
-                // // Поиск или создание записи в таблице DataCollection
-                // const [dataCollection, created] = await DataCollection.findOrCreate({
-                //     where: {
-                //         userId: id,
-                //         brandName: resTokens[item].brandName
-                //     },
-                //     defaults: {
-                //         userId: id,
-                //         brandName: resTokens[item].brandName,
-                //         ...responseData // Данные с эндпоинтов
-                //     }
-                // });
-
-                // // Если запись не была создана, обновляем существующую
-                // if (!created) {
-                //     await dataCollection.update(responseData);
-                // }
             }
         }
 

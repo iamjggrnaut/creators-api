@@ -1,4 +1,4 @@
-const { User, DataCollection } = require('../models/models')
+const { User } = require('../models/models')
 const ApiError = require('../error/ApiError')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
@@ -316,19 +316,6 @@ class UserController {
         const users = await User.findAll()
         users.forEach(x => x.password = '')
         return res.json(users)
-    }
-
-    async getData(req, res) {
-        const { id } = req.params;
-        try {
-            const data = await DataCollection.findOne({ where: { userId: id } })
-            return req.json(data)
-        }
-        catch (error) {
-            console.error('Ошибка при получении данных:', error);
-            return res.status(500).json({ error: 'Внутренняя ошибка сервера' });
-        }
-
     }
 
     async getTokenExp(req, res) {
