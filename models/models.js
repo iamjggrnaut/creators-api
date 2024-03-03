@@ -110,7 +110,6 @@ Info.belongsTo(User);
 
 module.exports = {
     User,
-    DataCollection,
     Warehouse,
     WarehouseWB,
     Supply,
