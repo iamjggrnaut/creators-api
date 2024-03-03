@@ -337,12 +337,12 @@ class DataCollectionController {
                         'rgba(74, 217, 145, 1)',
                         'rgba(254, 197, 61, 1)',
                     ],
-                    borderRadius: 10
+                    borderRadius: 10,
+                    extraData: {
+                        data: ordersTableData.slice(0, 5)
+                    }
                 },
             ],
-            extraData: {
-                data: ordersTableData.slice(0, 5)
-            }
         }
 
         const salesData = {
@@ -360,12 +360,12 @@ class DataCollectionController {
                         'rgba(74, 217, 145, 1)',
                         'rgba(254, 197, 61, 1)',
                     ],
-                    borderRadius: 10
+                    borderRadius: 10,
+                    extraData: {
+                        data: salesTableData.slice(0, 5)
+                    }
                 },
             ],
-            extraData: {
-                data: salesTableData.slice(0, 5)
-            }
         }
 
         const warehouseNames = orders ? [...new Set(orders.map(item => item.warehouseName))] : []
@@ -389,12 +389,12 @@ class DataCollectionController {
                         'rgba(74, 217, 145, 1)',
                         'rgba(254, 197, 61, 1)',
                     ],
-                    borderRadius: 10
+                    borderRadius: 10,
+                    extraData: {
+                        data: ordersByWarehouse.slice(0, 5)
+                    }
                 },
             ],
-            extraData: {
-                data: ordersByWarehouse.slice(0, 5)
-            }
         }
 
         const salesDataWarehouse = {
@@ -409,12 +409,12 @@ class DataCollectionController {
                         'rgba(74, 217, 145, 1)',
                         'rgba(254, 197, 61, 1)',
                     ],
-                    borderRadius: 10
+                    borderRadius: 10,
+                    extraData: {
+                        data: salesByWarehouse.slice(0, 5)
+                    }
                 },
             ],
-            extraData: {
-                data: salesByWarehouse.slice(0, 5)
-            }
         }
 
         const ordersWarehouseTable = ordersByWarehouse ? ordersByWarehouse.map((item, i) => item.data.reduce((acc, obj) => {
