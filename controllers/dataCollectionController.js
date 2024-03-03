@@ -271,8 +271,8 @@ class DataCollectionController {
 
         const data = filterArraysNoData(state, days)
 
-        const orders = data.orders
-        const sales = data.sales
+        const orders = data.orders.data
+        const sales = data.sales.data
 
         const fos = orders ? orders.map(item => item.oblastOkrugName) : []
         const uniqueFos = fos ? [...new Set(fos)] : []
