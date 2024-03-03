@@ -93,7 +93,6 @@ const Info = sequelize.define('Info', {
 });
 
 // Определение связи между пользователями и собранными данными
-User.hasMany(DataCollection); // Один пользователь может иметь много записей о сборе данных
 Warehouse.belongsTo(User);
 WarehouseWB.belongsTo(User);
 Supply.belongsTo(User);
