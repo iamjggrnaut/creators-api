@@ -531,6 +531,8 @@ async function calculateGrossProfit(salesData, deliveryData, days) {
         const getDateProp = (item) => {
             if (item.date) {
                 return item.date
+            } else if (item.rr_dt) {
+                return item.rr_dt
             } else if (item.sale_dt) {
                 return item.sale_dt
             }
