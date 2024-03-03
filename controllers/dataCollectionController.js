@@ -274,37 +274,37 @@ class DataCollectionController {
 
         const fos = orders ? orders.map(item => item.oblastOkrugName) : []
         const uniqueFos = fos ? [...new Set(fos)] : []
-        const uniqueFosSales = fos ? [...new Set(sales?.map(item => item.oblastOkrugName))] : []
+        const uniqueFosSales = fos ? [...new Set(sales.map(item => item.oblastOkrugName))] : []
 
-        const totalOrdersSum = orders ? orders.reduce((acc, item) => acc + item.finishedPrice, 0)?.toFixed(2) : 0
-        const totalSalesSum = sales ? sales.reduce((acc, item) => acc + item.finishedPrice, 0)?.toFixed(2) : 0
+        const totalOrdersSum = orders ? orders.reduce((acc, item) => acc + item.finishedPrice, 0).toFixed(2) : 0
+        const totalSalesSum = sales ? sales.reduce((acc, item) => acc + item.finishedPrice, 0).toFixed(2) : 0
 
         const totalOrdersAmount = orders ? orders.length : 0
         const totalSalesAmount = sales ? sales.length : 0
 
-        const totalOrdersAmountState = state?.orders?.data ? state?.orders?.data.length : 0
-        const totalSalesAmountState = state?.sales?.data ? state?.sales?.data.length : 0
+        const totalOrdersAmountState = state.orders.data ? state.orders.data.length : 0
+        const totalSalesAmountState = state.sales.data ? state.sales.data.length : 0
 
-        const ordersByFosTotal = uniqueFos && state && state?.orders ? uniqueFos.map(fo => state?.orders?.data?.filter(item => item.oblastOkrugName === fo))?.sort().reverse() : []
-        const salesByFosTotal = uniqueFosSales && state && state?.sales ? uniqueFosSales.map(fo => state?.sales?.data?.filter(item => item.oblastOkrugName === fo))?.sort().reverse() : []
+        const ordersByFosTotal = uniqueFos && state && state.orders ? uniqueFos.map(fo => state.orders.data.filter(item => item.oblastOkrugName === fo)).sort().reverse() : []
+        const salesByFosTotal = uniqueFosSales && state && state.sales ? uniqueFosSales.map(fo => state.sales.data.filter(item => item.oblastOkrugName === fo)).sort().reverse() : []
 
-        const ordersByFos = uniqueFos && orders ? uniqueFos.map(fo => orders.filter(item => item.oblastOkrugName === fo))?.sort().reverse() : []
-        const salesByFos = uniqueFosSales && sales ? uniqueFosSales.map(fo => sales.filter(item => item.oblastOkrugName === fo))?.sort().reverse() : []
+        const ordersByFos = uniqueFos && orders ? uniqueFos.map(fo => orders.filter(item => item.oblastOkrugName === fo)).sort().reverse() : []
+        const salesByFos = uniqueFosSales && sales ? uniqueFosSales.map(fo => sales.filter(item => item.oblastOkrugName === fo)).sort().reverse() : []
 
-        const ordersTableData = ordersByFos ? ordersByFos.filter(item => item.length)?.map((array, i) => array.reduce((acc, item) => {
-            acc['fo'] = item.oblastOkrugName ? item.oblastOkrugName.split(' ')?.map(word => word.charAt(0).toUpperCase() + word.slice(1))?.join(' ')?.split('-')?.map(word => word.charAt(0).toUpperCase()
-                + word.slice(1))?.join('-') : "Регион не определен"
-            acc['sum'] = array.reduce((a, i) => a + i.finishedPrice, 0)?.toFixed(0)
+        const ordersTableData = ordersByFos ? ordersByFos.filter(item => item.length).map((array, i) => array.reduce((acc, item) => {
+            acc['fo'] = item.oblastOkrugName ? item.oblastOkrugName.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ').split('-').map(word => word.charAt(0).toUpperCase()
+                + word.slice(1)).join('-') : "Регион не определен"
+            acc['sum'] = array.reduce((a, i) => a + i.finishedPrice, 0).toFixed(0)
             acc['amount'] = array.length
             acc['percent'] = ((acc['amount'] / totalOrdersAmount) * 100).toFixed(2)
             acc['growth'] = ordersByFosTotal && ordersByFosTotal[i] ? calculateGrowthPercentageGeo(ordersByFosTotal[i], days) : 0
             return acc;
         }, {})) : null
 
-        const salesTableData = salesByFos ? salesByFos.filter(item => item.length)?.map((array, i) => array.reduce((acc, item) => {
-            acc['fo'] = item.oblastOkrugName ? item.oblastOkrugName.split(' ')?.map(word => word.charAt(0).toUpperCase() + word.slice(1))?.join(' ')?.split('-')?.map(word => word.charAt(0).toUpperCase()
-                + word.slice(1))?.join('-') : "Регион не определен"
-            acc['sum'] = array.reduce((a, i) => a + i.finishedPrice, 0)?.toFixed(0)
+        const salesTableData = salesByFos ? salesByFos.filter(item => item.length).map((array, i) => array.reduce((acc, item) => {
+            acc['fo'] = item.oblastOkrugName ? item.oblastOkrugName.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ').split('-').map(word => word.charAt(0).toUpperCase()
+                + word.slice(1)).join('-') : "Регион не определен"
+            acc['sum'] = array.reduce((a, i) => a + i.finishedPrice, 0).toFixed(0)
             acc['amount'] = array.length
             acc['percent'] = ((acc['amount'] / totalSalesAmount) * 100).toFixed(2)
             acc['growth'] = salesByFosTotal && salesByFosTotal[i] ? calculateGrowthPercentageGeo(salesByFosTotal[i], days) : 0
@@ -312,10 +312,10 @@ class DataCollectionController {
         }, {})) : null
 
         const ordersData = {
-            labels: ordersTableData?.map(item => item.fo?.split(' '))?.slice(0, 5),
+            labels: ordersTableData.map(item => item.fo.split(' ')).slice(0, 5),
             datasets: [
                 {
-                    data: ordersTableData?.map(item => item.sum).slice(0, 5),
+                    data: ordersTableData.map(item => item.sum).slice(0, 5),
                     backgroundColor: [
                         'rgba(129, 172, 255, 1)',
                         'rgba(255, 153, 114, 1)',
@@ -329,13 +329,13 @@ class DataCollectionController {
         }
 
         const salesData = {
-            labels: [...new Set(sales?.map(item => {
+            labels: [...new Set(sales.map(item => {
                 item.oblastOkrugName === '' ? item.oblastOkrugName = 'Регион не определен' : item.oblastOkrugName = item.oblastOkrugName
-                return item.oblastOkrugName?.split(' ')
+                return item.oblastOkrugName.split(' ')
             }))].slice(0, 5),
             datasets: [
                 {
-                    data: salesTableData?.map(item => item.sum).slice(0, 5),
+                    data: salesTableData.map(item => item.sum).slice(0, 5),
                     backgroundColor: [
                         'rgba(129, 172, 255, 1)',
                         'rgba(255, 153, 114, 1)',
@@ -350,18 +350,18 @@ class DataCollectionController {
 
         const warehouseNames = orders ? [...new Set(orders.map(item => item.warehouseName))] : []
 
-        const ordersByWarehouseTotal = warehouseNames && state && state?.orders ? warehouseNames.map(fo => state?.orders?.data?.filter(item => item.warehouseName === fo))?.sort().reverse() : []
-        const salesByWarehouseTotal = warehouseNames && state && state?.sales ? warehouseNames.map(fo => state?.sales?.data?.filter(item => item.warehouseName === fo))?.sort().reverse() : []
+        const ordersByWarehouseTotal = warehouseNames && state && state.orders ? warehouseNames.map(fo => state.orders.data.filter(item => item.warehouseName === fo)).sort().reverse() : []
+        const salesByWarehouseTotal = warehouseNames && state && state.sales ? warehouseNames.map(fo => state.sales.data.filter(item => item.warehouseName === fo)).sort().reverse() : []
 
 
-        let ordersByWarehouse = warehouseNames && state?.orders?.data ? warehouseNames.map(fo => ({ warehouse: fo, data: state?.orders?.data?.filter(item => item.warehouseName === fo) }))?.sort((a, b) => b.data.length - a.data.length) : []
-        let salesByWarehouse = warehouseNames && state?.sales?.data ? warehouseNames.map(fo => ({ warehouse: fo, data: state?.sales?.data?.filter(item => item.warehouseName === fo) }))?.sort((a, b) => b.data.length - a.data.length) : []
+        let ordersByWarehouse = warehouseNames && state.orders.data ? warehouseNames.map(fo => ({ warehouse: fo, data: state.orders.data.filter(item => item.warehouseName === fo) })).sort((a, b) => b.data.length - a.data.length) : []
+        let salesByWarehouse = warehouseNames && state.sales.data ? warehouseNames.map(fo => ({ warehouse: fo, data: state.sales.data.filter(item => item.warehouseName === fo) })).sort((a, b) => b.data.length - a.data.length) : []
 
         const ordersDataWarehouse = {
-            labels: ordersByWarehouse?.map(item => item.warehouse?.split(' '))?.slice(0, 5),
+            labels: ordersByWarehouse.map(item => item.warehouse.split(' ')).slice(0, 5),
             datasets: [
                 {
-                    data: ordersByWarehouse?.map(item => item.data?.reduce((acc, item) => acc + item.finishedPrice, 0)).slice(0, 5),
+                    data: ordersByWarehouse.map(item => item.data.reduce((acc, item) => acc + item.finishedPrice, 0)).slice(0, 5),
                     backgroundColor: [
                         'rgba(129, 172, 255, 1)',
                         'rgba(255, 153, 114, 1)',
@@ -375,10 +375,10 @@ class DataCollectionController {
         }
 
         const salesDataWarehouse = {
-            labels: salesByWarehouse?.map(item => item.warehouse?.split(' '))?.slice(0, 5),
+            labels: salesByWarehouse.map(item => item.warehouse.split(' ')).slice(0, 5),
             datasets: [
                 {
-                    data: ordersByWarehouse?.map(item => item.data?.reduce((acc, item) => acc + item.finishedPrice, 0)).slice(0, 5),
+                    data: ordersByWarehouse.map(item => item.data.reduce((acc, item) => acc + item.finishedPrice, 0)).slice(0, 5),
                     backgroundColor: [
                         'rgba(129, 172, 255, 1)',
                         'rgba(255, 153, 114, 1)',
@@ -391,18 +391,18 @@ class DataCollectionController {
             ],
         }
 
-        const ordersWarehouseTable = ordersByWarehouse ? ordersByWarehouse.map((item, i) => item.data?.reduce((acc, obj) => {
+        const ordersWarehouseTable = ordersByWarehouse ? ordersByWarehouse.map((item, i) => item.data.reduce((acc, obj) => {
             acc['fo'] = item.warehouse
-            acc['sum'] = item.data.reduce((a, i) => a + i.finishedPrice, 0)?.toFixed(0)
+            acc['sum'] = item.data.reduce((a, i) => a + i.finishedPrice, 0).toFixed(0)
             acc['amount'] = item.data.length
             acc['percent'] = ((acc['amount'] / totalSalesAmount) * 100).toFixed(2)
             acc['growth'] = ordersByWarehouseTotal && ordersByWarehouseTotal[i] ? calculateGrowthPercentageGeo(ordersByWarehouseTotal[i], days) : 0
             return acc
         }, {})) : null
 
-        const salesWarehouseTable = salesByWarehouse ? salesByWarehouse.map((item, i) => item.data?.reduce((acc, obj) => {
+        const salesWarehouseTable = salesByWarehouse ? salesByWarehouse.map((item, i) => item.data.reduce((acc, obj) => {
             acc['fo'] = item.warehouse
-            acc['sum'] = item.data.reduce((a, i) => a + i.finishedPrice, 0)?.toFixed(0)
+            acc['sum'] = item.data.reduce((a, i) => a + i.finishedPrice, 0).toFixed(0)
             acc['amount'] = item.data.length
             acc['percent'] = ((acc['amount'] / totalSalesAmount) * 100).toFixed(2)
             acc['growth'] = salesByWarehouseTotal && salesByWarehouseTotal[i] ? calculateGrowthPercentageGeo(salesByWarehouseTotal[i], days) : 0
