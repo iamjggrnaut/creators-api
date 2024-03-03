@@ -265,8 +265,8 @@ class DataCollectionController {
         const salesRes = await Sale.findOne({ where: { userId: id, brandName } })
 
         const state = {
-            orders: ordersRes.dataValues.data,
-            sales: salesRes.dataValues.data,
+            orders: ordersRes.dataValues,
+            sales: salesRes.dataValues,
         }
 
         const data = filterArraysNoData(state, days)
