@@ -192,7 +192,7 @@ async function calculateAverageReceipt(data, days) {
 }
 
 async function calculatePenalty(data, days) {
-    data = data.filter(item => item.rr_dt)
+    data = data.filter(item => item.sale_dt)
     const currentDate = new Date();
     const lastDaysDate = new Date(currentDate);
     lastDaysDate.setDate(lastDaysDate.getDate() - days);
@@ -204,7 +204,7 @@ async function calculatePenalty(data, days) {
 
     // Фильтрация данных по заданному периоду
     const dataInPeriod = data.filter(item => {
-        const itemDate = new Date(item.rr_dt); // Используем дату продажи
+        const itemDate = new Date(item.sale_dt); // Используем дату продажи
         return isInPeriod(itemDate, lastDaysDate, currentDate);
     });
 
@@ -222,7 +222,7 @@ async function calculateAdditionalPayment(data, days) {
 
     // Функция для проверки, попадает ли дата объекта в заданный период
     function isWithinPeriod(item) {
-        const itemDate = new Date(item.rr_dt); // Используем дату создания записи
+        const itemDate = new Date(item.sale_dt); // Используем дату создания записи
         return itemDate >= lastDaysDate && itemDate <= currentDate;
     }
 
@@ -237,7 +237,7 @@ async function calculateAdditionalPayment(data, days) {
 
 async function calculateCommission(data, days) {
 
-    data = data.filter(item => item.retail_price && item.rr_dt);
+    data = data.filter(item => item.retail_price && item.sale_dt);
 
     const currentDate = new Date();
     // Получаем дату days дней назад
@@ -246,7 +246,7 @@ async function calculateCommission(data, days) {
 
     // Функция для проверки, попадает ли дата объекта в заданный период
     function isWithinPeriod(item) {
-        const itemDate = new Date(item.rr_dt);
+        const itemDate = new Date(item.sale_dt);
         return itemDate >= lastDaysDate && itemDate <= currentDate;
     }
 
@@ -258,7 +258,7 @@ async function calculateCommission(data, days) {
 
     // Фильтруем данные для получения записей, попадающих в прошлый период
     const previousPeriodData = data.filter(item => {
-        const itemDate = new Date(item.rr_dt);
+        const itemDate = new Date(item.sale_dt);
         return itemDate < lastDaysDate;
     });
 
@@ -281,7 +281,7 @@ async function calculateDeliveryCost(data, days) {
     lastDaysDate.setDate(lastDaysDate.getDate() - days);
 
     function isWithinPeriod(item) {
-        const itemDate = new Date(item.rr_dt);
+        const itemDate = new Date(item.sale_dt);
         return itemDate >= lastDaysDate && itemDate <= currentDate;
     }
 
@@ -295,7 +295,7 @@ async function calculateDeliveryCost(data, days) {
     previousPeriodEndDate.setDate(previousPeriodEndDate.getDate() - 1);
 
     const dataInPreviousPeriod = data.filter(item => {
-        const itemDate = new Date(item.rr_dt);
+        const itemDate = new Date(item.sale_dt);
         return itemDate >= previousPeriodStartDate && itemDate <= previousPeriodEndDate;
     });
 
@@ -328,7 +328,7 @@ async function calculateMarginalProfit(data, days) {
 
     // Функция для фильтрации объектов по датам
     function filterByDate(item) {
-        const itemDate = new Date(item.rr_dt);
+        const itemDate = new Date(item.sale_dt);
         return itemDate >= previousDate && itemDate <= currentDate;
     }
 
@@ -367,9 +367,9 @@ async function calculateMargin(data, days) {
     const lastDate = new Date(currentDate.getTime() - (days * 24 * 60 * 60 * 1000));
 
     // Фильтруем данные за текущий и предыдущий периоды
-    const currentPeriodData = data.filter(item => new Date(item.rr_dt) >= lastDate && new Date(item.rr_dt) <= currentDate);
+    const currentPeriodData = data.filter(item => new Date(item.sale_dt) >= lastDate && new Date(item.sale_dt) <= currentDate);
     const previousPeriodData = data.filter(item => {
-        const date = new Date(item.rr_dt);
+        const date = new Date(item.sale_dt);
         return date < lastDate;
     });
 
@@ -409,9 +409,9 @@ async function calculateNetProfit(data, days) {
     const lastDate = new Date(currentDate.getTime() - (days * 24 * 60 * 60 * 1000));
 
     // Фильтруем данные за текущий и предыдущий периоды
-    const currentPeriodData = data.filter(item => new Date(item.rr_dt) >= lastDate && new Date(item.rr_dt) <= currentDate);
+    const currentPeriodData = data.filter(item => new Date(item.sale_dt) >= lastDate && new Date(item.sale_dt) <= currentDate);
     const previousPeriodData = data.filter(item => {
-        const date = new Date(item.rr_dt);
+        const date = new Date(item.sale_dt);
         return date < lastDate;
     });
 
@@ -496,7 +496,7 @@ async function calculateROI(data, days) {
     const startDate = new Date(currentDate);
     startDate.setDate(startDate.getDate() - days);
     const filteredData = data.filter(item => {
-        const itemDate = new Date(item.rr_dt); // Предполагается, что в объекте есть поле date с датой
+        const itemDate = new Date(item.sale_dt); // Предполагается, что в объекте есть поле date с датой
         return itemDate >= startDate && itemDate <= currentDate;
     });
 
@@ -531,8 +531,8 @@ async function calculateGrossProfit(salesData, deliveryData, days) {
         const getDateProp = (item) => {
             if (item.date) {
                 return item.date
-            } else if (item.rr_dt) {
-                return item.rr_dt
+            } else if (item.sale_dt) {
+                return item.sale_dt
             }
         }
 
@@ -593,7 +593,7 @@ async function calculateToClients(data, days) {
 async function calculateCommissionFromProfit(data, days) {
     // Фильтруем объекты за указанный период
     const filteredData = data.filter(item => {
-        const currentDate = new Date(item.rr_dt);
+        const currentDate = new Date(item.sale_dt);
         const startDate = new Date();
         startDate.setDate(startDate.getDate() - days); // Начальная дата = текущая дата - days
         return currentDate >= startDate && currentDate <= new Date(); // Проверяем, попадает ли дата объекта в период
@@ -613,7 +613,7 @@ async function calculateCommissionFromProfit(data, days) {
 
     // Фильтруем объекты за предыдущий период
     const previousData = data.filter(item => {
-        const currentDate = new Date(item.rr_dt);
+        const currentDate = new Date(item.sale_dt);
         return currentDate >= previousStartDate && currentDate <= previousEndDate; // Проверяем, попадает ли дата объекта в предыдущий период
     });
 
@@ -638,7 +638,7 @@ async function calculateCommissionFromProfit(data, days) {
 async function calculateCommissionFromDelivery(data, days) {
     // Фильтруем объекты за указанный период
     const filteredData = data.filter(item => {
-        const itemDate = new Date(item.rr_dt);
+        const itemDate = new Date(item.sale_dt);
         const currentDate = new Date();
         const periodStartDate = new Date(currentDate.setDate(currentDate.getDate() - days));
         return itemDate >= periodStartDate && itemDate <= new Date();
@@ -653,7 +653,7 @@ async function calculateCommissionFromDelivery(data, days) {
     // Считаем долю роста суммы комиссии по отношению к предыдущему периоду
     // Предполагается, что данные отсортированы по дате в порядке возрастания
     const previousPeriodData = data.filter(item => {
-        const itemDate = new Date(item.rr_dt);
+        const itemDate = new Date(item.sale_dt);
         const previousPeriodStartDate = new Date(new Date().setDate(new Date().getDate() - days * 2)); // Предыдущий период
         return itemDate >= previousPeriodStartDate && itemDate < new Date();
     });
