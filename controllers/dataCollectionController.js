@@ -445,7 +445,9 @@ class DataCollectionController {
             ordersTableData,
             salesTableData,
             ordersWarehouseTable,
-            salesWarehouseTable
+            salesWarehouseTable,
+            ordersByWarehouse,
+            salesByWarehouse
         }
 
         const filtered = filterArraysNoData(object, days)
