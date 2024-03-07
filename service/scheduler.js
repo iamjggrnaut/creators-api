@@ -65,11 +65,11 @@ async function fetchAllData(user) {
 
     let id = user.id
 
-    for (const Model of models) {
-        await fetchDataAndUpsert(Model, id);
-    }
     for (const Model of reportModels) {
         await postDataAndUpsert(Model, id);
+    }
+    for (const Model of models) {
+        await fetchDataAndUpsert(Model, id);
     }
 }
 
