@@ -139,6 +139,7 @@ async function postDataAndUpsert(Model, id) {
             // Запрос данных по URL-адресам
             for (let item in resTokens) {
 
+                console.log(resTokens[item].token);
 
                 try {
                     const response = await axios.post(url, payload, {
