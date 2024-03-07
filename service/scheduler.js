@@ -142,22 +142,24 @@ async function postDataAndUpsert(Model, id) {
                 console.log(resTokens[item].token);
 
                 try {
-                    const response = await axios.post(url, payload, {
-                        headers: {
-                            Authorization: `Bearer ${resTokens[item].token}`
-                        },
-                        timeout: 62000 // Таймаут в 62 секунд
-                    });
-                    const data = response.data;
+                    setTimeout(async () => {
+                        const response = await axios.post(url, payload, {
+                            headers: {
+                                Authorization: `Bearer ${resTokens[item].token}`
+                            },
+                            timeout: 62000 // Таймаут в 62 секунд
+                        });
+                        const data = response.data;
 
-                    // Upsert data into corresponding table
-                    await Model.upsert({
-                        userId: id,
-                        brandName: resTokens[item].brandName,
-                        data: data
-                    });
+                        // Upsert data into corresponding table
+                        await Model.upsert({
+                            userId: id,
+                            brandName: resTokens[item].brandName,
+                            data: data
+                        });
+                        console.log(`Data from ${url} upserted successfully.`);
 
-                    console.log(`Data from ${url} upserted successfully.`);
+                    }, 21000);
                 } catch (error) {
                     console.error(`Error fetching data from ${url}: ${error}`);
                 }
