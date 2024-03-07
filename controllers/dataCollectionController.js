@@ -10,7 +10,11 @@ const {
     Sale,
     ReportDetailByPeriod,
     Add,
-    Info
+    Info,
+    ReportThreeMonths,
+    ReportMonthly,
+    ReportWeekly,
+    ReportDaily,
 } = require('../models/models')
 const {
     filterArrays,
@@ -67,6 +71,10 @@ class DataCollectionController {
         const reportDetailByPeriod = await ReportDetailByPeriod.findOne({ where: { userId: id, brandName } })
         const add = await Add.findOne({ where: { userId: id, brandName } })
         const info = await Info.findOne({ where: { userId: id, brandName } })
+        const reportThreeMonths = await ReportThreeMonths.findOne({ where: { userId: id, brandName } })
+        const reportMonthly = await ReportMonthly.findOne({ where: { userId: id, brandName } })
+        const reportWeekly = await ReportWeekly.findOne({ where: { userId: id, brandName } })
+        const reportDaily = await ReportDaily.findOne({ where: { userId: id, brandName } })
 
         const [
             orderStat,
@@ -151,7 +159,25 @@ class DataCollectionController {
             logisticsFromProfit
         };
 
-        return res.json({ warehouses, warehousesWB, supplies, newOrders, reshipmentOrders, incomes, stocks, orders, sales, reportDetailByPeriod, add, info, content })
+        return res.json({
+            warehouses,
+            warehousesWB,
+            supplies,
+            newOrders,
+            reshipmentOrders,
+            incomes,
+            stocks,
+            orders,
+            sales,
+            reportDetailByPeriod,
+            add,
+            info,
+            content,
+            reportDaily,
+            reportWeekly,
+            reportMonthly,
+            reportThreeMonths
+        })
     }
 
     async getFilteredCollection(req, res) {
@@ -170,6 +196,10 @@ class DataCollectionController {
         const reportDetailByPeriod = await ReportDetailByPeriod.findOne({ where: { userId: id, brandName } })
         const add = await Add.findOne({ where: { userId: id, brandName } })
         const info = await Info.findOne({ where: { userId: id, brandName } })
+        const reportThreeMonths = await ReportThreeMonths.findOne({ where: { userId: id, brandName } })
+        const reportMonthly = await ReportMonthly.findOne({ where: { userId: id, brandName } })
+        const reportWeekly = await ReportWeekly.findOne({ where: { userId: id, brandName } })
+        const reportDaily = await ReportDaily.findOne({ where: { userId: id, brandName } })
 
         const [
             orderStat,
@@ -254,7 +284,25 @@ class DataCollectionController {
             logisticsFromProfit
         };
 
-        return res.json({ warehouses, warehousesWB, supplies, newOrders, reshipmentOrders, incomes, stocks, orders, sales, reportDetailByPeriod, add, info, content })
+        return res.json({
+            warehouses,
+            warehousesWB,
+            supplies,
+            newOrders,
+            reshipmentOrders,
+            incomes,
+            stocks,
+            orders,
+            sales,
+            reportDetailByPeriod,
+            add,
+            info,
+            content,
+            reportDaily,
+            reportWeekly,
+            reportMonthly,
+            reportThreeMonths
+        })
     }
 
     async getGeographyData(req, res) {

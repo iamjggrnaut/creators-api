@@ -92,7 +92,32 @@ const Info = sequelize.define('Info', {
     brandName: { type: DataTypes.STRING },
 });
 
+const ReportDaily = sequelize.define('ReportDaily', {
+    id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+    data: { type: DataTypes.JSONB },
+    brandName: { type: DataTypes.STRING },
+});
+const ReportWeekly = sequelize.define('ReportWeekly', {
+    id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+    data: { type: DataTypes.JSONB },
+    brandName: { type: DataTypes.STRING },
+});
+const ReportMonthly = sequelize.define('ReportMonthly', {
+    id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+    data: { type: DataTypes.JSONB },
+    brandName: { type: DataTypes.STRING },
+});
+const ReportThreeMonths = sequelize.define('ReportThreeMonths', {
+    id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+    data: { type: DataTypes.JSONB },
+    brandName: { type: DataTypes.STRING },
+});
+
 // Определение связи между пользователями и собранными данными
+ReportThreeMonths.belongsTo(User);
+ReportMonthly.belongsTo(User);
+ReportWeekly.belongsTo(User);
+ReportDaily.belongsTo(User);
 Warehouse.belongsTo(User);
 WarehouseWB.belongsTo(User);
 Supply.belongsTo(User);
@@ -107,6 +132,10 @@ Add.belongsTo(User);
 Info.belongsTo(User);
 
 module.exports = {
+    ReportThreeMonths,
+    ReportMonthly,
+    ReportWeekly,
+    ReportDaily,
     User,
     Warehouse,
     WarehouseWB,

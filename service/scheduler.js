@@ -12,7 +12,11 @@ const {
     Sale,
     ReportDetailByPeriod,
     Add,
-    Info
+    Info,
+    ReportThreeMonths,
+    ReportMonthly,
+    ReportWeekly,
+    ReportDaily,
 } = require('../models/models')
 const jwt = require('jsonwebtoken')
 const axios = require('axios')
@@ -49,7 +53,14 @@ async function fetchAllData(user) {
         Sale,
         ReportDetailByPeriod,
         Add,
-        Info
+        Info,
+    ]
+
+    const reportModels = [
+        ReportThreeMonths,
+        ReportMonthly,
+        ReportWeekly,
+        ReportDaily,
     ]
 
     let id = user.id
@@ -57,6 +68,106 @@ async function fetchAllData(user) {
     for (const Model of models) {
         await fetchDataAndUpsert(Model, id);
     }
+    for (const Model of reportModels) {
+        await postDataAndUpsert(Model, id);
+    }
+}
+
+async function postDataAndUpsert(Model, id) {
+
+
+    const dateTo = new Date(new Date().setDate(new Date().getDate())).toLocaleDateString('ru').split('.').reverse().join('-')
+    const dayAgo = new Date(new Date().setDate(new Date().getDate() - 1)).toLocaleDateString('ru').split('.').reverse().join('-')
+    const weekAgo = new Date(new Date().setDate(new Date().getDate() - 7)).toLocaleDateString('ru').split('.').reverse().join('-')
+    const monthAgo = new Date(new Date().setDate(new Date().getDate() - 30)).toLocaleDateString('ru').split('.').reverse().join('-')
+    const threeMonthsAgo = new Date(new Date().setDate(new Date().getDate() - 91)).toLocaleDateString('ru').split('.').reverse().join('-')
+
+    const modelToUrlMap = {
+        ReportThreeMonths: `https://suppliers-api.wildberries.ru/content/v1/analytics/nm-report/grouped`,
+        ReportMonthly: `https://suppliers-api.wildberries.ru/content/v1/analytics/nm-report/grouped`,
+        ReportWeekly: `https://suppliers-api.wildberries.ru/content/v1/analytics/nm-report/grouped`,
+        ReportDaily: `https://suppliers-api.wildberries.ru/content/v1/analytics/nm-report/grouped`,
+    };
+
+    const dates = {
+        ReportThreeMonths: {
+            period: {
+                begin: threeMonthsAgo + ' 00:00:00',
+                end: dateTo + ' 00:00:01'
+            },
+            page: 1
+        },
+        ReportMonthly: {
+            period: {
+                begin: monthAgo + ' 00:00:00',
+                end: dateTo + ' 00:00:00'
+            },
+            page: 1
+        },
+        ReportWeekly: {
+            period: {
+                begin: weekAgo + ' 00:00:00',
+                end: dateTo + ' 00:00:00'
+            },
+            page: 1
+        },
+        ReportDaily: {
+            period: {
+                begin: dayAgo + ' 00:00:00',
+                end: dateTo + ' 00:00:00'
+            },
+            page: 1
+        },
+    }
+
+    try {
+        // Поиск пользователя
+        const user = await User.findOne({ where: { id } });
+
+        const url = modelToUrlMap[Model.name];
+        const payload = dates[Model.name]
+        if (!url) {
+            console.error(`No corresponding URL found for model: ${Model.name}`);
+            return;
+        }
+
+        const decodedTokens = user.tokens.map(token => ({ brandName: token.brandName, token: jwt.decode(token.token, { complete: true }) }))
+        const resTokens = decodedTokens && decodedTokens.length ? decodedTokens.map(token => ({ brandName: token.brandName, token: token.token.payload.token })) : [];
+
+
+        if (resTokens && resTokens.length) {
+            // Запрос данных по URL-адресам
+            for (let item in resTokens) {
+
+
+                try {
+                    const response = await axios.post(url, {
+                        headers: {
+                            Authorization: `Bearer ${resTokens[item].token}`
+                        },
+                        body: JSON.stringify(payload),
+                        timeout: 62000 // Таймаут в 62 секунд
+                    });
+                    const data = response.data;
+
+                    // Upsert data into corresponding table
+                    await Model.upsert({
+                        userId: id,
+                        brandName: resTokens[item].brandName,
+                        data: data
+                    });
+
+                    console.log(`Data from ${url} upserted successfully.`);
+                } catch (error) {
+                    console.error(`Error fetching data from ${url}: ${error}`);
+                }
+            }
+        }
+
+    } catch (error) {
+        console.error('Ошибка при получении данных:', error);
+    }
+
 }
 
 async function fetchDataAndUpsert(Model, id) {
@@ -77,7 +188,7 @@ async function fetchDataAndUpsert(Model, id) {
         Sale: `https://statistics-api.wildberries.ru/api/v1/supplier/sales?dateFrom=${dateFrom}`,
         ReportDetailByPeriod: `https://statistics-api.wildberries.ru/api/v1/supplier/reportDetailByPeriod?dateFrom=${dateFrom}&dateTo=${dateTo}`,
         Add: `https://advert-api.wb.ru/adv/v1/upd?from=${from}&to=${dateTo}`,
-        Info: `https://suppliers-api.wildberries.ru/public/api/v1/info`
+        Info: `https://suppliers-api.wildberries.ru/public/api/v1/info`,
     };
 
 
