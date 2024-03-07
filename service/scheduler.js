@@ -141,11 +141,10 @@ async function postDataAndUpsert(Model, id) {
 
 
                 try {
-                    const response = await axios.post(url, {
+                    const response = await axios.post(url, payload, {
                         headers: {
                             Authorization: `Bearer ${resTokens[item].token}`
                         },
-                        body: JSON.stringify(payload),
                         timeout: 62000 // Таймаут в 62 секунд
                     });
                     const data = response.data;
