@@ -59,6 +59,10 @@ class DataCollectionController {
     async getDataCollection(req, res) {
         const { id } = req.params
         const { days, brandName } = req.query
+
+        const startDate = new Date(currentDate.getTime() - days * 24 * 60 * 60 * 1000);
+
+
         const warehouses = await Warehouse.findOne({ where: { userId: id, brandName } })
         const warehousesWB = await WarehouseWB.findOne({ where: { userId: id, brandName } })
         const supplies = await Supply.findOne({ where: { userId: id, brandName } })
@@ -133,8 +137,8 @@ class DataCollectionController {
             yearProfitMargin: null,
             fbo: await findFBSFBO(orders.data, warehouses.data, days),
             fbs: await findFBSFBO(orders.data, warehouses.data, days),
-            toClient: stocks.data.filter(i => i.inWayToClient),
-            fromClient: stocks.data.filter(i => i.inWayFromClient),
+            toClient: stocks.data.filter(i => i.inWayToClient && new Date(i.lastChangeDate) >= startDate),
+            fromClient: stocks.data.filter(i => i.inWayFromClient && new Date(i.lastChangeDate) >= startDate),
             notSorted: await calculateToClients(stocks.data, days),
             advertisment,
             commissionFromProfit,
@@ -166,6 +170,8 @@ class DataCollectionController {
         const { id } = req.params
         const { days, brandName } = req.query
 
+        const startDate = new Date(currentDate.getTime() - days * 24 * 60 * 60 * 1000);
+
         const warehouses = await Warehouse.findOne({ where: { userId: id, brandName } })
         const warehousesWB = await WarehouseWB.findOne({ where: { userId: id, brandName } })
         const supplies = await Supply.findOne({ where: { userId: id, brandName } })
@@ -240,8 +246,8 @@ class DataCollectionController {
             yearProfitMargin: null,
             fbo: await findFBSFBO(orders.data, warehouses.data, days),
             fbs: await findFBSFBO(orders.data, warehouses.data, days),
-            toClient: stocks.data.filter(i => i.inWayToClient),
-            fromClient: stocks.data.filter(i => i.inWayFromClient),
+            toClient: stocks.data.filter(i => i.inWayToClient && new Date(i.lastChangeDate) >= startDate),
+            fromClient: stocks.data.filter(i => i.inWayFromClient && new Date(i.lastChangeDate) >= startDate),
             notSorted: await calculateToClients(stocks.data, days),
             advertisment,
             commissionFromProfit,
