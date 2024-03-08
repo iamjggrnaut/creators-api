@@ -15,6 +15,7 @@ const {
     Info,
     ReportThreeMonths,
     ReportMonthly,
+    ReportTwoWeeks,
     ReportWeekly,
     ReportDaily,
 } = require('../models/models')
@@ -59,6 +60,7 @@ async function fetchAllData(user) {
     const reportModels = [
         ReportThreeMonths,
         ReportMonthly,
+        ReportTwoWeeks,
         ReportWeekly,
         ReportDaily,
     ]
@@ -79,12 +81,14 @@ async function postDataAndUpsert(Model, id) {
     const dateTo = new Date(new Date().setDate(new Date().getDate())).toLocaleDateString('ru').split('.').reverse().join('-')
     const dayAgo = new Date(new Date().setDate(new Date().getDate() - 1)).toLocaleDateString('ru').split('.').reverse().join('-')
     const weekAgo = new Date(new Date().setDate(new Date().getDate() - 7)).toLocaleDateString('ru').split('.').reverse().join('-')
+    const twoWeekAgo = new Date(new Date().setDate(new Date().getDate() - 14)).toLocaleDateString('ru').split('.').reverse().join('-')
     const monthAgo = new Date(new Date().setDate(new Date().getDate() - 30)).toLocaleDateString('ru').split('.').reverse().join('-')
     const threeMonthsAgo = new Date(new Date().setDate(new Date().getDate() - 91)).toLocaleDateString('ru').split('.').reverse().join('-')
 
     const modelToUrlMap = {
         ReportThreeMonths: `https://suppliers-api.wildberries.ru/content/v1/analytics/nm-report/grouped`,
         ReportMonthly: `https://suppliers-api.wildberries.ru/content/v1/analytics/nm-report/grouped`,
+        ReportTwoWeeks: `https://suppliers-api.wildberries.ru/content/v1/analytics/nm-report/grouped`,
         ReportWeekly: `https://suppliers-api.wildberries.ru/content/v1/analytics/nm-report/grouped`,
         ReportDaily: `https://suppliers-api.wildberries.ru/content/v1/analytics/nm-report/grouped`,
     };
@@ -100,6 +104,13 @@ async function postDataAndUpsert(Model, id) {
         ReportMonthly: {
             period: {
                 begin: monthAgo + ' 00:00:00',
+                end: dateTo + ' 00:00:00'
+            },
+            page: 1
+        },
+        ReportTwoWeeks: {
+            period: {
+                begin: twoWeekAgo + ' 00:00:00',
                 end: dateTo + ' 00:00:00'
             },
             page: 1

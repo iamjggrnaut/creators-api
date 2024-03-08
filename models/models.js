@@ -102,6 +102,11 @@ const ReportWeekly = sequelize.define('ReportWeekly', {
     data: { type: DataTypes.JSONB },
     brandName: { type: DataTypes.STRING },
 });
+const ReportTwoWeeks = sequelize.define('ReportTwoWeeks', {
+    id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+    data: { type: DataTypes.JSONB },
+    brandName: { type: DataTypes.STRING },
+});
 const ReportMonthly = sequelize.define('ReportMonthly', {
     id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
     data: { type: DataTypes.JSONB },
@@ -117,6 +122,7 @@ const ReportThreeMonths = sequelize.define('ReportThreeMonths', {
 ReportThreeMonths.belongsTo(User);
 ReportMonthly.belongsTo(User);
 ReportWeekly.belongsTo(User);
+ReportTwoWeeks.belongsTo(User);
 ReportDaily.belongsTo(User);
 Warehouse.belongsTo(User);
 WarehouseWB.belongsTo(User);
@@ -133,6 +139,7 @@ Info.belongsTo(User);
 
 module.exports = {
     ReportThreeMonths,
+    ReportTwoWeeks,
     ReportMonthly,
     ReportWeekly,
     ReportDaily,

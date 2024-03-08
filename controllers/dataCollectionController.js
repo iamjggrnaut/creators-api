@@ -77,11 +77,6 @@ class DataCollectionController {
         const reportDaily = await ReportDaily.findOne({ where: { userId: id, brandName } })
 
         const [
-            orderStat,
-            salesStat,
-            returned,
-            buyout,
-            averageCheck,
             penalty,
             additionalPayment,
             wbComission,
@@ -92,7 +87,6 @@ class DataCollectionController {
             marginCosts,
             netProfit,
             averageProfit,
-            buyoutPercentage,
             roi,
             vpProfitMargin,
             opProfitMargin,
@@ -100,11 +94,6 @@ class DataCollectionController {
             commissionFromProfit,
             logisticsFromProfit
         ] = await Promise.all([
-            calculateOrders(orders.data, days),
-            calculateOrders(sales.data, days),
-            calculateReturn(orders.data, days),
-            calculateBuyout(orders.data, days),
-            calculateAverageReceipt(sales.data, days),
             calculatePenalty(reportDetailByPeriod.data, days),
             calculateAdditionalPayment(reportDetailByPeriod.data, days),
             calculateCommission(reportDetailByPeriod.data, days),
@@ -115,7 +104,6 @@ class DataCollectionController {
             calculateMargin(reportDetailByPeriod.data, days),
             calculateNetProfit(reportDetailByPeriod.data, days),
             calculateAverageProfit(sales.data, days),
-            calculatePurchasePercentage(sales.data, reportDetailByPeriod.data, days),
             calculateROI(reportDetailByPeriod.data, days),
             calculateGrossProfit(sales.data, reportDetailByPeriod.data, days),
             calculateGrossProfit(sales.data, reportDetailByPeriod.data, days),
@@ -125,11 +113,6 @@ class DataCollectionController {
         ]);
 
         const content = {
-            orderStat,
-            salesStat,
-            returned,
-            buyout,
-            averageCheck,
             chartData: null,
             initialPrice: 0,
             penalty,
@@ -144,7 +127,6 @@ class DataCollectionController {
             tax: { sum: 0, percent: 0 },
             netProfit,
             averageProfit,
-            buyoutPercentage,
             roi,
             vpProfitMargin,
             opProfitMargin,
@@ -202,11 +184,6 @@ class DataCollectionController {
         const reportDaily = await ReportDaily.findOne({ where: { userId: id, brandName } })
 
         const [
-            orderStat,
-            salesStat,
-            returned,
-            buyout,
-            averageCheck,
             penalty,
             additionalPayment,
             wbComission,
@@ -217,7 +194,6 @@ class DataCollectionController {
             marginCosts,
             netProfit,
             averageProfit,
-            buyoutPercentage,
             roi,
             vpProfitMargin,
             opProfitMargin,
@@ -225,11 +201,6 @@ class DataCollectionController {
             commissionFromProfit,
             logisticsFromProfit
         ] = await Promise.all([
-            calculateOrders(orders.data, days),
-            calculateOrders(sales.data, days),
-            calculateReturn(orders.data, days),
-            calculateBuyout(orders.data, days),
-            calculateAverageReceipt(sales.data, days),
             calculatePenalty(reportDetailByPeriod.data, days),
             calculateAdditionalPayment(reportDetailByPeriod.data, days),
             calculateCommission(reportDetailByPeriod.data, days),
@@ -240,7 +211,6 @@ class DataCollectionController {
             calculateMargin(reportDetailByPeriod.data, days),
             calculateNetProfit(reportDetailByPeriod.data, days),
             calculateAverageProfit(sales.data, days),
-            calculatePurchasePercentage(sales.data, reportDetailByPeriod.data, days),
             calculateROI(reportDetailByPeriod.data, days),
             calculateGrossProfit(sales.data, reportDetailByPeriod.data, days),
             calculateGrossProfit(sales.data, reportDetailByPeriod.data, days),
@@ -250,11 +220,6 @@ class DataCollectionController {
         ]);
 
         const content = {
-            orderStat,
-            salesStat,
-            returned,
-            buyout,
-            averageCheck,
             chartData: null,
             initialPrice: 0,
             penalty,
@@ -269,7 +234,6 @@ class DataCollectionController {
             tax: { sum: 0, percent: 0 },
             netProfit,
             averageProfit,
-            buyoutPercentage,
             roi,
             vpProfitMargin,
             opProfitMargin,
