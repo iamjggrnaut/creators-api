@@ -96,35 +96,35 @@ async function postDataAndUpsert(Model, id) {
     const dates = {
         ReportThreeMonths: {
             period: {
-                begin: threeMonthsAgo + ' ' + new Date(new Date().setDate(new Date().getDate())).toLocaleTimeString(),
+                begin: threeMonthsAgo + ' ' + new Date(new Date().setTime(new Date().getTime() + 30)).toLocaleTimeString(),
                 end: dateTo + ' 00:00:01'
             },
             page: 1
         },
         ReportMonthly: {
             period: {
-                begin: monthAgo + ' ' + new Date(new Date().setDate(new Date().getDate())).toLocaleTimeString(),
+                begin: monthAgo + ' ' + new Date(new Date().setTime(new Date().getTime() + 30)).toLocaleTimeString(),
                 end: dateTo + ' 00:00:00'
             },
             page: 1
         },
         ReportTwoWeeks: {
             period: {
-                begin: twoWeekAgo + ' ' + new Date(new Date().setDate(new Date().getDate())).toLocaleTimeString(),
+                begin: twoWeekAgo + ' ' + new Date(new Date().setTime(new Date().getTime() + 30)).toLocaleTimeString(),
                 end: dateTo + ' 00:00:00'
             },
             page: 1
         },
         ReportWeekly: {
             period: {
-                begin: weekAgo + ' ' + new Date(new Date().setDate(new Date().getDate())).toLocaleTimeString(),
+                begin: weekAgo + ' ' + new Date(new Date().setTime(new Date().getTime() + 30)).toLocaleTimeString(),
                 end: dateTo + ' 00:00:00'
             },
             page: 1
         },
         ReportDaily: {
             period: {
-                begin: dayAgo + ' ' + new Date(new Date().setDate(new Date().getDate())).toLocaleTimeString(),
+                begin: dayAgo + ' ' + new Date(new Date().setTime(new Date().getTime() + 30)).toLocaleTimeString(),
                 end: dateTo + ' 00:00:00'
             },
             page: 1
