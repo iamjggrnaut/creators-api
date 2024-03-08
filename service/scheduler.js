@@ -163,12 +163,14 @@ async function postDataAndUpsert(Model, id) {
                         const data = response.data;
 
                         // Upsert data into corresponding table
-                        await Model.upsert({
-                            userId: id,
-                            brandName: resTokens[item].brandName,
-                            data: data
-                        });
-                        console.log(`Data from ${url} upserted successfully.`);
+                        if (data !== null) {
+                            await Model.upsert({
+                                userId: id,
+                                brandName: resTokens[item].brandName,
+                                data: data
+                            });
+                            console.log(`Data from ${url} upserted successfully.`);
+                        }
 
                     }, 21000);
                 } catch (error) {
