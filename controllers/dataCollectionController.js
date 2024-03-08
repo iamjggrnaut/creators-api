@@ -60,7 +60,7 @@ class DataCollectionController {
         const { id } = req.params
         const { days, brandName } = req.query
 
-        const startDate = new Date(currentDate.getTime() - days * 24 * 60 * 60 * 1000);
+        const startDate = new Date(new Date().getTime() - days * 24 * 60 * 60 * 1000);
 
 
         const warehouses = await Warehouse.findOne({ where: { userId: id, brandName } })
@@ -170,7 +170,7 @@ class DataCollectionController {
         const { id } = req.params
         const { days, brandName } = req.query
 
-        const startDate = new Date(currentDate.getTime() - days * 24 * 60 * 60 * 1000);
+        const startDate = new Date(new Date().getTime() - days * 24 * 60 * 60 * 1000);
 
         const warehouses = await Warehouse.findOne({ where: { userId: id, brandName } })
         const warehousesWB = await WarehouseWB.findOne({ where: { userId: id, brandName } })
