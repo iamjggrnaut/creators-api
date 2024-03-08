@@ -96,35 +96,35 @@ async function postDataAndUpsert(Model, id) {
     const dates = {
         ReportThreeMonths: {
             period: {
-                begin: threeMonthsAgo + ' 00:00:00',
+                begin: threeMonthsAgo + ' ' + new Date(new Date().setDate(new Date().getDate())).toLocaleTimeString(),
                 end: dateTo + ' 00:00:01'
             },
             page: 1
         },
         ReportMonthly: {
             period: {
-                begin: monthAgo + ' 00:00:00',
+                begin: monthAgo + ' ' + new Date(new Date().setDate(new Date().getDate())).toLocaleTimeString(),
                 end: dateTo + ' 00:00:00'
             },
             page: 1
         },
         ReportTwoWeeks: {
             period: {
-                begin: twoWeekAgo + ' 00:00:00',
+                begin: twoWeekAgo + ' ' + new Date(new Date().setDate(new Date().getDate())).toLocaleTimeString(),
                 end: dateTo + ' 00:00:00'
             },
             page: 1
         },
         ReportWeekly: {
             period: {
-                begin: weekAgo + ' 00:00:00',
+                begin: weekAgo + ' ' + new Date(new Date().setDate(new Date().getDate())).toLocaleTimeString(),
                 end: dateTo + ' 00:00:00'
             },
             page: 1
         },
         ReportDaily: {
             period: {
-                begin: dayAgo + ' 00:00:00',
+                begin: dayAgo + ' ' + new Date(new Date().setDate(new Date().getDate())).toLocaleTimeString(),
                 end: dateTo + ' 00:00:00'
             },
             page: 1
