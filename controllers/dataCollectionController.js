@@ -77,6 +77,7 @@ class DataCollectionController {
         const info = await Info.findOne({ where: { userId: id, brandName } })
         const reportThreeMonths = await ReportThreeMonths.findOne({ where: { userId: id, brandName } })
         const reportMonthly = await ReportMonthly.findOne({ where: { userId: id, brandName } })
+        const reportTwoWeeks = await ReportMonthly.findOne({ where: { userId: id, brandName } })
         const reportWeekly = await ReportWeekly.findOne({ where: { userId: id, brandName } })
         const reportDaily = await ReportDaily.findOne({ where: { userId: id, brandName } })
 
@@ -161,6 +162,7 @@ class DataCollectionController {
             content,
             reportDaily,
             reportWeekly,
+            reportTwoWeeks,
             reportMonthly,
             reportThreeMonths
         })
@@ -186,6 +188,7 @@ class DataCollectionController {
         const info = await Info.findOne({ where: { userId: id, brandName } })
         const reportThreeMonths = await ReportThreeMonths.findOne({ where: { userId: id, brandName } })
         const reportMonthly = await ReportMonthly.findOne({ where: { userId: id, brandName } })
+        const reportTwoWeeks = await ReportMonthly.findOne({ where: { userId: id, brandName } })
         const reportWeekly = await ReportWeekly.findOne({ where: { userId: id, brandName } })
         const reportDaily = await ReportDaily.findOne({ where: { userId: id, brandName } })
 
@@ -270,6 +273,7 @@ class DataCollectionController {
             content,
             reportDaily,
             reportWeekly,
+            reportTwoWeeks,
             reportMonthly,
             reportThreeMonths
         })
