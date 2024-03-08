@@ -172,7 +172,7 @@ async function postDataAndUpsert(Model, id) {
                             console.log(`Data from ${url} upserted successfully.`);
                         }
 
-                    }, 21000);
+                    }, 61000);
                 } catch (error) {
                     console.error(`Error fetching data from ${url}: ${error}`);
                 }
