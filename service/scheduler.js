@@ -68,7 +68,9 @@ async function fetchAllData(user) {
     let id = user.id
 
     for (const Model of reportModels) {
-        await postDataAndUpsert(Model, id);
+        setTimeout(async () => {
+            await postDataAndUpsert(Model, id);
+        }, 61000);
     }
     for (const Model of models) {
         await fetchDataAndUpsert(Model, id);
@@ -149,30 +151,25 @@ async function postDataAndUpsert(Model, id) {
         if (resTokens && resTokens.length) {
             // Запрос данных по URL-адресам
             for (let item in resTokens) {
-
-                console.log(resTokens[item].token);
-
                 try {
-                    setTimeout(async () => {
-                        const response = await axios.post(url, payload, {
-                            headers: {
-                                Authorization: `Bearer ${resTokens[item].token}`
-                            },
-                            timeout: 62000 // Таймаут в 62 секунд
+                    const response = await axios.post(url, payload, {
+                        headers: {
+                            Authorization: `Bearer ${resTokens[item].token}`
+                        },
+                        timeout: 62000 // Таймаут в 62 секунд
+                    });
+                    const data = response.data;
+
+                    // Upsert data into corresponding table
+                    if (data) {
+                        await Model.upsert({
+                            userId: id,
+                            brandName: resTokens[item].brandName,
+                            data: data
                         });
-                        const data = response.data;
+                        console.log(`Data from ${url} upserted successfully.`);
+                    }
 
-                        // Upsert data into corresponding table
-                        if (data !== null) {
-                            await Model.upsert({
-                                userId: id,
-                                brandName: resTokens[item].brandName,
-                                data: data
-                            });
-                            console.log(`Data from ${url} upserted successfully.`);
-                        }
-
-                    }, 61000);
                 } catch (error) {
                     console.error(`Error fetching data from ${url}: ${error}`);
                 }
