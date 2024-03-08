@@ -156,7 +156,7 @@ async function postDataAndUpsert(Model, id) {
                         headers: {
                             Authorization: `Bearer ${resTokens[item].token}`
                         },
-                        timeout: 62000 // Таймаут в 62 секунд
+                        timeout: 21000 // Таймаут в 62 секунд
                     });
                     const data = response.data;
 
