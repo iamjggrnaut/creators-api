@@ -73,6 +73,7 @@ async function fetchAllData(user) {
         }, 61000);
     }
     for (const Model of models) {
+        console.log('--------New Iteration------');
         setTimeout(async () => {
             await fetchDataAndUpsert(Model, id);
         }, 21000)
