@@ -73,7 +73,9 @@ async function fetchAllData(user) {
         }, 61000);
     }
     for (const Model of models) {
-        await fetchDataAndUpsert(Model, id);
+        setTimeout(async () => {
+            await fetchDataAndUpsert(Model, id);
+        }, 21000)
     }
 }
 
@@ -161,7 +163,7 @@ async function postDataAndUpsert(Model, id) {
                     const data = response.data;
 
                     // Upsert data into corresponding table
-                    if (data) {
+                    if (data && data !== null) {
                         await Model.upsert({
                             userId: id,
                             brandName: resTokens[item].brandName,
