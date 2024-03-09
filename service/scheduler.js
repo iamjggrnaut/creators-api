@@ -68,11 +68,11 @@ async function fetchAllData(user) {
     let id = user.id
 
     for (const Model of reportModels) {
-        setTimeout(() => console.log("-----------Request taking a 25 seconds----------"), 25000);
+        await new Promise(resolve => setTimeout(resolve, 61000));
         await postDataAndUpsert(Model, id);
     }
     for (const Model of models) {
-        setTimeout(() => console.log("----------Request taking a 1 minute-----------"), 61000);
+        await new Promise(resolve => setTimeout(resolve, 61000));
         await fetchDataAndUpsert(Model, id);
     }
 }
