@@ -578,7 +578,7 @@ async function calculateNotSorted(data, days) {
 
     // Фильтруем данные за период
     const filteredData = data.filter(item => {
-        const itemDate = new Date(item.date);
+        const itemDate = new Date(item.lastChangeDate);
         return itemDate >= startDate && itemDate <= currentDate;
     });
 
