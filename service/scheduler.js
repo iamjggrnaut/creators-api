@@ -68,7 +68,7 @@ async function fetchAllData(user) {
     let id = user.id
 
     for (const Model of reportModels) {
-        await new Promise(resolve => setTimeout(resolve, 61000));
+        await new Promise(resolve => setTimeout(resolve, 22000));
         await postDataAndUpsert(Model, id);
     }
     for (const Model of models) {

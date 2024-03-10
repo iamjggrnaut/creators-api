@@ -39,7 +39,8 @@ const {
     calculatePurchasePercentage,
     abcAnalysis,
     calculateAdvertisementMetrics,
-    findFBSFBO
+    findFBSFBO,
+    calculateNotSorted
 } = require('../service/utils')
 
 class DataCollectionController {
@@ -141,7 +142,7 @@ class DataCollectionController {
             fbs: await findFBSFBO(orders.data, warehouses.data, days),
             toClient: stocks.data.filter(i => i.inWayToClient && new Date(i.lastChangeDate) >= startDate),
             fromClient: stocks.data.filter(i => i.inWayFromClient && new Date(i.lastChangeDate) >= startDate),
-            notSorted: await calculateToClients(stocks.data, days),
+            notSorted: await calculateNotSorted(stocks.data, days),
             advertisment,
             commissionFromProfit,
             logisticsFromProfit

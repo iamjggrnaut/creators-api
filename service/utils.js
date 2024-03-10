@@ -310,7 +310,7 @@ async function calculateDeliveryCost(data, days) {
     };
 }
 
-async function calculateMarginalProfit(data, days) {
+async function calculateMarginalProfit(data, days, delivery) {
 
     // data = data.filter(item => item.ppvz_for_pay)
 
@@ -323,7 +323,7 @@ async function calculateMarginalProfit(data, days) {
 
     // Функция для вычисления маржинальной прибыли из массива данных
     function calculateProfit(item) {
-        return item.ppvz_for_pay - item.retail_price * item.quantity;
+        return (item.ppvz_for_pay - (item.retail_price * item.quantity) - (item.quantity * 1000)) || 0;
     }
 
     // Функция для фильтрации объектов по датам
@@ -496,15 +496,15 @@ async function calculateROI(data, days) {
     const startDate = new Date(currentDate);
     startDate.setDate(startDate.getDate() - days);
     const filteredData = data.filter(item => {
-        const itemDate = new Date(item.sale_dt); // Предполагается, что в объекте есть поле date с датой
+        const itemDate = new Date(item.date); // Предполагается, что в объекте есть поле date с датой
         return itemDate >= startDate && itemDate <= currentDate;
     });
 
     // Вычисление общих затрат за период (стоимость товаров + затраты на доставку)
-    const totalCost = filteredData.reduce((acc, item) => acc + item.delivery_rub, 0);
+    const totalCost = filteredData.reduce((acc, item) => acc + 1000, 0);
 
     // Вычисление общей выручки за период
-    const totalRevenue = filteredData.reduce((acc, item) => acc + item.retail_price, 0);
+    const totalRevenue = filteredData.reduce((acc, item) => acc + item.finishedPrice, 0);
 
     // Вычисление ROI
     const roi = ((totalRevenue - totalCost) / totalCost) * 100;
@@ -566,6 +566,28 @@ async function calculateGrossProfit(salesData, deliveryData, days) {
         percent: (grossProfit / totalSalesCost) * 100,
         amount: grossProfit
     };
+}
+
+async function calculateNotSorted(data, days) {
+
+    // Получаем текущую дату
+    const currentDate = new Date();
+
+    // Вычисляем дату days дней назад
+    const startDate = new Date(currentDate.getTime() - days * 24 * 60 * 60 * 1000);
+
+    // Фильтруем данные за период
+    const filteredData = data.filter(item => {
+        const itemDate = new Date(item.date);
+        return itemDate >= startDate && itemDate <= currentDate;
+    });
+
+    // Считаем количество товаров в пути к клиенту
+    const goodsInTransit = filteredData.reduce((total, item) => {
+        return item.isSupply ? total + item.quantity : total;
+    }, 0);
+
+    return goodsInTransit;
 }
 
 async function calculateToClients(data, days) {
