@@ -511,7 +511,7 @@ class DataCollectionController {
                 { header: 'Себестоимость', key: 'initial_cost', width: 20 }
             ]
 
-            goods.dataValues.data.forEach(item => worksheet.addRow({
+            goods.dataValues.data.data.forEach(item => worksheet.addRow({
                 wb_article: item.nmID,
                 product_article: item.vendorCode,
                 initial_cost: '',
