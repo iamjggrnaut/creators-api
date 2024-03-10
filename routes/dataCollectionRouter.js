@@ -8,5 +8,6 @@ router.get('/user/:id', dataCollectionController.getAllForUser)
 router.get('/filtered/:id', dataCollectionController.getFilteredCollection)
 router.get('/names/:id', dataCollectionController.getBrandNames)
 router.get('/geo/:id', dataCollectionController.getGeographyData)
+router.get('/costs/:id', dataCollectionController.getCostsFile)
 
 module.exports = router

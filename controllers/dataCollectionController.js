@@ -1,3 +1,5 @@
+const exceljs = require('exceljs')
+
 const {
     Warehouse,
     WarehouseWB,
@@ -16,6 +18,8 @@ const {
     ReportWeekly,
     ReportDaily,
     ReportTwoWeeks,
+    Goods,
+    InitialCostsAndTax
 } = require('../models/models')
 const {
     filterArrays,
@@ -77,11 +81,13 @@ class DataCollectionController {
         const reportDetailByPeriod = await ReportDetailByPeriod.findOne({ where: { userId: id, brandName } })
         const add = await Add.findOne({ where: { userId: id, brandName } })
         const info = await Info.findOne({ where: { userId: id, brandName } })
+        const goods = await Goods.findOne({ where: { userId: id, brandName } })
         const reportThreeMonths = await ReportThreeMonths.findOne({ where: { userId: id, brandName } })
         const reportMonthly = await ReportMonthly.findOne({ where: { userId: id, brandName } })
         const reportTwoWeeks = await ReportTwoWeeks.findOne({ where: { userId: id, brandName } })
         const reportWeekly = await ReportWeekly.findOne({ where: { userId: id, brandName } })
         const reportDaily = await ReportDaily.findOne({ where: { userId: id, brandName } })
+        const initialCostsAndTax = await InitialCostsAndTax.findOne({ where: { userId: id, brandName } })
 
         const [
             penalty,
@@ -161,12 +167,14 @@ class DataCollectionController {
             reportDetailByPeriod,
             add,
             info,
+            goods,
             content,
             reportDaily,
             reportWeekly,
             reportTwoWeeks,
             reportMonthly,
-            reportThreeMonths
+            reportThreeMonths,
+            initialCostsAndTax,
         })
     }
 
@@ -188,11 +196,13 @@ class DataCollectionController {
         const reportDetailByPeriod = await ReportDetailByPeriod.findOne({ where: { userId: id, brandName } })
         const add = await Add.findOne({ where: { userId: id, brandName } })
         const info = await Info.findOne({ where: { userId: id, brandName } })
+        const goods = await Goods.findOne({ where: { userId: id, brandName } })
         const reportThreeMonths = await ReportThreeMonths.findOne({ where: { userId: id, brandName } })
         const reportMonthly = await ReportMonthly.findOne({ where: { userId: id, brandName } })
         const reportTwoWeeks = await ReportTwoWeeks.findOne({ where: { userId: id, brandName } })
         const reportWeekly = await ReportWeekly.findOne({ where: { userId: id, brandName } })
         const reportDaily = await ReportDaily.findOne({ where: { userId: id, brandName } })
+        const initialCostsAndTax = await InitialCostsAndTax.findOne({ where: { userId: id, brandName } })
 
         const [
             penalty,
@@ -272,12 +282,14 @@ class DataCollectionController {
             reportDetailByPeriod,
             add,
             info,
+            goods,
             content,
             reportDaily,
             reportWeekly,
             reportTwoWeeks,
             reportMonthly,
-            reportThreeMonths
+            reportThreeMonths,
+            initialCostsAndTax
         })
     }
 
@@ -477,6 +489,49 @@ class DataCollectionController {
         const filtered = filterArraysNoData(object, days)
 
         return res.json(filtered)
+    }
+
+    async getCostsFile(req, res) {
+        const { id } = req.params
+        const { brandName } = req.query
+
+        try {
+            // Создаем новый Excel файл
+            const workbook = new exceljs.Workbook();
+            const worksheet = workbook.addWorksheet('Sheet 1');
+
+            const goods = await Goods.findOne({ where: { userId: id, brandName } })
+
+            // Добавляем данные в Excel файл
+            worksheet.columns = [
+                { header: 'Артикул WB', key: 'wb_article', width: 30 },
+                { header: 'Артикул продавцы', key: 'product_article', width: 30 },
+                { header: 'Себестоимость', key: 'initial_cost', width: 20 }
+            ]
+
+            goods.dataValues.data.forEach(item => worksheet.addRow({
+                wb_article: item.nmID,
+                product_article: item.vendorCode,
+                initial_cost: '',
+            }))
+
+            const filePath = `./temp/${id}-${brandName}.xlsx`; // Путь к файлу
+            await workbook.xlsx.writeFile(filePath);
+
+            res.download(filePath, 'data.xlsx', (err) => {
+                if (err) {
+                    console.error('Ошибка при скачивании файла:', err);
+                    res.status(500).send('Произошла ошибка при скачивании файла');
+                } else {
+                    // Удаляем временный файл
+                    fs.unlinkSync(filePath);
+                }
+            });
+
+        } catch (error) {
+            console.error('Ошибка при генерации Excel файла:', error);
+            res.status(500).send('Произошла ошибка при генерации Excel файла');
+        }
     }
 
 }

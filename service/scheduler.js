@@ -18,6 +18,7 @@ const {
     ReportTwoWeeks,
     ReportWeekly,
     ReportDaily,
+    Goods
 } = require('../models/models')
 const jwt = require('jsonwebtoken')
 const axios = require('axios')
@@ -56,6 +57,7 @@ async function fetchAllData(user) {
         ReportDetailByPeriod,
         Add,
         Info,
+        Goods,
     ]
 
     const reportModels = [
@@ -202,6 +204,7 @@ async function fetchDataAndUpsert(Model, id) {
         ReportDetailByPeriod: `https://statistics-api.wildberries.ru/api/v1/supplier/reportDetailByPeriod?dateFrom=${dateFrom}&dateTo=${dateTo}`,
         Add: `https://advert-api.wb.ru/adv/v1/upd?from=${from}&to=${dateTo}`,
         Info: `https://suppliers-api.wildberries.ru/public/api/v1/info`,
+        Goods: `https://discounts-prices-api.wb.ru/api/v2/list/goods/filter?limit=1000`,
     };
 
 

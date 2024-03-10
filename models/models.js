@@ -92,6 +92,19 @@ const Info = sequelize.define('Info', {
     brandName: { type: DataTypes.STRING },
 });
 
+const Goods = sequelize.define('Goods', {
+    id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+    data: { type: DataTypes.JSONB },
+    brandName: { type: DataTypes.STRING },
+});
+
+const InitialCostsAndTax = sequelize.define('Goods', {
+    id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+    data: { type: DataTypes.JSONB },
+    tax: { type: DataTypes.JSON },
+    brandName: { type: DataTypes.STRING },
+});
+
 const ReportDaily = sequelize.define('ReportDaily', {
     id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
     data: { type: DataTypes.JSONB },
@@ -121,6 +134,8 @@ const ReportThreeMonths = sequelize.define('ReportThreeMonths', {
 // Определение связи между пользователями и собранными данными
 ReportThreeMonths.belongsTo(User);
 ReportMonthly.belongsTo(User);
+Goods.belongsTo(User);
+InitialCostsAndTax.belongsTo(User);
 ReportWeekly.belongsTo(User);
 ReportTwoWeeks.belongsTo(User);
 ReportDaily.belongsTo(User);
@@ -138,12 +153,14 @@ Add.belongsTo(User);
 Info.belongsTo(User);
 
 module.exports = {
+    InitialCostsAndTax,
     ReportThreeMonths,
     ReportTwoWeeks,
     ReportMonthly,
     ReportWeekly,
     ReportDaily,
     User,
+    Goods,
     Warehouse,
     WarehouseWB,
     Supply,
