@@ -502,6 +502,8 @@ class DataCollectionController {
 
             const goods = await Goods.findOne({ where: { userId: id, brandName } })
 
+            console.log(goods);
+
             // Добавляем данные в Excel файл
             worksheet.columns = [
                 { header: 'Артикул WB', key: 'wb_article', width: 30 },
@@ -509,7 +511,7 @@ class DataCollectionController {
                 { header: 'Себестоимость', key: 'initial_cost', width: 20 }
             ]
 
-            goods.data.forEach(item => worksheet.addRow({
+            goods.dataValues.data.forEach(item => worksheet.addRow({
                 wb_article: item.nmID,
                 product_article: item.vendorCode,
                 initial_cost: '',
