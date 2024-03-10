@@ -527,7 +527,7 @@ class DataCollectionController {
                 fs.mkdirSync(tempDir);
             }
 
-            const filePath = `/temp/${id}-${brandName}.xlsx`; // Путь к файлу
+            const filePath = path.join(tempDir, `${id}-${brandName}.xlsx`) // Путь к файлу
             await workbook.xlsx.writeFile(filePath);
 
 
