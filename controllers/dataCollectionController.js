@@ -1,5 +1,6 @@
 const exceljs = require('exceljs')
 const fs = require('fs');
+const path = require('path');
 
 const {
     Warehouse,
@@ -518,7 +519,10 @@ class DataCollectionController {
                 initial_cost: '',
             }))
 
-            const tempDir = '/temp';
+            const projectDir = path.resolve(__dirname);
+
+            // Создаем директорию temp внутри директории проекта, если она не существует
+            const tempDir = path.join(projectDir, 'temp');
             if (!fs.existsSync(tempDir)) {
                 fs.mkdirSync(tempDir);
             }
