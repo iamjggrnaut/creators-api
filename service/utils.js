@@ -584,8 +584,10 @@ async function calculateNotSorted(data, days) {
 
     // Считаем количество товаров в пути к клиенту
     const goodsInTransit = filteredData.reduce((total, item) => {
-        return item.isSupply ? total + item.quantity : total;
-    }, 0);
+        total['amount'] = filteredData.reduce((acc, i) => acc + i.quantity, 0)
+        total['sum'] = filteredData.reduce((acc, i) => acc + i.quantity * i.Price, 0)
+        return total;
+    }, {});
 
     return goodsInTransit;
 }
@@ -818,6 +820,7 @@ async function findFBSFBO(orders, warehouses, days) {
 
 
 module.exports = {
+    calculateNotSorted,
     findFBSFBO,
     calculateAdvertisementMetrics,
     calculateToClients,
