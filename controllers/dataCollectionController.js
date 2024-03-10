@@ -551,7 +551,9 @@ class DataCollectionController {
         const { brandName } = req.query
 
         try {
-            const file = req.files.excelFile; // Получаем файл из запроса
+            const file = req.files; // Получаем файл из запроса
+
+            console.log(file);
 
             if (!file) {
                 return res.status(400).json({ error: 'Файл не был загружен' });
@@ -584,8 +586,6 @@ class DataCollectionController {
             console.log(jsonData);
 
             const updated = await InitialCostsAndTax.update({
-                userId: id,
-                brandName: brandName,
                 data: jsonData
             }, {
                 userId: id,
