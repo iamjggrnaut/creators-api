@@ -504,12 +504,10 @@ class DataCollectionController {
 
             const goods = await Goods.findOne({ where: { userId: id, brandName } })
 
-            console.log(goods.dataValues.data);
-
             // Добавляем данные в Excel файл
             worksheet.columns = [
                 { header: 'Артикул WB', key: 'wb_article', width: 30 },
-                { header: 'Артикул продавцы', key: 'product_article', width: 30 },
+                { header: 'Артикул продавца', key: 'product_article', width: 30 },
                 { header: 'Себестоимость', key: 'initial_cost', width: 20 }
             ]
 
@@ -545,6 +543,59 @@ class DataCollectionController {
         } catch (error) {
             console.error('Ошибка при генерации Excel файла:', error);
             res.status(500).send('Произошла ошибка при генерации Excel файла');
+        }
+    }
+
+    async updateCostsAndTax(req, res) {
+        const { tax } = req.body
+        const { id } = req.params
+        const { brandName } = req.query
+
+        try {
+            const file = req.files.excelFile; // Получаем файл из запроса
+
+            if (!file) {
+                return res.status(400).json({ error: 'Файл не был загружен' });
+            }
+
+            const workbook = new exceljs.Workbook();
+            await workbook.xlsx.load(file.data); // Загружаем содержимое файла
+
+            const worksheet = workbook.getWorksheet(1); // Получаем первый лист
+
+            const jsonData = [];
+
+            // Проходим по каждой строке (кроме заголовка)
+            for (let row = 2; row <= worksheet.rowCount; row++) {
+                const articleWB = worksheet.getCell(`A${row}`).value;
+                const articleSeller = worksheet.getCell(`B${row}`).value;
+                const costPrice = worksheet.getCell(`C${row}`).value;
+
+                // Создаем объект JSON для каждой строки
+                const data = {
+                    articleWB: articleWB,
+                    articleSeller: articleSeller,
+                    costPrice: costPrice
+                };
+
+                // Добавляем объект JSON в массив данных
+                jsonData.push(data);
+            }
+
+            console.log(jsonData);
+
+            await InitialCostsAndTax.upsert({
+                userId: id,
+                data: jsonData,
+                brandName: brandName,
+                tax: tax
+            })
+
+
+            res.status(200).json({ message: 'Данные из файла успешно обработаны', data: jsonData });
+        } catch (error) {
+            console.error('Ошибка при обработке файла:', error);
+            res.status(500).json({ error: 'Произошла ошибка при обработке файла' });
         }
     }
 
