@@ -502,7 +502,7 @@ class DataCollectionController {
 
             const goods = await Goods.findOne({ where: { userId: id, brandName } })
 
-            console.log(goods);
+            console.log(goods.dataValues.data);
 
             // Добавляем данные в Excel файл
             worksheet.columns = [
