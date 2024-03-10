@@ -518,8 +518,15 @@ class DataCollectionController {
                 initial_cost: '',
             }))
 
-            const filePath = `./temp/${id}-${brandName}.xlsx`; // Путь к файлу
+            const tempDir = '/temp';
+            if (!fs.existsSync(tempDir)) {
+                fs.mkdirSync(tempDir);
+            }
+
+            const filePath = `/temp/${id}-${brandName}.xlsx`; // Путь к файлу
             await workbook.xlsx.writeFile(filePath);
+
+
 
             res.download(filePath, 'data.xlsx', (err) => {
                 if (err) {
