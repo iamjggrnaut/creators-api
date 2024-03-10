@@ -546,8 +546,7 @@ class DataCollectionController {
         }
     }
 
-    async updateCostsAndTax(req, res) {
-        const { tax } = req.body
+    async updateInitialCosts(req, res) {
         const { id } = req.params
         const { brandName } = req.query
 
@@ -584,11 +583,13 @@ class DataCollectionController {
 
             console.log(jsonData);
 
-            await InitialCostsAndTax.upsert({
+            const updated = await InitialCostsAndTax.update({
                 userId: id,
-                data: jsonData,
                 brandName: brandName,
-                tax: tax
+                data: jsonData
+            }, {
+                userId: id,
+                brandName: brandName,
             })
 
 
@@ -597,6 +598,21 @@ class DataCollectionController {
             console.error('Ошибка при обработке файла:', error);
             res.status(500).json({ error: 'Произошла ошибка при обработке файла' });
         }
+    }
+
+    async updateTax(req, res) {
+        const { id } = req.params
+        const { brandName } = req.query
+        const { tax } = req.body
+
+        const updated = await InitialCostsAndTax.update({ tax: tax }, {
+            where: {
+                userId: id,
+                brandName: brandName
+            }
+        })
+
+
     }
 
 }
