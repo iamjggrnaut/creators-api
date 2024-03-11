@@ -24,7 +24,7 @@ const jwt = require('jsonwebtoken')
 const axios = require('axios')
 
 // Расписание: каждый день в 00:00
-cron.schedule('42 14 * * *', async () => {
+cron.schedule('29 23 * * *', async () => {
     try {
         // Получение данных для всех пользователей
         const users = await User.findAll()
@@ -172,6 +172,7 @@ async function postDataAndUpsert(Model, id) {
                         if (existingRecord) {
                             // Если запись найдена, обновляем ее
                             await existingRecord.update({ data: data });
+                            console.log('----------UPDATED----------');
                         } else {
                             // Если запись не найдена, создаем новую
                             await Model.create({
@@ -179,6 +180,7 @@ async function postDataAndUpsert(Model, id) {
                                 brandName: resTokens[item].brandName,
                                 data: data
                             });
+                            console.log('---------CREATED---------');
                         }
                         console.log(`Data from ${url} upserted successfully.`);
                     }
@@ -254,6 +256,7 @@ async function fetchDataAndUpsert(Model, id) {
                     if (existingRecord) {
                         // Если запись найдена, обновляем ее
                         await existingRecord.update({ data: data });
+                        console.log('----------UPDATED----------');
                     } else {
                         // Если запись не найдена, создаем новую
                         await Model.create({
@@ -261,6 +264,7 @@ async function fetchDataAndUpsert(Model, id) {
                             brandName: resTokens[item].brandName,
                             data: data
                         });
+                        console.log('----------CREATED----------');
                     }
 
                     console.log(`Data from ${url} upserted successfully.`);
