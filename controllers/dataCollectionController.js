@@ -551,7 +551,7 @@ class DataCollectionController {
         const { brandName } = req.query
 
         try {
-            const file = req.file.excelFile; // Получаем файл из запроса
+            const file = req.file; // Получаем файл из запроса
 
             console.log(file);
 
@@ -560,7 +560,7 @@ class DataCollectionController {
             }
 
             const workbook = new exceljs.Workbook();
-            await workbook.xlsx.load(file.data); // Загружаем содержимое файла
+            await workbook.xlsx.load(file.buffer); // Загружаем содержимое файла
 
             const worksheet = workbook.getWorksheet(1); // Получаем первый лист
 
