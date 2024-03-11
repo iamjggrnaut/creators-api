@@ -24,7 +24,7 @@ const jwt = require('jsonwebtoken')
 const axios = require('axios')
 
 // Расписание: каждый день в 00:00
-cron.schedule('29 23 * * *', async () => {
+cron.schedule('1 0 * * *', async () => {
     try {
         // Получение данных для всех пользователей
         const users = await User.findAll()
@@ -162,9 +162,6 @@ async function postDataAndUpsert(Model, id) {
                         timeout: 61000 // Таймаут в 62 секунд
                     });
                     const data = response.data;
-
-                    let tot = await Model.findAll()
-                    console.log(tot);
 
                     // Upsert data into corresponding table
                     if (data) {
