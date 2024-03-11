@@ -565,7 +565,10 @@ class DataCollectionController {
             // Проходим по каждой строке (кроме заголовка)
             XLSX({
                 input: file.buffer,  // Используем буфер загруженного файла
-                output: null,             // Не сохраняем результат в файл, только возвращаем JSON
+                output: null,
+                sheet: "Sheet 1", // specific sheetname
+                rowsToSkip: 1, // number of rows to skip at the top of the sheet; defaults to 0
+                allowEmptyKey: false,           // Не сохраняем результат в файл, только возвращаем JSON
             }, function (err, result) {
                 if (err) {
                     console.error('Ошибка при чтении файла XLS:', err);
