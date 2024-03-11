@@ -1,6 +1,7 @@
 const exceljs = require('exceljs')
 const fs = require('fs');
 const path = require('path');
+const XLSX = require('xls-to-json');
 
 const {
     Warehouse,
@@ -567,30 +568,27 @@ class DataCollectionController {
             const jsonData = [];
 
             // Проходим по каждой строке (кроме заголовка)
-            for (let row = 2; row <= worksheet.rowCount; row++) {
-                const articleWB = worksheet.getCell(`A${row}`).value;
-                const articleSeller = worksheet.getCell(`B${row}`).value;
-                const costPrice = worksheet.getCell(`C${row}`).value;
+            XLSX({
+                input: req.file.buffer,  // Используем буфер загруженного файла
+                output: null,             // Не сохраняем результат в файл, только возвращаем JSON
+            }, function (err, result) {
+                if (err) {
+                    console.error('Ошибка при чтении файла XLS:', err);
+                    return res.status(500).json({ error: 'Ошибка при чтении файла XLS' });
+                } else {
+                    console.log('Данные из файла XLS:', result);
+                    return res.status(200).json({ data: result });
+                }
+            });
 
-                // Создаем объект JSON для каждой строки
-                const data = {
-                    articleWB: articleWB,
-                    articleSeller: articleSeller,
-                    costPrice: costPrice
-                };
+            // console.log(jsonData);
 
-                // Добавляем объект JSON в массив данных
-                jsonData.push(data);
-            }
-
-            console.log(jsonData);
-
-            const updated = await InitialCostsAndTax.update({
-                data: jsonData
-            }, {
-                userId: id,
-                brandName: brandName,
-            })
+            // const updated = await InitialCostsAndTax.update({
+            //     data: jsonData
+            // }, {
+            //     userId: id,
+            //     brandName: brandName,
+            // })
 
 
             res.status(200).json({ message: 'Данные из файла успешно обработаны', data: jsonData });
