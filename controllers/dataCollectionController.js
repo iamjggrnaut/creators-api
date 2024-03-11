@@ -575,8 +575,10 @@ class DataCollectionController {
             const updated = await InitialCostsAndTax.update({
                 data: modified
             }, {
-                userId: id,
-                brandName: brandName,
+                where: {
+                    userId: id,
+                    brandName: brandName,
+                }
             })
             console.log('Данные из файла XLS:', modified);
             return res.status(200).json({ data: data });
