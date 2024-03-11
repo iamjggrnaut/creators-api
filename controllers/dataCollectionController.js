@@ -1,9 +1,7 @@
 const exceljs = require('exceljs')
 const fs = require('fs');
 const path = require('path');
-const XLSX = require('xls-to-json');
-
-const xlsParser = require('xls-parser');
+const xlsx = require('xlsx');
 
 const {
     Warehouse,
@@ -565,15 +563,13 @@ class DataCollectionController {
             const jsonData = [];
 
             // Проходим по каждой строке (кроме заголовка)
-            xlsParser.parse(req.file.buffer, (err, data) => {
-                if (err) {
-                    console.error('Ошибка при чтении файла XLS:', err);
-                    return res.status(500).json({ error: 'Ошибка при чтении файла XLS' });
-                } else {
-                    console.log('Данные из файла XLS:', data);
-                    return res.status(200).json({ data: data });
-                }
-            });
+            const workbook = xlsx.read(req.file.buffer, { type: 'buffer' });
+            const sheetName = workbook.SheetNames[0];
+            const sheet = workbook.Sheets[sheetName];
+            const data = xlsx.utils.sheet_to_json(sheet);
+
+            console.log('Данные из файла XLS:', data);
+            return res.status(200).json({ data: data });
 
             // console.log(jsonData);
 
