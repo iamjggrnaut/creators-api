@@ -512,11 +512,13 @@ class DataCollectionController {
                 { header: 'Себестоимость', key: 'initial_cost', width: 20 }
             ]
 
-            goods.dataValues.data.data.listGoods.forEach(item => worksheet.addRow({
-                wb_article: item.nmID,
-                product_article: item.vendorCode,
-                initial_cost: '',
-            }))
+            for (let i in goods.dataValues.data.data.listGoods) {
+                worksheet.addRow({
+                    wb_article: goods.dataValues.data.data.listGoods[i].nmID,
+                    product_article: goods.dataValues.data.data.listGoods[i].vendorCode,
+                    initial_cost: '',
+                })
+            }
 
             const projectDir = path.resolve(__dirname);
 
