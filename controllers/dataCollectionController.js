@@ -563,8 +563,8 @@ class DataCollectionController {
             const jsonData = [];
 
             // Проходим по каждой строке (кроме заголовка)
-            XLSX.xlsToJson({
-                input: req.file.buffer,  // Используем буфер загруженного файла
+            XLSX({
+                input: file.buffer,  // Используем буфер загруженного файла
                 output: null,             // Не сохраняем результат в файл, только возвращаем JSON
             }, function (err, result) {
                 if (err) {
