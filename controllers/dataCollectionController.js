@@ -603,6 +603,7 @@ class DataCollectionController {
             }
         })
 
+        return res.json(updated)
 
     }
 
