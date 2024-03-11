@@ -163,6 +163,9 @@ async function postDataAndUpsert(Model, id) {
                     });
                     const data = response.data;
 
+                    let tot = await Model.findAll()
+                    console.log(tot);
+
                     // Upsert data into corresponding table
                     if (data) {
                         const existingRecord = await Model.findOne({
