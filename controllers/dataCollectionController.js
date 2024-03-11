@@ -568,7 +568,13 @@ class DataCollectionController {
             const sheet = workbook.Sheets[sheetName];
             const data = xlsx.utils.sheet_to_json(sheet);
 
-            console.log('Данные из файла XLS:', data);
+            const modified = data.map(item => ({
+                nmID: item['Артикул WB'],
+                vendorCode: 'Артикул продавца',
+                initialCosts: 'Себестоимость'
+            }))
+
+            console.log('Данные из файла XLS:', modified);
             return res.status(200).json({ data: data });
 
             // console.log(jsonData);
@@ -579,9 +585,6 @@ class DataCollectionController {
             //     userId: id,
             //     brandName: brandName,
             // })
-
-
-            res.status(200).json({ message: 'Данные из файла успешно обработаны', data: jsonData });
         } catch (error) {
             console.error('Ошибка при обработке файла:', error);
             res.status(500).json({ error: 'Произошла ошибка при обработке файла' });
