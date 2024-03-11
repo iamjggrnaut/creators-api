@@ -16,6 +16,8 @@ if (cluster.isMaster) {
     const router = require('./routes/index');
     require('./service/scheduler');
 
+    const { ReportDaily } = require('./models/models')
+
     const app = express();
 
     app.use('/static', express.static('static'));
@@ -28,6 +30,8 @@ if (cluster.isMaster) {
             await sequelize.authenticate();
             await sequelize.sync();
             app.listen(PORT, () => console.log(`Server is running on port ${PORT}`));
+            let data = await ReportDaily.findAll()
+            console.log(data);
         } catch (e) {
             console.log(e);
         }
