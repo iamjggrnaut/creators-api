@@ -3,6 +3,8 @@ const fs = require('fs');
 const path = require('path');
 const XLSX = require('xls-to-json');
 
+const xlsParser = require('xls-parser');
+
 const {
     Warehouse,
     WarehouseWB,
@@ -563,19 +565,13 @@ class DataCollectionController {
             const jsonData = [];
 
             // Проходим по каждой строке (кроме заголовка)
-            XLSX({
-                input: file.buffer,  // Используем буфер загруженного файла
-                output: null,
-                sheet: "Sheet 1", // specific sheetname
-                rowsToSkip: 1, // number of rows to skip at the top of the sheet; defaults to 0
-                allowEmptyKey: false,           // Не сохраняем результат в файл, только возвращаем JSON
-            }, function (err, result) {
+            xlsParser.parse(req.file.buffer, (err, data) => {
                 if (err) {
                     console.error('Ошибка при чтении файла XLS:', err);
                     return res.status(500).json({ error: 'Ошибка при чтении файла XLS' });
                 } else {
-                    console.log('Данные из файла XLS:', result);
-                    return res.status(200).json({ data: result });
+                    console.log('Данные из файла XLS:', data);
+                    return res.status(200).json({ data: data });
                 }
             });
 
