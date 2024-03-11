@@ -560,8 +560,6 @@ class DataCollectionController {
                 return res.status(400).json({ error: 'Файл не был загружен' });
             }
 
-            const jsonData = [];
-
             // Проходим по каждой строке (кроме заголовка)
             const workbook = xlsx.read(req.file.buffer, { type: 'buffer' });
             const sheetName = workbook.SheetNames[0];
@@ -574,17 +572,17 @@ class DataCollectionController {
                 initialCosts: item['Себестоимость']
             }))
 
+            const updated = await InitialCostsAndTax.update({
+                data: modified
+            }, {
+                userId: id,
+                brandName: brandName,
+            })
             console.log('Данные из файла XLS:', modified);
             return res.status(200).json({ data: data });
 
             // console.log(jsonData);
 
-            // const updated = await InitialCostsAndTax.update({
-            //     data: jsonData
-            // }, {
-            //     userId: id,
-            //     brandName: brandName,
-            // })
         } catch (error) {
             console.error('Ошибка при обработке файла:', error);
             res.status(500).json({ error: 'Произошла ошибка при обработке файла' });
