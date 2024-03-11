@@ -560,11 +560,6 @@ class DataCollectionController {
                 return res.status(400).json({ error: 'Файл не был загружен' });
             }
 
-            const workbook = new exceljs.Workbook();
-            await workbook.xlsx.load(file.buffer); // Загружаем содержимое файла
-
-            const worksheet = workbook.getWorksheet(1); // Получаем первый лист
-
             const jsonData = [];
 
             // Проходим по каждой строке (кроме заголовка)
