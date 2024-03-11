@@ -598,14 +598,14 @@ class DataCollectionController {
 
         console.log(req.body);
 
-        const updated = await InitialCostsAndTax.update({ tax: tax }, {
+        const updated = await InitialCostsAndTax.update({ tax: req.body }, {
             where: {
                 userId: id,
                 brandName: brandName
             }
         })
 
-        return res.json(tax)
+        return res.json({ tax })
 
     }
 
