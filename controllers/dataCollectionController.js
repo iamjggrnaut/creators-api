@@ -596,6 +596,8 @@ class DataCollectionController {
         const { brandName } = req.query
         const { tax } = req.body
 
+        console.log(tax);
+
         const updated = await InitialCostsAndTax.update({ tax: tax }, {
             where: {
                 userId: id,
@@ -603,7 +605,7 @@ class DataCollectionController {
             }
         })
 
-        return res.json(updated)
+        return res.json(tax)
 
     }
 
