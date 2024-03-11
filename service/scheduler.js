@@ -24,7 +24,7 @@ const jwt = require('jsonwebtoken')
 const axios = require('axios')
 
 // Расписание: каждый день в 00:00
-cron.schedule('59 13 * * *', async () => {
+cron.schedule('45 11 * * *', async () => {
     try {
         // Получение данных для всех пользователей
         const users = await User.findAll()
@@ -164,19 +164,11 @@ async function postDataAndUpsert(Model, id) {
                     const data = response.data;
 
                     // Upsert data into corresponding table
-                    if (data && data !== null) {
+                    if (data) {
                         await Model.upsert({
                             userId: id,
                             brandName: resTokens[item].brandName,
                             data: data
-                        }, {
-                            where: { userId: id, brandName: resTokens[item].brandName }, // Условие, по которому будет производиться поиск существующей записи
-                            returning: true, // Этот флаг указывает Sequelize вернуть обновленную запись
-                            plain: true, // Этот флаг указывает Sequelize возвращать только данные обновленной записи без метаданных
-                            onConflict: { // Указываем директиву ON CONFLICT и указываем действие
-                                fields: ['userId', 'brandName'], // Указываем поля, по которым будет проверяться конфликт
-                                updateOnConflict: ['data'] // Указываем поля, которые нужно обновить в случае конфликта
-                            }
                         });
                         console.log(`Data from ${url} upserted successfully.`);
                     }
@@ -249,14 +241,6 @@ async function fetchDataAndUpsert(Model, id) {
                         userId: id,
                         brandName: resTokens[item].brandName,
                         data: data
-                    }, {
-                        where: { userId: id, brandName: resTokens[item].brandName }, // Условие, по которому будет производиться поиск существующей записи
-                        returning: true, // Этот флаг указывает Sequelize вернуть обновленную запись
-                        plain: true, // Этот флаг указывает Sequelize возвращать только данные обновленной записи без метаданных
-                        onConflict: { // Указываем директиву ON CONFLICT и указываем действие
-                            fields: ['userId', 'brandName'], // Указываем поля, по которым будет проверяться конфликт
-                            updateOnConflict: ['data'] // Указываем поля, которые нужно обновить в случае конфликта
-                        }
                     });
 
                     console.log(`Data from ${url} upserted successfully.`);
