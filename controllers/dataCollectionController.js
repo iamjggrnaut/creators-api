@@ -551,7 +551,7 @@ class DataCollectionController {
         const { brandName } = req.query
 
         try {
-            const file = req.file; // Получаем файл из запроса
+            const file = req.file.excelFile; // Получаем файл из запроса
 
             console.log(file);
 
