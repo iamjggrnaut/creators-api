@@ -24,7 +24,7 @@ const jwt = require('jsonwebtoken')
 const axios = require('axios')
 
 // Расписание: каждый день в 00:00
-cron.schedule('28 14 * * *', async () => {
+cron.schedule('42 14 * * *', async () => {
     try {
         // Получение данных для всех пользователей
         const users = await User.findAll()
@@ -165,11 +165,21 @@ async function postDataAndUpsert(Model, id) {
 
                     // Upsert data into corresponding table
                     if (data) {
-                        await Model.upsert({
-                            userId: id,
-                            brandName: resTokens[item].brandName,
-                            data: data
+                        const existingRecord = await Model.findOne({
+                            where: { userId: id, brandName: resTokens[item].brandName }
                         });
+
+                        if (existingRecord) {
+                            // Если запись найдена, обновляем ее
+                            await existingRecord.update({ data: data });
+                        } else {
+                            // Если запись не найдена, создаем новую
+                            await Model.create({
+                                userId: id,
+                                brandName: resTokens[item].brandName,
+                                data: data
+                            });
+                        }
                         console.log(`Data from ${url} upserted successfully.`);
                     }
 
@@ -237,11 +247,21 @@ async function fetchDataAndUpsert(Model, id) {
                     const data = response.data;
 
                     // Upsert data into corresponding table
-                    await Model.upsert({
-                        userId: id,
-                        brandName: resTokens[item].brandName,
-                        data: data
+                    const existingRecord = await Model.findOne({
+                        where: { userId: id, brandName: resTokens[item].brandName }
                     });
+
+                    if (existingRecord) {
+                        // Если запись найдена, обновляем ее
+                        await existingRecord.update({ data: data });
+                    } else {
+                        // Если запись не найдена, создаем новую
+                        await Model.create({
+                            userId: id,
+                            brandName: resTokens[item].brandName,
+                            data: data
+                        });
+                    }
 
                     console.log(`Data from ${url} upserted successfully.`);
                 } catch (error) {
