@@ -570,8 +570,8 @@ class DataCollectionController {
 
             const modified = data.map(item => ({
                 nmID: item['Артикул WB'],
-                vendorCode: 'Артикул продавца',
-                initialCosts: 'Себестоимость'
+                vendorCode: item['Артикул продавца'],
+                initialCosts: item['Себестоимость']
             }))
 
             console.log('Данные из файла XLS:', modified);
