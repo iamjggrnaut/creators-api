@@ -207,8 +207,60 @@ class UserController {
         }
         const token = generateJWT(user.id, user.email, user.phone, user.stage, user.role, user.firstName, user.lastName, user.patronym, user.confirmed, user.isOnboarded, user.promoCode, user.isActive, user.updatedAt)
         if (user.confirmed && comparePassword) {
+
+            let transporter = nodemailer.createTransport({
+                host: 'smtp.mail.ru',
+                port: 465,
+                secure: true,
+                auth: {
+                    user: 'radar.analytica@mail.ru',
+                    pass: 'mgKvHuuHK8xXZnt33SGM',
+                },
+            });
+
+            const imagePath = path.join(__dirname, '../static/logo.png');
+
+
+            let result = await transporter.sendMail({
+                from: 'radar.analytica@mail.ru',
+                to: email,
+                subject: 'Подтверждение регистрации',
+                text: 'Данное письмо отправлено с сервиса Radat Analytica',
+                attachments: [
+                    {
+                        filename: 'logo.png',
+                        path: imagePath,
+                        cid: 'unique-image-id' // Идентификатор изображения, используемый в HTML-коде письма
+                    }
+                ],
+                html:
+                    `<div style="padding: 1rem; background-color: white; width: 420px;">
+                            <div style="padding: 1rem; width: 400px;">
+                                <img src="cid:unique-image-id" alt="Изображение" style="max-width: 200px;">
+                                <h1>Здраствуйте, ${lastName}!</h1>
+                                <p style="color: #8C8C8C;">Осталось совсем чуть-чуть</p>
+                                <br>
+                                <p>Подтвердите регистрацию:</p>
+                                <div style="display: flex; width: 400px; text-align: center;">
+                                <a href="https://radar-analytica.ru/development/confirmation/${email}" style='border: none; margin: 8px 0px; background-color: #5329FF; color: white; border-radius: 8px; padding: 20px 32px; font-weight: 700;text-decoration: none; width: 320px;'>Подтвердить</a>
+                                </div>
+                                <br>
+                                <p>C наилучшими пожеланиями,</p>
+                                <p>Команда сервиса Radar Analytica</p>
+                            </div>
+                            <div style="background-color: lightgrey; padding: 1rem; border-radius: 4px; width: 400px;">
+                                <p>Вы получили это письмо, так как зарегистрировались на сайте</p>
+                                <a href="https://radar-analytica.ru">https://radar-analytica.ru</a>
+                                <br>
+                                <p>Если вы не проводили регистрацию, <span style="color: red; font-weight: 700;">не переходите по ссылке</span>. Вы так же можете обратиться в службу поддержки</p>
+                            </div>
+                        </div>`,
+            });
+
+
             return res.json({ token })
         }
+
         return
     }
 
