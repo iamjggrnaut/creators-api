@@ -235,7 +235,8 @@ class UserController {
                 ],
                 html:
                     `<div style="padding: 1rem; background-color: white; min-width: 400px; width: 100vw; display: flex; align-items: center; justify-content: center;">
-                            <div style="padding: 1rem; width: 400px;">
+                            <div>
+                                <div style="padding: 1rem; width: 400px;">
                                 <img src="cid:unique-image-id" alt="Изображение" style="max-width: 200px;">
                                 <h1>Здраствуйте, ${'asd'}!</h1>
                                 <p style="color: #8C8C8C;">Осталось совсем чуть-чуть</p>
@@ -253,6 +254,7 @@ class UserController {
                                 <a href="https://radar-analytica.ru">https://radar-analytica.ru</a>
                                 <br>
                                 <p>Если вы не проводили регистрацию, <span style="color: red; font-weight: 700;">не переходите по ссылке</span>. Вы так же можете обратиться в службу поддержки</p>
+                            </div>
                             </div>
                         </div>`,
             });
