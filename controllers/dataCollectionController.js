@@ -112,7 +112,7 @@ class DataCollectionController {
         ] = await Promise.all([
             calculatePenalty(reportDetailByPeriod.data, days),
             calculateAdditionalPayment(reportDetailByPeriod.data, days),
-            calculateCommission(reportDetailByPeriod.data, days),
+            calculateCommission(sales.data, days),
             calculateDeliveryCost(reportDetailByPeriod.data, days),
             calculateMarginalProfit(reportDetailByPeriod.data, days),
             calculateReturn(orders.data, days),
@@ -227,7 +227,7 @@ class DataCollectionController {
         ] = await Promise.all([
             calculatePenalty(reportDetailByPeriod.data, days),
             calculateAdditionalPayment(reportDetailByPeriod.data, days),
-            calculateCommission(reportDetailByPeriod.data, days),
+            calculateCommission(sales.data, days),
             calculateDeliveryCost(reportDetailByPeriod.data, days),
             calculateMarginalProfit(reportDetailByPeriod.data, days),
             calculateReturn(orders.data, days),

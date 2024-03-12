@@ -237,7 +237,7 @@ async function calculateAdditionalPayment(data, days) {
 
 async function calculateCommission(data, days) {
 
-    data = data.filter(item => item.retail_price && item.sale_dt);
+    data = data.filter(item => item.forPay && item.finishedPrice);
 
     const currentDate = new Date();
     // Получаем дату days дней назад
@@ -246,7 +246,7 @@ async function calculateCommission(data, days) {
 
     // Функция для проверки, попадает ли дата объекта в заданный период
     function isWithinPeriod(item) {
-        const itemDate = new Date(item.sale_dt);
+        const itemDate = new Date(item.date);
         return itemDate >= lastDaysDate && itemDate <= currentDate;
     }
 
@@ -254,16 +254,16 @@ async function calculateCommission(data, days) {
     const currentPeriodData = data.filter(isWithinPeriod);
 
     // Вычисляем комиссию за текущий период
-    const currentPeriodCommission = currentPeriodData.reduce((total, item) => total + (item.quantity * item.retail_price * item.commission_percent), 0);
+    const currentPeriodCommission = currentPeriodData.reduce((total, item) => total + (item.forPay - item.finishedPrice), 0);
 
     // Фильтруем данные для получения записей, попадающих в прошлый период
     const previousPeriodData = data.filter(item => {
-        const itemDate = new Date(item.sale_dt);
+        const itemDate = new Date(item.date);
         return itemDate < lastDaysDate;
     });
 
     // Вычисляем комиссию за прошлый период
-    const previousPeriodCommission = previousPeriodData.reduce((total, item) => total + (item.quantity * item.retail_price * item.commission_percent), 0);
+    const previousPeriodCommission = previousPeriodData.reduce((total, item) => total + (item.forPay - item.finishedPrice), 0);
 
     // Вычисляем долю роста значения текущего периода по отношению к предыдущему
     const growthPercentage = ((currentPeriodCommission - previousPeriodCommission) / previousPeriodCommission) * 100;
