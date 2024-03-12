@@ -234,8 +234,8 @@ class UserController {
                     }
                 ],
                 html:
-                    `<div style="padding: 1rem; background-color: white; min-width: 400px; width: 100vw; display: flex; flex-direction: column; align-items: center; justify-content: center;">
-                            <div style="padding: 1rem; width: 400px;">
+                    `<div style="padding: 1rem; background-color: white; width: 70vw;;">
+                            <div style="padding: 1rem; min-width: 400px; display: flex; flex-direction: column; align-items: center;">
                                 <img src="cid:unique-image-id" alt="Изображение" style="max-width: 200px;">
                                 <h1>Здраствуйте, ${'asd'}!</h1>
                                 <p style="color: #8C8C8C;">Осталось совсем чуть-чуть</p>
