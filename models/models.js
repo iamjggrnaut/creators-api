@@ -98,7 +98,7 @@ const Goods = sequelize.define('Goods', {
     brandName: { type: DataTypes.STRING },
 });
 
-const InitialCostsAndTax = sequelize.define('Goods', {
+const InitialCostsAndTax = sequelize.define('InitialCostAndTax', {
     id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
     data: { type: DataTypes.JSONB },
     tax: { type: DataTypes.JSON },
