@@ -254,7 +254,7 @@ async function calculateCommission(data, days) {
     const currentPeriodData = data.filter(isWithinPeriod);
 
     // Вычисляем комиссию за текущий период
-    const currentPeriodCommission = currentPeriodData.reduce((total, item) => total + (item.forPay - item.finishedPrice), 0);
+    const currentPeriodCommission = currentPeriodData.reduce((total, item) => total + (item.finishedPrice - item.forPay), 0);
 
     // Фильтруем данные для получения записей, попадающих в прошлый период
     const previousPeriodData = data.filter(item => {
@@ -263,7 +263,7 @@ async function calculateCommission(data, days) {
     });
 
     // Вычисляем комиссию за прошлый период
-    const previousPeriodCommission = previousPeriodData.reduce((total, item) => total + (item.forPay - item.finishedPrice), 0);
+    const previousPeriodCommission = previousPeriodData.reduce((total, item) => total + (item.finishedPrice - item.forPay), 0);
 
     // Вычисляем долю роста значения текущего периода по отношению к предыдущему
     const growthPercentage = ((currentPeriodCommission - previousPeriodCommission) / previousPeriodCommission) * 100;
