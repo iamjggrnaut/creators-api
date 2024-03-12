@@ -575,7 +575,7 @@ class DataCollectionController {
             }))
 
             const existingRecord = await InitialCostsAndTax.findOne({
-                where: { userId: id, brandName: resTokens[item].brandName }
+                where: { userId: id, brandName: brandName }
             });
 
             if (existingRecord) {
@@ -586,7 +586,7 @@ class DataCollectionController {
                 // Если запись не найдена, создаем новую
                 await InitialCostsAndTax.create({
                     userId: id,
-                    brandName: resTokens[item].brandName,
+                    brandName: brandName,
                     data: modified,
                 });
                 console.log('---------CREATED---------');
@@ -610,7 +610,7 @@ class DataCollectionController {
         console.log(req.body);
 
         const existingRecord = await InitialCostsAndTax.findOne({
-            where: { userId: id, brandName: resTokens[item].brandName }
+            where: { userId: id, brandName: brandName }
         });
 
         if (existingRecord) {
@@ -621,7 +621,7 @@ class DataCollectionController {
             // Если запись не найдена, создаем новую
             await InitialCostsAndTax.create({
                 userId: id,
-                brandName: resTokens[item].brandName,
+                brandName: brandName,
                 tax: req.body,
             });
             console.log('---------CREATED---------');
