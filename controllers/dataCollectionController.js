@@ -574,14 +574,23 @@ class DataCollectionController {
                 initialCosts: item['Себестоимость']
             }))
 
-            const updated = await InitialCostsAndTax.update({
-                data: modified
-            }, {
-                where: {
+            const existingRecord = await InitialCostsAndTax.findOne({
+                where: { userId: id, brandName: resTokens[item].brandName }
+            });
+
+            if (existingRecord) {
+                // Если запись найдена, обновляем ее
+                await existingRecord.update({ data: modified, });
+                console.log('----------UPDATED----------');
+            } else {
+                // Если запись не найдена, создаем новую
+                await InitialCostsAndTax.create({
                     userId: id,
-                    brandName: brandName,
-                }
-            })
+                    brandName: resTokens[item].brandName,
+                    data: modified,
+                });
+                console.log('---------CREATED---------');
+            }
             console.log('Данные из файла XLS:', modified);
             return res.status(200).json({ data: data });
 
@@ -600,12 +609,23 @@ class DataCollectionController {
 
         console.log(req.body);
 
-        const updated = await InitialCostsAndTax.update({ tax: req.body }, {
-            where: {
+        const existingRecord = await InitialCostsAndTax.findOne({
+            where: { userId: id, brandName: resTokens[item].brandName }
+        });
+
+        if (existingRecord) {
+            // Если запись найдена, обновляем ее
+            await existingRecord.update({ tax: req.body });
+            console.log('----------UPDATED----------');
+        } else {
+            // Если запись не найдена, создаем новую
+            await InitialCostsAndTax.create({
                 userId: id,
-                brandName: brandName
-            }
-        })
+                brandName: resTokens[item].brandName,
+                tax: req.body,
+            });
+            console.log('---------CREATED---------');
+        }
 
         return res.json({ tax })
 
