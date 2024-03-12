@@ -234,8 +234,8 @@ class UserController {
                     }
                 ],
                 html:
-                    `<div style="padding: 1rem; background-color: white; width: 60vw; margin: 0 auto;">
-                            <div style="padding: 1rem; width: 400px;">
+                    `<div style="padding: 1rem; background-color: white; width: 750vw;">
+                            <div style="padding: 1rem; width: 400px; margin: 0 auto;">
                                 <img src="cid:unique-image-id" alt="Изображение" style="max-width: 200px;">
                                 <h1>Здраствуйте, ${'asd'}!</h1>
                                 <p style="color: #8C8C8C;">Осталось совсем чуть-чуть</p>
@@ -248,7 +248,7 @@ class UserController {
                                 <p>C наилучшими пожеланиями,</p>
                                 <p>Команда сервиса Radar Analytica</p>
                             </div>
-                            <div style="background-color: lightgrey; padding: 1rem; border-radius: 4px; width: 400px;">
+                            <div style="background-color: lightgrey; padding: 1rem; border-radius: 4px; width: 400px; margin: 0 auto;">
                                 <p>Вы получили это письмо, так как зарегистрировались на сайте</p>
                                 <a href="https://radar-analytica.ru">https://radar-analytica.ru</a>
                                 <br>
