@@ -236,18 +236,17 @@ class UserController {
                         <div style="padding: 1rem; width: 400px; margin:0 auto">
                             <img src="cid:unique-image-id" alt="Изображение" style="width: 200px;">
                             <h1>Восстановление пароля</h1>
-                            <p style="color: #8C8C8C; font-weight: 600;">Не переживайте, это несложно и безопасно</p>
-                            <p style="font-weight: 600;">Здравствуйте! Для вашего аккаунта в сервисе Radar Analytica создан запрос на восстановление пароля.</p>
-                            <p style="font-weight: 600;">Ваш логин: <span style="color: #5329FF;">${email}</span></p>
+                            <p style="color: #8C8C8C; font-weight: 500;">Не переживайте, это несложно и безопасно</p>
+                            <p style="font-weight: 500;">Здравствуйте! Для вашего аккаунта в сервисе Radar Analytica создан запрос на восстановление пароля.</p>
+                            <p style="font-weight: 500;">Ваш логин: <span style="color: #5329FF;">${email}</span></p>
                             <p>Если этот запрос сделали вы, перейдите по <a href="https://radar-analytica.ru/development/restore/${email}/$}" style='border: none; font-weight: 700;text-decoration: none;min-width: 400px; color: #5329FF;'>данной</a> ссылке для сброса пароля. </p>
-                            <br>
-                            <p style="font-weight: 600;">C наилучшими пожеланиями,</p>
-                            <p style="font-weight: 600;">Команда сервиса Radar Analytica</p>
+                            <p style="font-weight: 500;">C наилучшими пожеланиями,</p>
+                            <p style="font-weight: 500;">Команда сервиса Radar Analytica</p>
                         </div>
                         <div style="background-color: rgba(247, 246, 254, 1); padding: 1rem; border-radius: 4px; width: 400px; margin:0 auto">
-                            <p style="font-weight: 600;">Вы получили это письмо, так как запросили восстановление пароля на сайте <a href="https://radar-analytica.ru">https://radar-analytica.ru</a></p>
+                            <p style="font-weight: 500;">Вы получили это письмо, так как запросили восстановление пароля на сайте <a href="https://radar-analytica.ru">https://radar-analytica.ru</a></p>
                             <br>
-                            <p style="font-weight: 600;">Если вы не запрашивали такую информацию, просто игнорируйте это письмо. Вы так же можете обратиться в службу поддержки:support@gmail.com</p>
+                            <p style="font-weight: 500;">Если вы не запрашивали такую информацию, просто игнорируйте это письмо. Вы так же можете обратиться в службу поддержки:support@gmail.com</p>
                         </div>
                     </div>`,
             });
