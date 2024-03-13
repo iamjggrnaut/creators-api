@@ -234,21 +234,21 @@ class UserController {
                     }
                 ],
                 html:
-                    `<div style="padding: 1rem; background-color: white; width: 60vw;">
-                            <div style="padding: 1rem; width: 400px; margin: 0 auto;">
+                    `<div style="padding: 1rem; background-color: white; width: 65vw;">
+                            <div style="padding: 1rem; width: 380px; margin: 0 auto;">
                                 <img src="cid:unique-image-id" alt="Изображение" style="max-width: 200px;">
                                 <h1>Здраствуйте, ${'asd'}!</h1>
                                 <p style="color: #8C8C8C;">Осталось совсем чуть-чуть</p>
                                 <br>
                                 <p>Подтвердите регистрацию:</p>
-                                <div style="display: flex; width: 400px; text-align: center;">
+                                <div style="display: flex; width: 380px; text-align: center;">
                                 <a href="https://radar-analytica.ru/development/confirmation/${email}" style='border: none; margin: 8px 0px; background-color: #5329FF; color: white; border-radius: 8px; padding: 20px 32px; font-weight: 700;text-decoration: none; width: 320px;'>Подтвердить</a>
                                 </div>
                                 <br>
                                 <p>C наилучшими пожеланиями,</p>
                                 <p>Команда сервиса Radar Analytica</p>
                             </div>
-                            <div style="background-color: lightgrey; padding: 1rem; border-radius: 4px; width: 400px; margin: 0 auto;">
+                            <div style="background-color: lightgrey; padding: 1rem; border-radius: 4px; width: 380px; margin: 0 auto;">
                                 <p>Вы получили это письмо, так как зарегистрировались на сайте</p>
                                 <a href="https://radar-analytica.ru">https://radar-analytica.ru</a>
                                 <br>
