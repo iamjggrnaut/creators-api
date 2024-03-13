@@ -234,7 +234,7 @@ class UserController {
                     }
                 ],
                 html:
-                    `<div style="padding: 1rem; background-color: white; width: 75vw;">
+                    `<div style="padding: 1rem; background-color: white; width: 60vw;">
                             <div style="padding: 1rem; width: 400px; margin: 0 auto;">
                                 <img src="cid:unique-image-id" alt="Изображение" style="max-width: 200px;">
                                 <h1>Здраствуйте, ${'asd'}!</h1>
