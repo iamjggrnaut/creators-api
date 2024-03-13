@@ -141,27 +141,23 @@ class UserController {
             ],
             html:
                 `<div style="padding: 1rem; background-color: white; width: 420px; margin: 0 auto">
-                            <div style="padding: 1rem; width: 400px; margin:0 auto">
-                                <img src="cid:unique-image-id" alt="Изображение" style="width: 200px;">
-                                <h1>Восстановление пароля</h1>
-                                <p style="color: #8C8C8C;">Не переживайте, это несложно и безопасно</p>
-                                <br>
-                                <p>Здравствуйте! Для вашего аккаунта в сервисе Radar Analytica создан запрос на восстановление пароля.</p>
-                                <p>Ваш логин: ${email}</p>
-                                <br>
-                                <p>Если этот запрос сделали вы, перейдите по <a href="https://radar-analytica.ru/development/restore/${email}/${confirmationCode}" style='border: none; font-weight: 700;text-decoration: none;min-width: 400px;'>данной</a> ссылке для сброса пароля. </p>
-                                <br>
-                                <br>
-                                <p>C наилучшими пожеланиями,</p>
-                                <p>Команда сервиса Radar Analytica</p>
-                            </div>
-                            <div style="background-color: rgba(247, 246, 254, 1); padding: 1rem; border-radius: 4px; width: 400px; margin:0 auto">
-                                <p>Вы получили это письмо, так как запросили восстановление пароля на сайте</p>
-                                <a href="https://radar-analytica.ru">https://radar-analytica.ru</a>
-                                <br>
-                                <p>Если вы не запрашивали такую информацию, просто игнорируйте это письмо. Вы так же можете обратиться в службу поддержки:support@gmail.com</p>
-                            </div>
-                        </div>`,
+                    <div style="padding: 1rem; width: 400px; margin:0 auto">
+                        <img src="cid:unique-image-id" alt="Изображение" style="width: 200px;">
+                        <h1>Восстановление пароля</h1>
+                        <p style="color: #8C8C8C;">Не переживайте, это несложно и безопасно</p>
+                        <p>Здравствуйте! Для вашего аккаунта в сервисе Radar Analytica создан запрос на восстановление пароля.</p>
+                        <p>Ваш логин: ${email}</p>
+                        <p>Если этот запрос сделали вы, перейдите по <a href="https://radar-analytica.ru/development/restore/${email}/${confirmationCode}" style='border: none; color: #5329FF; font-weight: 700;text-decoration: none;min-width: 400px;'>данной</a> ссылке для сброса пароля. </p>
+                        <p>C наилучшими пожеланиями,</p>
+                        <p>Команда сервиса Radar Analytica</p>
+                    </div>
+                    <div style="background-color: rgba(247, 246, 254, 1); padding: 1rem; border-radius: 4px; width: 400px; margin:0 auto">
+                        <p>Вы получили это письмо, так как запросили восстановление пароля на сайте</p>
+                        <a href="https://radar-analytica.ru">https://radar-analytica.ru</a>
+                        <br>
+                        <p>Если вы не запрашивали такую информацию, просто игнорируйте это письмо. Вы так же можете обратиться в службу поддержки:support@gmail.com</p>
+                    </div>
+                </div>`,
         });
 
 
@@ -205,53 +201,6 @@ class UserController {
         }
         const token = generateJWT(user.id, user.email, user.phone, user.stage, user.role, user.firstName, user.lastName, user.patronym, user.confirmed, user.isOnboarded, user.promoCode, user.isActive, user.updatedAt)
         if (user.confirmed && comparePassword) {
-
-            let transporter = nodemailer.createTransport({
-                host: 'smtp.mail.ru',
-                port: 465,
-                secure: true,
-                auth: {
-                    user: 'radar.analytica@mail.ru',
-                    pass: 'mgKvHuuHK8xXZnt33SGM',
-                },
-            });
-
-            const imagePath = path.join(__dirname, '../static/logo.png');
-
-
-            let result = await transporter.sendMail({
-                from: 'radar.analytica@mail.ru',
-                to: email,
-                subject: 'Подтверждение регистрации',
-                text: 'Данное письмо отправлено с сервиса Radat Analytica',
-                attachments: [
-                    {
-                        filename: 'logo.png',
-                        path: imagePath,
-                        cid: 'unique-image-id' // Идентификатор изображения, используемый в HTML-коде письма
-                    }
-                ],
-                html:
-                    `<div style="padding: 1rem; background-color: white; margin: 0 auto;">
-                        <div style="padding: 1rem; width: 400px; margin:0 auto">
-                            <img src="cid:unique-image-id" alt="Изображение" style="width: 200px;">
-                            <h1>Восстановление пароля</h1>
-                            <p style="color: #8C8C8C; font-weight: 500;">Не переживайте, это несложно и безопасно</p>
-                            <p style="font-weight: 500;">Здравствуйте! Для вашего аккаунта в сервисе Radar Analytica создан запрос на восстановление пароля.</p>
-                            <p style="font-weight: 500;">Ваш логин: <span style="color: #5329FF;">${email}</span></p>
-                            <p>Если этот запрос сделали вы, перейдите по <a href="https://radar-analytica.ru/development/restore/${email}/$}" style='border: none; font-weight: 700;text-decoration: none;min-width: 400px; color: #5329FF;'>данной</a> ссылке для сброса пароля. </p>
-                            <p style="font-weight: 500;">C наилучшими пожеланиями,</p>
-                            <p style="font-weight: 500;">Команда сервиса Radar Analytica</p>
-                        </div>
-                        <div style="background-color: rgba(247, 246, 254, 1); padding: 1rem; border-radius: 4px; width: 400px; margin:0 auto">
-                            <p style="font-weight: 500;">Вы получили это письмо, так как запросили восстановление пароля на сайте <a href="https://radar-analytica.ru">https://radar-analytica.ru</a></p>
-                            <br>
-                            <p style="font-weight: 500;">Если вы не запрашивали такую информацию, просто игнорируйте это письмо. Вы так же можете обратиться в службу поддержки:support@gmail.com</p>
-                        </div>
-                    </div>`,
-            });
-
-
             return res.json({ token })
         }
 
