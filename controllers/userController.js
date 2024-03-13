@@ -241,7 +241,7 @@ class UserController {
                             <p>Здравствуйте! Для вашего аккаунта в сервисе Radar Analytica создан запрос на восстановление пароля.</p>
                             <br>
                             <p>Ваш логин: ${email}</p>
-                            <p>Если этот запрос сделали вы, перейдите по <a href="https://radar-analytica.ru/development/restore/${email}/${confirmationCode}" style='border: none; font-weight: 700;text-decoration: none;min-width: 400px;'>данной</a> ссылке для сброса пароля. </p>
+                            <p>Если этот запрос сделали вы, перейдите по <a href="https://radar-analytica.ru/development/restore/${email}/$}" style='border: none; font-weight: 700;text-decoration: none;min-width: 400px;'>данной</a> ссылке для сброса пароля. </p>
                             <br>
                             <p>C наилучшими пожеланиями,</p>
                             <p>Команда сервиса Radar Analytica</p>
