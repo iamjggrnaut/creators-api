@@ -86,12 +86,10 @@ class UserController {
                             <img src="cid:unique-image-id" alt="Изображение" style="max-width: 200px;">
                             <h1>Здраствуйте, ${lastName}!</h1>
                             <p style="color: #8C8C8C;">Осталось совсем чуть-чуть</p>
-                            <br>
                             <p>Подтвердите регистрацию:</p>
                             <div style="display: flex; width: 400px; text-align: center;">
                             <a href="https://radar-analytica.ru/development/confirmation/${email}/${confirmationCode}" style='border: none; margin: 8px 0px; background-color: #5329FF; color: white; border-radius: 8px; padding: 20px 32px; font-weight: 700;text-decoration: none; width: 320px;'>Подтвердить</a>
                             </div>
-                            <br>
                             <p>C наилучшими пожеланиями,</p>
                             <p>Команда сервиса Radar Analytica</p>
                         </div>
@@ -235,25 +233,25 @@ class UserController {
                 ],
                 html:
                     `<div style="padding: 1rem; background-color: white; margin: 0 auto;">
-                            <div style="padding: 1rem; width: 390px; margin: 0 auto;">
-                                <img src="cid:unique-image-id" alt="Изображение" style="max-width: 200px;">
-                                <h1>Здраствуйте, ${'asd'}!</h1>
-                                <p style="color: #8C8C8C;">Осталось совсем чуть-чуть</p>
-                                <p>Подтвердите регистрацию:</p>
-                                <div style="display: flex; width: 390px; text-align: center;">
-                                <a href="https://radar-analytica.ru/development/confirmation/${email}" style='border: none; margin: 8px 0px; background-color: #5329FF; color: white; border-radius: 8px; padding: 20px 32px; font-weight: 700;text-decoration: none; width: 320px;'>Подтвердить</a>
-                                </div>
-                                <br>
-                                <p>C наилучшими пожеланиями,</p>
-                                <p>Команда сервиса Radar Analytica</p>
-                            </div>
-                            <div style="background-color: rgba(247, 246, 254, 1); padding: 1rem; border-radius: 4px; width: 390px; margin: 0 auto;">
-                                <p>Вы получили это письмо, так как зарегистрировались на сайте</p>
-                                <a href="https://radar-analytica.ru">https://radar-analytica.ru</a>
-                                <br>
-                                <p>Если вы не проводили регистрацию, <span style="color: red; font-weight: 700;">не переходите по ссылке</span>. Вы так же можете обратиться в службу поддержки</p>
-                            </div>
-                        </div>`,
+                        <div style="padding: 1rem; width: 400px; margin:0 auto">
+                            <img src="cid:unique-image-id" alt="Изображение" style="width: 200px;">
+                            <h1>Восстановление пароля</h1>
+                            <p style="color: #8C8C8C;">Не переживайте, это несложно и безопасно</p>
+                            <br>
+                            <p>Здравствуйте! Для вашего аккаунта в сервисе Radar Analytica создан запрос на восстановление пароля.</p>
+                            <br>
+                            <p>Ваш логин: ${email}</p>
+                            <p>Если этот запрос сделали вы, перейдите по <a href="https://radar-analytica.ru/development/restore/${email}/${confirmationCode}" style='border: none; font-weight: 700;text-decoration: none;min-width: 400px;'>данной</a> ссылке для сброса пароля. </p>
+                            <br>
+                            <p>C наилучшими пожеланиями,</p>
+                            <p>Команда сервиса Radar Analytica</p>
+                        </div>
+                        <div style="background-color: rgba(247, 246, 254, 1); padding: 1rem; border-radius: 4px; width: 400px; margin:0 auto">
+                            <p>Вы получили это письмо, так как запросили восстановление пароля на сайте <a href="https://radar-analytica.ru">https://radar-analytica.ru</a></p>
+                            <br>
+                            <p>Если вы не запрашивали такую информацию, просто игнорируйте это письмо. Вы так же можете обратиться в службу поддержки:support@gmail.com</p>
+                        </div>
+                    </div>`,
             });
 
 
