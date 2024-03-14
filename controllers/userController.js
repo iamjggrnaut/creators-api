@@ -39,11 +39,11 @@ class UserController {
     async register(req, res, next) {
         const { email, password, phone, stage, role, firstName, lastName, patronym, confirmed, isOnboarded, promoCode, isActive, updatedAt } = req.body
         if (!email || !password) {
-            return next(ApiError.badRequest('Incorrect email or password'))
+            return res.status(500).json({ success: false, message: 'Введите корректное значение для данного поля' })
         }
         const candidate = await User.findOne({ where: { email } })
         if (candidate) {
-            return next(ApiError.badRequest('User with this email already exists'))
+            return res.status(500).json({ success: false, message: 'Пользователь с этими данными уже зарегестрирован!' });
         }
         const hashPass = await bcrypt.hash(password, 5)
         const user = await User.create({ email, phone, stage, role, firstName, lastName, patronym, confirmed, isOnboarded, promoCode, isActive, updatedAt, password: hashPass })
@@ -189,15 +189,15 @@ class UserController {
         const { email, password } = req.body
         const user = await User.findOne({ where: { email } })
         if (!user) {
-            return next(ApiError.internal('User not found'))
+            return res.status(500).json({ success: false, message: 'Пользователь не найден' })
         }
         let comparePassword = bcrypt.compareSync(password, user.password)
         console.log(comparePassword);
         if (!comparePassword) {
-            res.status(500).json({ success: false, message: 'Неверный логин или пароль' })
+            return res.status(500).json({ success: false, message: 'Неверный логин или пароль' })
         }
         if (!comparePassword && !user.confirmed) {
-            return next(ApiError.internal('Wrong password or email is not confirmed'))
+            return res.status(500).json({ success: false, message: 'Аккаунт не подтвержден' })
         }
         const token = generateJWT(user.id, user.email, user.phone, user.stage, user.role, user.firstName, user.lastName, user.patronym, user.confirmed, user.isOnboarded, user.promoCode, user.isActive, user.updatedAt)
         if (user.confirmed && comparePassword) {
