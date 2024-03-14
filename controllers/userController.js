@@ -41,7 +41,7 @@ class UserController {
         if (!email || !password) {
             return res.status(500).json({ success: false, message: 'Введите корректное значение для данного поля' })
         }
-        const candidate = await User.findOne({ where: { email } })
+        const candidate = await User.findOne({ where: { email, phone } })
         if (candidate) {
             return res.status(500).json({ success: false, message: 'Пользователь с этими данными уже зарегестрирован!' });
         }
