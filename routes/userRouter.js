@@ -6,7 +6,7 @@ const checkRoleMiddleware = require('../middleware/CheckRoleMiddleware')
 
 router.get('/', checkRoleMiddleware('ADMIN'), userController.getAll)
 router.get('/auth', authMiddleware, userController.check)
-router.get('/:id', authMiddleware, userController.getOne)
+router.get('/:id', userController.getOne)
 router.put('/:id', userController.updateImage)
 router.put('/', userController.updateUser)
 router.patch('/update/:id', userController.updateToken)
