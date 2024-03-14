@@ -93,6 +93,7 @@ class UserController {
                                 </div>
                                 <p>C наилучшими пожеланиями,</p>
                                 <p>Команда сервиса Radar Analytica</p>
+                                <br />
                             </div>
                             <div style="background-color: rgba(247, 246, 254, 1); padding: 1rem; border-radius: 4px; width: 400px; margin: 0 auto;">
                                 <p>Вы получили это письмо, так как зарегистрировались на сайте</p>
@@ -154,6 +155,7 @@ class UserController {
                         <p>Если этот запрос сделали вы, перейдите по <a href="https://radar-analytica.ru/development/restore/${email}/${confirmationCode}" style='border: none; color: #5329FF; font-weight: 700;text-decoration: none;min-width: 400px;'>данной</a> ссылке для сброса пароля. </p>
                         <p>C наилучшими пожеланиями,</p>
                         <p>Команда сервиса Radar Analytica</p>
+                        <br />
                     </div>
                     <div style="background-color: rgba(247, 246, 254, 1); padding: 1rem; border-radius: 4px; width: 400px; margin:0 auto">
                         <p>Вы получили это письмо, так как запросили восстановление пароля на сайте</p>
