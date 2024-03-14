@@ -60,8 +60,8 @@ class UserController {
             port: 465,
             secure: true,
             auth: {
-                user: 'radar.analytica@mail.ru',
-                pass: 'mgKvHuuHK8xXZnt33SGM',
+                user: 'radar-analytica@inbox.ru',
+                pass: '0eXubjSDDseXiULJDG4B',
             },
         });
 
@@ -69,7 +69,7 @@ class UserController {
 
 
         let result = await transporter.sendMail({
-            from: 'radar.analytica@mail.ru',
+            from: 'radar-analytica@inbox.ru',
             to: email,
             subject: 'Подтверждение регистрации',
             text: 'Данное письмо отправлено с сервиса Radat Analytica',
@@ -119,8 +119,8 @@ class UserController {
             port: 465,
             secure: true,
             auth: {
-                user: 'radar.analytica@mail.ru',
-                pass: 'mgKvHuuHK8xXZnt33SGM',
+                user: 'radar-analytica@inbox.ru',
+                pass: '0eXubjSDDseXiULJDG4B',
             },
         });
 
@@ -128,7 +128,7 @@ class UserController {
 
 
         let result = await transporter.sendMail({
-            from: 'radar.analytica@mail.ru',
+            from: 'radar-analytica@inbox.ru',
             to: email,
             subject: 'Восстановление пароля',
             text: 'Данное письмо отправлено с сервиса Radat Analytica',
