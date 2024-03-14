@@ -37,7 +37,7 @@ const generateJWT = (id, email, phone, stage, role, firstName, lastName, patrony
 class UserController {
 
     async register(req, res, next) {
-        const { email, password, phone, stage, role, firstName, lastName, patronym, confirmed, isOnboarded, promoCode, isActive, updatedAt } = req.body
+        const { email, password, phone, stage, role, firstName, lastName, patronym, confirmed, isOnboarded, promoCode, isActive } = req.body
         if (!email || !password) {
             return res.status(500).json({ success: false, message: 'Введите корректное значение для данного поля' })
         }
@@ -46,9 +46,7 @@ class UserController {
             return res.status(500).json({ success: false, message: 'Пользователь с этими данными уже зарегестрирован!' });
         }
         const hashPass = await bcrypt.hash(password, 5)
-        const user = await User.create({ email, phone, stage, role, firstName, lastName, patronym, confirmed, isOnboarded, promoCode, isActive, updatedAt, password: hashPass })
-
-        const token = generateJWT(user.id, user.email, user.role, user.firstName, user.lastName, user.isActive, user.patronym, user.stage, user.confirmed, user.isOnboarded, user.promoCode)
+        const user = await User.create({ email, phone, stage, role, firstName, lastName, patronym, confirmed, isOnboarded, promoCode, isActive, password: hashPass })
 
         const confirmationCode = uuid.v4();
         confirmationCodes[email] = confirmationCode;
