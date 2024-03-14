@@ -533,10 +533,10 @@ class DataCollectionController {
 
 
 
-            res.download(filePath, 'data.xlsx', (err) => {
+            res.sendFile(filePath, (err) => {
                 if (err) {
-                    console.error('Ошибка при скачивании файла:', err);
-                    res.status(500).send('Произошла ошибка при скачивании файла');
+                    console.error('Ошибка при отправке файла:', err);
+                    res.status(500).send('Произошла ошибка при отправке файла');
                 } else {
                     // Удаляем временный файл
                     fs.unlinkSync(filePath);
