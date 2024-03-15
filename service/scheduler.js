@@ -24,7 +24,7 @@ const jwt = require('jsonwebtoken')
 const axios = require('axios')
 
 // Расписание: каждый день в 00:00
-cron.schedule('36 0,12 * * *', async () => {
+cron.schedule('8 0,15 * * *', async () => {
     try {
         // Получение данных для всех пользователей
         const users = await User.findAll()
@@ -42,7 +42,7 @@ cron.schedule('36 0,12 * * *', async () => {
         // Для каждого пользователя запускаем функцию получения данных
         for (const user of users) {
             await new Promise(resolve => setTimeout(resolve, 60500));
-            await fetchAllData(user); // Подставьте свою фунsкцию получения данных для каждого пользователя
+            await fetchAllData(user, date); // Подставьте свою фунsкцию получения данных для каждого пользователя
         }
 
         console.log('Сбор данных для всех пользователей завершен');
@@ -52,7 +52,7 @@ cron.schedule('36 0,12 * * *', async () => {
 });
 
 // Define function to fetch data from all URLs
-async function fetchAllData(user) {
+async function fetchAllData(user, date) {
 
     const models = [
         Warehouse,
@@ -82,7 +82,7 @@ async function fetchAllData(user) {
 
     for (const Model of reportModels) {
         await new Promise(resolve => setTimeout(resolve, 22000));
-        await postDataAndUpsert(Model, id);
+        await postDataAndUpsert(Model, id, date);
     }
     for (const Model of models) {
         await new Promise(resolve => setTimeout(resolve, 61000));
@@ -90,7 +90,7 @@ async function fetchAllData(user) {
     }
 }
 
-async function postDataAndUpsert(Model, id) {
+async function postDataAndUpsert(Model, id, date) {
 
 
     const dateTo = new Date(new Date().setDate(new Date().getDate())).toLocaleDateString('ru').split('.').reverse().join('-')
@@ -112,35 +112,35 @@ async function postDataAndUpsert(Model, id) {
         ReportThreeMonths: {
             period: {
                 begin: threeMonthsAgo + ' 11:59:59',
-                end: dateTo + ' 00:00:01'
+                end: dateTo + date
             },
             page: 1
         },
         ReportMonthly: {
             period: {
                 begin: monthAgo + ' 11:59:59',
-                end: dateTo + ' 00:00:00'
+                end: dateTo + date
             },
             page: 1
         },
         ReportTwoWeeks: {
             period: {
                 begin: twoWeekAgo + ' 11:59:59',
-                end: dateTo + ' 00:00:00'
+                end: dateTo + date
             },
             page: 1
         },
         ReportWeekly: {
             period: {
                 begin: weekAgo + ' 11:59:59',
-                end: dateTo + ' 00:00:00'
+                end: dateTo + date
             },
             page: 1
         },
         ReportDaily: {
             period: {
                 begin: dayAgo + ' 11:59:59',
-                end: dateTo + ' 00:00:00'
+                end: dateTo + date
             },
             page: 1
         },
