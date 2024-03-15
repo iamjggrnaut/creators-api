@@ -24,10 +24,20 @@ const jwt = require('jsonwebtoken')
 const axios = require('axios')
 
 // Расписание: каждый день в 00:00
-cron.schedule('1 0 * * *', async () => {
+cron.schedule('36 0,12 * * *', async () => {
     try {
         // Получение данных для всех пользователей
         const users = await User.findAll()
+
+        let date;
+        const currentHour = new Date().getHours();
+        if (currentHour < 12) {
+            // Утро
+            date = ' 00:00:01';
+        } else {
+            // Вечер
+            date = ' 11:59:01';
+        }
 
         // Для каждого пользователя запускаем функцию получения данных
         for (const user of users) {
