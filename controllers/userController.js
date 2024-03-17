@@ -178,6 +178,7 @@ class UserController {
         const user = await User.findOne({ where: { email } })
         if (user && user.email === email && user.confirmationCode === code) {
             user.update({ confirmed: true }, { where: { email } }).then(data => console.log(data))
+            console.log('--------CONFIRMED!!!!--------');
         }
         else {
             return res.status(500).json({ success: false, message: 'Ошибка' })
@@ -211,6 +212,7 @@ class UserController {
         }
         const token = generateJWT(user.id, user.email, user.phone, user.stage, user.role, user.firstName, user.lastName, user.patronym, user.confirmed, user.isOnboarded, user.promoCode, user.isActive, user.updatedAt)
         if (user.confirmed && comparePassword) {
+            console.log('-------token--------');
             return res.json({ token })
         }
         else {
