@@ -176,6 +176,9 @@ class UserController {
     async confirm(req, res, next) {
         const { email, code } = req.body
         const user = await User.findOne({ where: { email } })
+        console.log(code);
+        console.log(email);
+        console.log(user.confirmationCode);
         if (user && user.email === email && user.confirmationCode === code) {
             user.update({ confirmed: true }, { where: { email } }).then(data => console.log(data))
             console.log('--------CONFIRMED!!!!--------');
