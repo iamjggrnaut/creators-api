@@ -211,8 +211,7 @@ class UserController {
         if (user.confirmed && comparePassword) {
             return res.json({ token })
         }
-
-        return
+        return res.json({ token: '' })
     }
 
     async check(req, res) {
