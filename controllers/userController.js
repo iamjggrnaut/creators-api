@@ -181,6 +181,7 @@ class UserController {
             console.log('--------CONFIRMED!!!!--------');
         }
         else {
+            console.log('--------NOT CONFIRMED!!!!--------');
             return res.status(500).json({ success: false, message: 'Ошибка' })
         }
     }
