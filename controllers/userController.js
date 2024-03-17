@@ -207,7 +207,8 @@ class UserController {
         if (!comparePassword) {
             return res.status(500).json({ success: false, message: 'Неверный логин или пароль' })
         }
-        if (!comparePassword && !user.confirmed) {
+        if (!user.confirmed) {
+            console.log('----NOT CONFIRMED--------');
             return res.status(500).json({ success: false, message: 'Аккаунт не подтвержден' })
         }
         const token = generateJWT(user.id, user.email, user.phone, user.stage, user.role, user.firstName, user.lastName, user.patronym, user.confirmed, user.isOnboarded, user.promoCode, user.isActive, user.updatedAt)
