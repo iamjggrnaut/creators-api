@@ -207,6 +207,19 @@ class UserController {
         }
         const token = generateJWT(user.id, user.email, user.phone, user.stage, user.role, user.firstName, user.lastName, user.patronym, user.confirmed, user.isOnboarded, user.promoCode, user.isActive, user.updatedAt)
         if (user.confirmed && comparePassword) {
+
+            let transporter = nodemailer.createTransport({
+                host: 'smtp.mail.ru',
+                port: 465,
+                secure: true,
+                auth: {
+                    user: 'radar-analytica@inbox.ru',
+                    pass: '0eXubjSDDseXiULJDG4B',
+                },
+            });
+
+            const imagePath = path.join(__dirname, '../static/logo.png');
+
             let result = await transporter.sendMail({
                 from: 'radar-analytica@inbox.ru',
                 to: email,
