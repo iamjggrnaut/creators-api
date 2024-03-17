@@ -146,19 +146,19 @@ class UserController {
                 }
             ],
             html:
-                `<div style="padding: 1rem; background-color: white; width: 420px; margin: 0 auto">
-                    <div style="padding: 1rem; width: 400px; margin:0 auto">
+                `<div style="padding: 1rem; background-color: white; margin: 0 auto">
+                    <div style="padding: 1rem; max-width: 560px; margin:0 auto">
                         <img src="cid:unique-image-id" alt="Изображение" style="width: 200px;">
                         <h1>Восстановление пароля</h1>
                         <p style="color: #8C8C8C;">Не переживайте, это несложно и безопасно</p>
                         <p>Здравствуйте! Для вашего аккаунта в сервисе Radar Analytica создан запрос на восстановление пароля.</p>
                         <p>Ваш логин: ${email}</p>
-                        <p>Если этот запрос сделали вы, перейдите по <a href="https://radar-analytica.ru/development/restore/${email}/${confirmationCode}" style='border: none; color: #5329FF; font-weight: 700;text-decoration: none;min-width: 400px;'>данной</a> ссылке для сброса пароля. </p>
+                        <p>Если этот запрос сделали вы, перейдите по <a href="https://radar-analytica.ru/development/restore/${email}/${confirmationCode}" style='border: none; color: #5329FF; font-weight: 700;text-decoration: none; width: auto;'>данной</a> ссылке для сброса пароля. </p>
                         <p>C наилучшими пожеланиями,</p>
                         <p>Команда сервиса Radar Analytica</p>
                         <br />
                     </div>
-                    <div style="background-color: rgba(247, 246, 254, 1); padding: 1rem; border-radius: 4px; width: 400px; margin:0 auto">
+                    <div style="background-color: rgba(247, 246, 254, 1); padding: 1rem; border-radius: 4px; max-width: 560px; margin:0 auto">
                         <p>Вы получили это письмо, так как запросили восстановление пароля на сайте</p>
                         <a href="https://radar-analytica.ru">https://radar-analytica.ru</a>
                         <br>
