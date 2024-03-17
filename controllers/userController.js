@@ -177,9 +177,11 @@ class UserController {
         const { email, code } = req.body
         const user = await User.findOne({ where: { email } })
         if (user && user.email === email && user.confirmationCode === code) {
-            user.update({ confirmed: true }, { where: { email } })
+            user.update({ confirmed: true }, { where: { email } }).then(data => console.log(data))
         }
-        return res.json({ confirmed: true })
+        else {
+            return res.status(500).json({ success: false, message: 'Ошибка' })
+        }
     }
 
     async confirmReset(req, res, next) {
