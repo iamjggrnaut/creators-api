@@ -90,7 +90,7 @@ class UserController {
                         <p>Подтвердите регистрацию:</p>
                         <br />
                         <div style="display: flex; width: width: 100%; text-align: center; margin: 20px auto;">
-                        <a href="https://radar-analytica.ru/development/confirmation/${lastName}/${confirmationCode}" style='border: none; margin: 8px auto; background-color: #5329FF; color: white; border-radius: 8px; padding: 20px auto; font-weight: 700;text-decoration: none; width: 100%;'>Подтвердить</a>
+                        <a href="https://radar-analytica.ru/development/confirmation/${email}/${confirmationCode}" style='border: none; margin: 8px auto; background-color: #5329FF; color: white; border-radius: 8px; padding: 20px auto; font-weight: 700;text-decoration: none; width: 100%;'>Подтвердить</a>
                         </div>
                         <br />
                         <p>C наилучшими пожеланиями,</p>
