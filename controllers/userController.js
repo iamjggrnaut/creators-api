@@ -73,7 +73,7 @@ class UserController {
                 from: 'radar-analytica@inbox.ru',
                 to: email,
                 subject: 'Подтверждение регистрации',
-                text: 'Данное письмо отправлено с сервиса Radar Analytica',
+                text: 'Данные письмо отправлено сервисом «Radar Analytica»',
                 attachments: [
                     {
                         filename: 'logo.png',
@@ -137,7 +137,7 @@ class UserController {
             from: 'radar-analytica@inbox.ru',
             to: email,
             subject: 'Восстановление пароля',
-            text: 'Данное письмо отправлено с сервиса Radar Analytica',
+            text: 'Данные письмо отправлено сервисом «Radar Analytica»',
             attachments: [
                 {
                     filename: 'logo.png',
