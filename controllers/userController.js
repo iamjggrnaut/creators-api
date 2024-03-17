@@ -105,6 +105,7 @@ class UserController {
                     </div>
                 </div>`,
             });
+            return res.json({ success: true, message: 'Регистрация прошла успешно' })
         } catch (error) {
             console.log(error);
             return res.json({ success: false, message: 'Не удалось зарегистрировать пользователя' })
