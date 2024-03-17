@@ -259,7 +259,7 @@ class UserController {
             return res.json({ token })
         }
 
-        return
+        return res.json({})
     }
 
     async check(req, res) {
