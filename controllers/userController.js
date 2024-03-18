@@ -182,6 +182,7 @@ class UserController {
         if (user && user.email === email && user.confirmationCode === code) {
             user.update({ confirmed: true }, { where: { email } }).then(data => console.log(data))
             console.log('--------CONFIRMED!!!!--------');
+            return res.status(200).json({ success: true, message: 'Успешно' })
         }
         else {
             console.log('--------NOT CONFIRMED!!!!--------');
