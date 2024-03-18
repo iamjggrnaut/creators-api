@@ -414,7 +414,6 @@ async function calculateMargin(data, days) {
         return {}
     }
 }
-}
 
 async function calculateNetProfit(data, days) {
     // Функция для вычисления маржинальной стоимости
