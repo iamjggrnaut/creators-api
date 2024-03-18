@@ -416,36 +416,40 @@ async function calculateMargin(data, days) {
 }
 
 async function calculateNetProfit(data, days) {
-    // Функция для вычисления маржинальной стоимости
-    function calculateGrossMargin(deliveryRub, retailPrice) {
-        return retailPrice - deliveryRub;
+    try {
+        // Функция для вычисления маржинальной стоимости
+        function calculateGrossMargin(deliveryRub, retailPrice) {
+            return retailPrice - deliveryRub;
+        }
+
+        // Получаем текущую дату
+        const currentDate = new Date();
+
+        // Получаем дату days дней назад
+        const lastDate = new Date(currentDate.getTime() - (days * 24 * 60 * 60 * 1000));
+
+        // Фильтруем данные за текущий и предыдущий периоды
+        const currentPeriodData = data.filter(item => new Date(item.sale_dt) >= lastDate && new Date(item.sale_dt) <= currentDate);
+        const previousPeriodData = data.filter(item => {
+            const date = new Date(item.sale_dt);
+            return date < lastDate;
+        });
+
+        // Суммируем стоимость товара за текущий и предыдущий периоды
+        const currentRetailPriceSum = currentPeriodData.reduce((sum, item) => sum + item.ppvz_for_pay, 0);
+        const previousRetailPriceSum = previousPeriodData.reduce((sum, item) => sum + item.ppvz_for_pay, 0);
+
+        // Вычисляем долю роста маржинальной стоимости
+        const marginGrowth = ((currentRetailPriceSum - previousRetailPriceSum) / previousRetailPriceSum) * 100;
+
+        // Возвращаем результаты
+        return {
+            sum: currentRetailPriceSum,
+            marginGrowth: marginGrowth
+        };
+    } catch (e) {
+        return {}
     }
-
-    // Получаем текущую дату
-    const currentDate = new Date();
-
-    // Получаем дату days дней назад
-    const lastDate = new Date(currentDate.getTime() - (days * 24 * 60 * 60 * 1000));
-
-    // Фильтруем данные за текущий и предыдущий периоды
-    const currentPeriodData = data.filter(item => new Date(item.sale_dt) >= lastDate && new Date(item.sale_dt) <= currentDate);
-    const previousPeriodData = data.filter(item => {
-        const date = new Date(item.sale_dt);
-        return date < lastDate;
-    });
-
-    // Суммируем стоимость товара за текущий и предыдущий периоды
-    const currentRetailPriceSum = currentPeriodData.reduce((sum, item) => sum + item.ppvz_for_pay, 0);
-    const previousRetailPriceSum = previousPeriodData.reduce((sum, item) => sum + item.ppvz_for_pay, 0);
-
-    // Вычисляем долю роста маржинальной стоимости
-    const marginGrowth = ((currentRetailPriceSum - previousRetailPriceSum) / previousRetailPriceSum) * 100;
-
-    // Возвращаем результаты
-    return {
-        sum: currentRetailPriceSum,
-        marginGrowth: marginGrowth
-    };
 }
 
 async function calculateAverageProfit(data, days) {
