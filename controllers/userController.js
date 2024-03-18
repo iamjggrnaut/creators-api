@@ -44,7 +44,7 @@ class UserController {
         const candidate = await User.findOne({ where: { email } })
         const candidatePhone = await User.findOne({ where: { phone } })
         if (candidate || candidatePhone) {
-            return res.status(500).json({ success: false, message: 'Пользователь с этими данными уже зарегестрирован!' });
+            return res.status(500).json({ success: false, message: 'Пользователь с этими данными уже зарегистрирован!' });
         }
 
         try {
@@ -85,7 +85,7 @@ class UserController {
                     `<div style="padding: 1rem; background-color: white; width: 100%; margin: 0 auto; ">
                     <div style="padding: 1rem; max-width: 560px; margin: 0 auto; ">
                         <img src="cid:unique-image-id" alt="Изображение" style="width: 200px;">
-                        <h1>Здраствуйте, ${lastName}!</h1>
+                        <h1>Здравствуйте, ${lastName}!</h1>
                         <p style="color: #8C8C8C;">Осталось совсем чуть-чуть</p>
                         <p>Подтвердите регистрацию:</p>
                         <br />
