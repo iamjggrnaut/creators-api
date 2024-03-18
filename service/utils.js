@@ -192,7 +192,6 @@ async function calculateAverageReceipt(data, days) {
 }
 
 async function calculatePenalty(data, days) {
-    data = data.filter(item => item.sale_dt)
     const currentDate = new Date();
     const lastDaysDate = new Date(currentDate);
     lastDaysDate.setDate(lastDaysDate.getDate() - days);
