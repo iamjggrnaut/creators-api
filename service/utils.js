@@ -323,46 +323,50 @@ async function calculateDeliveryCost(data, days) {
 
 async function calculateMarginalProfit(data, days, delivery) {
 
-    // data = data.filter(item => item.ppvz_for_pay)
+    try {
+        // data = data.filter(item => item.ppvz_for_pay)
 
-    // Получаем текущую дату
-    const currentDate = new Date();
+        // Получаем текущую дату
+        const currentDate = new Date();
 
-    // Получаем дату предыдущего периода
-    const previousDate = new Date(currentDate);
-    previousDate.setDate(previousDate.getDate() - days);
+        // Получаем дату предыдущего периода
+        const previousDate = new Date(currentDate);
+        previousDate.setDate(previousDate.getDate() - days);
 
-    // Функция для вычисления маржинальной прибыли из массива данных
-    function calculateProfit(item) {
-        return (item.ppvz_for_pay - (item.retail_price * item.quantity) - (item.quantity * 1000)) || 0;
+        // Функция для вычисления маржинальной прибыли из массива данных
+        function calculateProfit(item) {
+            return (item.ppvz_for_pay - (item.retail_price * item.quantity) - (item.quantity * 1000)) || 0;
+        }
+
+        // Функция для фильтрации объектов по датам
+        function filterByDate(item) {
+            const itemDate = new Date(item.sale_dt);
+            return itemDate >= previousDate && itemDate <= currentDate;
+        }
+
+        // Фильтруем данные для текущего периода
+        const currentPeriodData = data.filter(filterByDate);
+
+        // Считаем маржинальную прибыль для текущего периода
+        const currentMarginalProfit = currentPeriodData.reduce((total, item) => total + calculateProfit(item), 0);
+
+        // Фильтруем данные для предыдущего периода
+        const previousPeriodData = data.filter(item => !filterByDate(item));
+
+        // Считаем маржинальную прибыль для предыдущего периода
+        const previousMarginalProfit = previousPeriodData.reduce((total, item) => total + calculateProfit(item), 0);
+
+        // Вычисляем долю роста маржинальной прибыли
+        const profitGrowth = ((currentMarginalProfit - previousMarginalProfit) / previousMarginalProfit || 1) * 100;
+
+        return {
+            currentMarginalProfit,
+            previousMarginalProfit,
+            profitGrowth
+        };
+    } catch (e) {
+        return {}
     }
-
-    // Функция для фильтрации объектов по датам
-    function filterByDate(item) {
-        const itemDate = new Date(item.sale_dt);
-        return itemDate >= previousDate && itemDate <= currentDate;
-    }
-
-    // Фильтруем данные для текущего периода
-    const currentPeriodData = data.filter(filterByDate);
-
-    // Считаем маржинальную прибыль для текущего периода
-    const currentMarginalProfit = currentPeriodData.reduce((total, item) => total + calculateProfit(item), 0);
-
-    // Фильтруем данные для предыдущего периода
-    const previousPeriodData = data.filter(item => !filterByDate(item));
-
-    // Считаем маржинальную прибыль для предыдущего периода
-    const previousMarginalProfit = previousPeriodData.reduce((total, item) => total + calculateProfit(item), 0);
-
-    // Вычисляем долю роста маржинальной прибыли
-    const profitGrowth = ((currentMarginalProfit - previousMarginalProfit) / previousMarginalProfit || 1) * 100;
-
-    return {
-        currentMarginalProfit,
-        previousMarginalProfit,
-        profitGrowth
-    };
 }
 
 async function calculateMargin(data, days) {
