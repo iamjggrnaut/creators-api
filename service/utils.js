@@ -192,25 +192,29 @@ async function calculateAverageReceipt(data, days) {
 }
 
 async function calculatePenalty(data, days) {
-    const currentDate = new Date();
-    const lastDaysDate = new Date(currentDate);
-    lastDaysDate.setDate(lastDaysDate.getDate() - days);
+    try {
+        const currentDate = new Date();
+        const lastDaysDate = new Date(currentDate);
+        lastDaysDate.setDate(lastDaysDate.getDate() - days);
 
-    // Функция для проверки, входит ли дата в заданный период
-    function isInPeriod(itemDate, startDate, endDate) {
-        return itemDate >= startDate && itemDate <= endDate;
+        // Функция для проверки, входит ли дата в заданный период
+        function isInPeriod(itemDate, startDate, endDate) {
+            return itemDate >= startDate && itemDate <= endDate;
+        }
+
+        // Фильтрация данных по заданному периоду
+        const dataInPeriod = data.filter(item => {
+            const itemDate = new Date(item.sale_dt); // Используем дату продажи
+            return isInPeriod(itemDate, lastDaysDate, currentDate);
+        });
+
+        // Подсчет суммы штрафов
+        const totalPenalty = dataInPeriod.reduce((sum, item) => sum + item.penalty, 0);
+
+        return totalPenalty;
+    } catch (error) {
+        return 0
     }
-
-    // Фильтрация данных по заданному периоду
-    const dataInPeriod = data.filter(item => {
-        const itemDate = new Date(item.sale_dt); // Используем дату продажи
-        return isInPeriod(itemDate, lastDaysDate, currentDate);
-    });
-
-    // Подсчет суммы штрафов
-    const totalPenalty = dataInPeriod.reduce((sum, item) => sum + item.penalty, 0);
-
-    return totalPenalty;
 }
 
 async function calculateAdditionalPayment(data, days) {
