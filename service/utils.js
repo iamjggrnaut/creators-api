@@ -697,160 +697,176 @@ async function calculateCommissionFromProfit(data, days) {
 }
 
 async function calculateCommissionFromDelivery(data, days) {
-    // Фильтруем объекты за указанный период
-    const filteredData = data.filter(item => {
-        const itemDate = new Date(item.sale_dt);
-        const currentDate = new Date();
-        const periodStartDate = new Date(currentDate.setDate(currentDate.getDate() - days));
-        return itemDate >= periodStartDate && itemDate <= new Date();
-    });
+    try {
+        // Фильтруем объекты за указанный период
+        const filteredData = data.filter(item => {
+            const itemDate = new Date(item.sale_dt);
+            const currentDate = new Date();
+            const periodStartDate = new Date(currentDate.setDate(currentDate.getDate() - days));
+            return itemDate >= periodStartDate && itemDate <= new Date();
+        });
 
-    // Считаем сумму комиссии и доставки
-    const deliverySum = filteredData.reduce((total, item) => total + item.delivery_rub, 0);
+        // Считаем сумму комиссии и доставки
+        const deliverySum = filteredData.reduce((total, item) => total + item.delivery_rub, 0);
 
-    // Считаем размер комиссии в процентах от выручки
-    const totalSales = filteredData.reduce((total, item) => total + item.retail_price, 0);
+        // Считаем размер комиссии в процентах от выручки
+        const totalSales = filteredData.reduce((total, item) => total + item.retail_price, 0);
 
-    // Считаем долю роста суммы комиссии по отношению к предыдущему периоду
-    // Предполагается, что данные отсортированы по дате в порядке возрастания
-    const previousPeriodData = data.filter(item => {
-        const itemDate = new Date(item.sale_dt);
-        const previousPeriodStartDate = new Date(new Date().setDate(new Date().getDate() - days * 2)); // Предыдущий период
-        return itemDate >= previousPeriodStartDate && itemDate < new Date();
-    });
-    const totalSalesPrev = previousPeriodData.reduce((total, item) => total + item.retail_price, 0);
-    const deliveryPrev = previousPeriodData.reduce((total, item) => total + item.delivery_rub, 0);
+        // Считаем долю роста суммы комиссии по отношению к предыдущему периоду
+        // Предполагается, что данные отсортированы по дате в порядке возрастания
+        const previousPeriodData = data.filter(item => {
+            const itemDate = new Date(item.sale_dt);
+            const previousPeriodStartDate = new Date(new Date().setDate(new Date().getDate() - days * 2)); // Предыдущий период
+            return itemDate >= previousPeriodStartDate && itemDate < new Date();
+        });
+        const totalSalesPrev = previousPeriodData.reduce((total, item) => total + item.retail_price, 0);
+        const deliveryPrev = previousPeriodData.reduce((total, item) => total + item.delivery_rub, 0);
 
-    // Считаем долю роста суммы доставки по отношению к предыдущему периоду
-    const previousDeliverySum = previousPeriodData.reduce((total, item) => total + item.delivery_rub, 0);
-    const deliveryGrowth = (deliverySum / previousDeliverySum) * 100;
+        // Считаем долю роста суммы доставки по отношению к предыдущему периоду
+        const previousDeliverySum = previousPeriodData.reduce((total, item) => total + item.delivery_rub, 0);
+        const deliveryGrowth = (deliverySum / previousDeliverySum) * 100;
 
-    const percent = (deliverySum / totalSales) * 100
-    const percentPrev = (deliveryPrev / totalSalesPrev) * 100
+        const percent = (deliverySum / totalSales) * 100
+        const percentPrev = (deliveryPrev / totalSalesPrev) * 100
 
-    const percentGrowth = ((percent - percentPrev) / percentPrev) * 100
+        const percentGrowth = ((percent - percentPrev) / percentPrev) * 100
 
 
-    return {
-        deliverySum,
-        deliveryGrowth,
-        percent,
-        percentGrowth
-    };
+        return {
+            deliverySum,
+            deliveryGrowth,
+            percent,
+            percentGrowth
+        };
+    } catch (e) {
+        return {}
+    }
 }
 
 const abcAnalysis = (products) => {
 
-    const totalSales = products.reduce((total, product) => total + product.finishedPrice, 0);
-    const totalQuantity = products.length
+    try {
+        const totalSales = products.reduce((total, product) => total + product.finishedPrice, 0);
+        const totalQuantity = products.length
 
-    // Ранжирование товаров по убыванию объема продаж
-    const sortedProducts = products.sort((a, b) => b.finishedPrice - a.finishedPrice);
+        // Ранжирование товаров по убыванию объема продаж
+        const sortedProducts = products.sort((a, b) => b.finishedPrice - a.finishedPrice);
 
-    // Рассчитываем долю каждого товара в общем объеме продаж и присваиваем категорию ABC
-    const categoryA = sortedProducts.slice(0, Math.ceil(products.length * 0.2));
-    const categoryB = sortedProducts.slice(Math.ceil(products.length * 0.2), Math.ceil(products.length * 0.5));
-    const categoryC = sortedProducts.slice(Math.ceil(products.length * 0.5));
+        // Рассчитываем долю каждого товара в общем объеме продаж и присваиваем категорию ABC
+        const categoryA = sortedProducts.slice(0, Math.ceil(products.length * 0.2));
+        const categoryB = sortedProducts.slice(Math.ceil(products.length * 0.2), Math.ceil(products.length * 0.5));
+        const categoryC = sortedProducts.slice(Math.ceil(products.length * 0.5));
 
-    [categoryA, categoryB, categoryC].forEach(category => {
+        [categoryA, categoryB, categoryC].forEach(category => {
 
-        // Рассчитываем долю каждого товара в общем объеме продаж и присваиваем свойства
-        category.forEach(product => {
-            product.quantityPercentage = (category.length / totalQuantity) * 100;
-            product.amount = (product.finishedPrice * product.quantity) || 1;
-            product.salesPercentage = (category.map(i => i.finishedPrice).reduce((a, b) => a + b, 0) / totalSales) * 100;
-            product.abcTotalAmount = category.length
-            product.abcTotalSales = category.map(i => i.finishedPrice).reduce((a, b) => a + b, 0) || 0
-            product.prodName = product.subject
-            // Добавьте свои дополнительные действия, если необходимо
+            // Рассчитываем долю каждого товара в общем объеме продаж и присваиваем свойства
+            category.forEach(product => {
+                product.quantityPercentage = (category.length / totalQuantity) * 100;
+                product.amount = (product.finishedPrice * product.quantity) || 1;
+                product.salesPercentage = (category.map(i => i.finishedPrice).reduce((a, b) => a + b, 0) / totalSales) * 100;
+                product.abcTotalAmount = category.length
+                product.abcTotalSales = category.map(i => i.finishedPrice).reduce((a, b) => a + b, 0) || 0
+                product.prodName = product.subject
+                // Добавьте свои дополнительные действия, если необходимо
+            });
         });
-    });
-    return {
-        categoryA: { totalAmount: categoryA[0].abcTotalAmount, totalSales: categoryA[0].abcTotalSales, quantityPercentage: categoryA[0].quantityPercentage, salesPercentage: categoryA[0].salesPercentage },
-        categoryB: { totalAmount: categoryB[0].abcTotalAmount, totalSales: categoryB[0].abcTotalSales, quantityPercentage: categoryB[0].quantityPercentage, salesPercentage: categoryB[0].salesPercentage },
-        categoryC: { totalAmount: categoryC[0].abcTotalAmount, totalSales: categoryC[0].abcTotalSales, quantityPercentage: categoryC[0].quantityPercentage, salesPercentage: categoryC[0].salesPercentage }
+        return {
+            categoryA: { totalAmount: categoryA[0].abcTotalAmount, totalSales: categoryA[0].abcTotalSales, quantityPercentage: categoryA[0].quantityPercentage, salesPercentage: categoryA[0].salesPercentage },
+            categoryB: { totalAmount: categoryB[0].abcTotalAmount, totalSales: categoryB[0].abcTotalSales, quantityPercentage: categoryB[0].quantityPercentage, salesPercentage: categoryB[0].salesPercentage },
+            categoryC: { totalAmount: categoryC[0].abcTotalAmount, totalSales: categoryC[0].abcTotalSales, quantityPercentage: categoryC[0].quantityPercentage, salesPercentage: categoryC[0].salesPercentage }
+        }
+    } catch (e) {
+        return {}
     }
 }
 
 async function calculateAdvertisementMetrics(advertisementData, revenue, days) {
-    const currentDate = new Date();
-    const periodStartDate = new Date(currentDate.getTime() - days * 24 * 60 * 60 * 1000);
+    try {
+        const currentDate = new Date();
+        const periodStartDate = new Date(currentDate.getTime() - days * 24 * 60 * 60 * 1000);
 
-    const filteredDataCurrentPeriod = advertisementData.filter(item => new Date(item.updTime) >= periodStartDate && new Date(item.updTime) <= currentDate);
+        const filteredDataCurrentPeriod = advertisementData.filter(item => new Date(item.updTime) >= periodStartDate && new Date(item.updTime) <= currentDate);
 
-    const expensesCurrentPeriod = filteredDataCurrentPeriod.reduce((total, item) => total + item.updSum, 0);
-    const expensesPercentageCurrentPeriod = (expensesCurrentPeriod / revenue) * 100;
+        const expensesCurrentPeriod = filteredDataCurrentPeriod.reduce((total, item) => total + item.updSum, 0);
+        const expensesPercentageCurrentPeriod = (expensesCurrentPeriod / revenue) * 100;
 
-    // Теперь аналогично для предыдущего периода
-    const previousPeriodEndDate = new Date(periodStartDate.getTime() - 24 * 60 * 60 * 1000);
-    const previousPeriodStartDate = new Date(previousPeriodEndDate.getTime() - days * 24 * 60 * 60 * 1000);
+        // Теперь аналогично для предыдущего периода
+        const previousPeriodEndDate = new Date(periodStartDate.getTime() - 24 * 60 * 60 * 1000);
+        const previousPeriodStartDate = new Date(previousPeriodEndDate.getTime() - days * 24 * 60 * 60 * 1000);
 
-    const filteredDataPreviousPeriod = advertisementData.filter(item => new Date(item.updTime) >= previousPeriodStartDate && new Date(item.updTime) <= previousPeriodEndDate);
+        const filteredDataPreviousPeriod = advertisementData.filter(item => new Date(item.updTime) >= previousPeriodStartDate && new Date(item.updTime) <= previousPeriodEndDate);
 
-    const expensesPreviousPeriod = filteredDataPreviousPeriod.reduce((total, item) => total + item.updSum, 0);
-    const expensesPercentagePreviousPeriod = (expensesPreviousPeriod / revenue) * 100;
+        const expensesPreviousPeriod = filteredDataPreviousPeriod.reduce((total, item) => total + item.updSum, 0);
+        const expensesPercentagePreviousPeriod = (expensesPreviousPeriod / revenue) * 100;
 
-    // Вычисление прироста
-    const growthPercentageExpenses = ((expensesCurrentPeriod - expensesPreviousPeriod) / expensesPreviousPeriod) * 100;
-    const growthPercentageExpensesPercentage = ((expensesPercentageCurrentPeriod - expensesPercentagePreviousPeriod) / expensesPercentagePreviousPeriod) * 100;
+        // Вычисление прироста
+        const growthPercentageExpenses = ((expensesCurrentPeriod - expensesPreviousPeriod) / expensesPreviousPeriod) * 100;
+        const growthPercentageExpensesPercentage = ((expensesPercentageCurrentPeriod - expensesPercentagePreviousPeriod) / expensesPercentagePreviousPeriod) * 100;
 
-    return {
-        expensesCurrentPeriod: expensesCurrentPeriod,
-        growthPercentageExpenses: growthPercentageExpenses,
-        expensesPercentageCurrentPeriod: expensesPercentageCurrentPeriod,
-        growthPercentageExpensesPercentage: growthPercentageExpensesPercentage
-    };
+        return {
+            expensesCurrentPeriod: expensesCurrentPeriod,
+            growthPercentageExpenses: growthPercentageExpenses,
+            expensesPercentageCurrentPeriod: expensesPercentageCurrentPeriod,
+            growthPercentageExpensesPercentage: growthPercentageExpensesPercentage
+        };
+    } catch (e) {
+        return {}
+    }
 }
 
 async function findFBSFBO(orders, warehouses, days) {
-    const currentDate = new Date();
-    const periodStartDate = new Date(currentDate.getTime() - days * 24 * 60 * 60 * 1000);
+    try {
+        const currentDate = new Date();
+        const periodStartDate = new Date(currentDate.getTime() - days * 24 * 60 * 60 * 1000);
 
-    // Функция для фильтрации заказов по складам
-    function filterOrdersByWarehouses(orders, warehouses) {
-        return orders.filter(order => warehouses.includes(order.warehouseName));
+        // Функция для фильтрации заказов по складам
+        function filterOrdersByWarehouses(orders, warehouses) {
+            return orders.filter(order => warehouses.includes(order.warehouseName));
+        }
+        function missOrdersByWarehouses(orders, warehouses) {
+            return orders.filter(order => !warehouses.includes(order.warehouseName));
+        }
+
+        // Функция для подсчета суммы заказов
+        function calculateTotalAmount(orders) {
+            return orders.reduce((total, order) => total + order.finishedPrice, 0);
+        }
+
+        // Фильтрация заказов по складам в текущем периоде
+        const currentPeriodOrders = orders.filter(order => new Date(order.date) >= periodStartDate && new Date(order.date) <= currentDate);
+        const currentPeriodFilteredOrders = filterOrdersByWarehouses(currentPeriodOrders, warehouses);
+        const currentPeriodTotalAmount = calculateTotalAmount(currentPeriodFilteredOrders);
+        const currentPeriodlength = currentPeriodFilteredOrders.length
+
+        const currentPeriodFBO = missOrdersByWarehouses(currentPeriodOrders, warehouses)
+        const currentPeriodFBOAmount = calculateTotalAmount(currentPeriodFBO);
+        const currentPeriodFBOlength = currentPeriodFBO.length
+
+        // Фильтрация заказов по складам в предыдущем периоде
+        const previousPeriodStartDate = new Date(currentDate.getTime() - days * 2 * 24 * 60 * 60 * 1000); // Удвоение для предыдущего периода
+        const previousPeriodEndDate = new Date(currentDate.getTime() - days * 24 * 60 * 60 * 1000);
+        const previousPeriodOrders = orders.filter(order => new Date(order.date) >= previousPeriodStartDate && new Date(order.date) <= previousPeriodEndDate);
+        const previousPeriodFilteredOrders = filterOrdersByWarehouses(previousPeriodOrders, warehouses);
+        const previousPeriodTotalAmount = calculateTotalAmount(previousPeriodFilteredOrders);
+
+        const previousPeriodFilteredFBO = filterOrdersByWarehouses(previousPeriodOrders, warehouses);
+        const previousPeriodFBOAmount = calculateTotalAmount(previousPeriodFilteredFBO);
+
+        const percentageGrowth = ((currentPeriodTotalAmount - previousPeriodTotalAmount) / previousPeriodTotalAmount) * 100;
+
+        const percentageGrowthFBO = ((currentPeriodFBOAmount - previousPeriodFBOAmount) / previousPeriodFBOAmount) * 100
+
+        return {
+            fbs: currentPeriodTotalAmount,
+            fbsPercent: percentageGrowth,
+            fbsAmount: currentPeriodlength,
+            fbo: currentPeriodFBOAmount,
+            fboPercent: percentageGrowthFBO,
+            fboAmount: currentPeriodFBOlength
+        };
+    } catch (e) {
+        return {}
     }
-    function missOrdersByWarehouses(orders, warehouses) {
-        return orders.filter(order => !warehouses.includes(order.warehouseName));
-    }
-
-    // Функция для подсчета суммы заказов
-    function calculateTotalAmount(orders) {
-        return orders.reduce((total, order) => total + order.finishedPrice, 0);
-    }
-
-    // Фильтрация заказов по складам в текущем периоде
-    const currentPeriodOrders = orders.filter(order => new Date(order.date) >= periodStartDate && new Date(order.date) <= currentDate);
-    const currentPeriodFilteredOrders = filterOrdersByWarehouses(currentPeriodOrders, warehouses);
-    const currentPeriodTotalAmount = calculateTotalAmount(currentPeriodFilteredOrders);
-    const currentPeriodlength = currentPeriodFilteredOrders.length
-
-    const currentPeriodFBO = missOrdersByWarehouses(currentPeriodOrders, warehouses)
-    const currentPeriodFBOAmount = calculateTotalAmount(currentPeriodFBO);
-    const currentPeriodFBOlength = currentPeriodFBO.length
-
-    // Фильтрация заказов по складам в предыдущем периоде
-    const previousPeriodStartDate = new Date(currentDate.getTime() - days * 2 * 24 * 60 * 60 * 1000); // Удвоение для предыдущего периода
-    const previousPeriodEndDate = new Date(currentDate.getTime() - days * 24 * 60 * 60 * 1000);
-    const previousPeriodOrders = orders.filter(order => new Date(order.date) >= previousPeriodStartDate && new Date(order.date) <= previousPeriodEndDate);
-    const previousPeriodFilteredOrders = filterOrdersByWarehouses(previousPeriodOrders, warehouses);
-    const previousPeriodTotalAmount = calculateTotalAmount(previousPeriodFilteredOrders);
-
-    const previousPeriodFilteredFBO = filterOrdersByWarehouses(previousPeriodOrders, warehouses);
-    const previousPeriodFBOAmount = calculateTotalAmount(previousPeriodFilteredFBO);
-
-    const percentageGrowth = ((currentPeriodTotalAmount - previousPeriodTotalAmount) / previousPeriodTotalAmount) * 100;
-
-    const percentageGrowthFBO = ((currentPeriodFBOAmount - previousPeriodFBOAmount) / previousPeriodFBOAmount) * 100
-
-    return {
-        fbs: currentPeriodTotalAmount,
-        fbsPercent: percentageGrowth,
-        fbsAmount: currentPeriodlength,
-        fbo: currentPeriodFBOAmount,
-        fboPercent: percentageGrowthFBO,
-        fboAmount: currentPeriodFBOlength
-    };
 }
 
 
