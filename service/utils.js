@@ -649,47 +649,51 @@ async function calculateToClients(data, days) {
 
 async function calculateCommissionFromProfit(data, days) {
     // Фильтруем объекты за указанный период
-    const filteredData = data.filter(item => {
-        const currentDate = new Date(item.sale_dt);
-        const startDate = new Date();
-        startDate.setDate(startDate.getDate() - days); // Начальная дата = текущая дата - days
-        return currentDate >= startDate && currentDate <= new Date(); // Проверяем, попадает ли дата объекта в период
-    });
+    try {
+        const filteredData = data.filter(item => {
+            const currentDate = new Date(item.sale_dt);
+            const startDate = new Date();
+            startDate.setDate(startDate.getDate() - days); // Начальная дата = текущая дата - days
+            return currentDate >= startDate && currentDate <= new Date(); // Проверяем, попадает ли дата объекта в период
+        });
 
-    // Вычисляем сумму комиссии в рублях
-    const commissionSum = filteredData.reduce((sum, item) => sum + (item.commission_percent * (item.retail_price * item.quantity)), 0);
+        // Вычисляем сумму комиссии в рублях
+        const commissionSum = filteredData.reduce((sum, item) => sum + (item.commission_percent * (item.retail_price * item.quantity)), 0);
 
-    // Вычисляем средний процент комиссии
-    const commissionPercent = filteredData.reduce((sum, item) => sum + item.commission_percent, 0)
+        // Вычисляем средний процент комиссии
+        const commissionPercent = filteredData.reduce((sum, item) => sum + item.commission_percent, 0)
 
-    // Находим предыдущий период
-    const previousStartDate = new Date();
-    previousStartDate.setDate(previousStartDate.getDate() - 2 * days); // Начальная дата предыдущего периода
-    const previousEndDate = new Date();
-    previousEndDate.setDate(previousEndDate.getDate() - days); // Конечная дата предыдущего периода
+        // Находим предыдущий период
+        const previousStartDate = new Date();
+        previousStartDate.setDate(previousStartDate.getDate() - 2 * days); // Начальная дата предыдущего периода
+        const previousEndDate = new Date();
+        previousEndDate.setDate(previousEndDate.getDate() - days); // Конечная дата предыдущего периода
 
-    // Фильтруем объекты за предыдущий период
-    const previousData = data.filter(item => {
-        const currentDate = new Date(item.sale_dt);
-        return currentDate >= previousStartDate && currentDate <= previousEndDate; // Проверяем, попадает ли дата объекта в предыдущий период
-    });
+        // Фильтруем объекты за предыдущий период
+        const previousData = data.filter(item => {
+            const currentDate = new Date(item.sale_dt);
+            return currentDate >= previousStartDate && currentDate <= previousEndDate; // Проверяем, попадает ли дата объекта в предыдущий период
+        });
 
-    // Вычисляем сумму комиссии за предыдущий период
-    const previousCommissionSum = previousData.reduce((sum, item) => sum + (item.commission_percent * (item.retail_price * item.quantity)), 0);
-    const previousCommissionPercent = previousData.reduce((sum, item) => sum + item.commission_percent, 0);
+        // Вычисляем сумму комиссии за предыдущий период
+        const previousCommissionSum = previousData.reduce((sum, item) => sum + (item.commission_percent * (item.retail_price * item.quantity)), 0);
+        const previousCommissionPercent = previousData.reduce((sum, item) => sum + item.commission_percent, 0);
 
-    // Вычисляем долю роста суммы комиссии по отношению к предыдущему периоду
-    const commissionSumGrowth = (commissionSum / previousCommissionSum) * 100;
+        // Вычисляем долю роста суммы комиссии по отношению к предыдущему периоду
+        const commissionSumGrowth = (commissionSum / previousCommissionSum) * 100;
 
-    // Вычисляем долю роста комиссии в процентах по отношению к предыдущему периоду
-    const commissionPercentGrowth = (commissionSumGrowth / previousCommissionPercent) * 100;
+        // Вычисляем долю роста комиссии в процентах по отношению к предыдущему периоду
+        const commissionPercentGrowth = (commissionSumGrowth / previousCommissionPercent) * 100;
 
-    return {
-        commissionSum,
-        commissionPercent,
-        commissionSumGrowth,
-        commissionPercentGrowth
-    };
+        return {
+            commissionSum,
+            commissionPercent,
+            commissionSumGrowth,
+            commissionPercentGrowth
+        };
+    } catch (e) {
+        return {}
+    }
 }
 
 async function calculateCommissionFromDelivery(data, days) {
