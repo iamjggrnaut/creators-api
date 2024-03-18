@@ -283,38 +283,42 @@ async function calculateCommission(data, days) {
 }
 
 async function calculateDeliveryCost(data, days) {
-    const currentDate = new Date();
-    const lastDaysDate = new Date(currentDate);
-    lastDaysDate.setDate(lastDaysDate.getDate() - days);
+    try {
+        const currentDate = new Date();
+        const lastDaysDate = new Date(currentDate);
+        lastDaysDate.setDate(lastDaysDate.getDate() - days);
 
-    function isWithinPeriod(item) {
-        const itemDate = new Date(item.sale_dt);
-        return itemDate >= lastDaysDate && itemDate <= currentDate;
+        function isWithinPeriod(item) {
+            const itemDate = new Date(item.sale_dt);
+            return itemDate >= lastDaysDate && itemDate <= currentDate;
+        }
+
+        const dataInPeriod = data.filter(isWithinPeriod);
+        const totalDeliveryCostCurrentPeriod = dataInPeriod.reduce((total, item) => total + item.delivery_rub, 0);
+
+        const previousPeriodDate = new Date(lastDaysDate);
+        const previousPeriodStartDate = new Date(previousPeriodDate);
+        previousPeriodStartDate.setDate(previousPeriodStartDate.getDate() - days);
+        const previousPeriodEndDate = new Date(previousPeriodDate);
+        previousPeriodEndDate.setDate(previousPeriodEndDate.getDate() - 1);
+
+        const dataInPreviousPeriod = data.filter(item => {
+            const itemDate = new Date(item.sale_dt);
+            return itemDate >= previousPeriodStartDate && itemDate <= previousPeriodEndDate;
+        });
+
+        const totalDeliveryCostPreviousPeriod = dataInPreviousPeriod.reduce((total, item) => total + item.delivery_rub, 0);
+
+        const percentageGrowth = ((totalDeliveryCostCurrentPeriod - totalDeliveryCostPreviousPeriod) / totalDeliveryCostPreviousPeriod) * 100;
+
+        return {
+            totalDeliveryCostCurrentPeriod,
+            totalDeliveryCostPreviousPeriod,
+            percentageGrowth
+        };
+    } catch (e) {
+        return {}
     }
-
-    const dataInPeriod = data.filter(isWithinPeriod);
-    const totalDeliveryCostCurrentPeriod = dataInPeriod.reduce((total, item) => total + item.delivery_rub, 0);
-
-    const previousPeriodDate = new Date(lastDaysDate);
-    const previousPeriodStartDate = new Date(previousPeriodDate);
-    previousPeriodStartDate.setDate(previousPeriodStartDate.getDate() - days);
-    const previousPeriodEndDate = new Date(previousPeriodDate);
-    previousPeriodEndDate.setDate(previousPeriodEndDate.getDate() - 1);
-
-    const dataInPreviousPeriod = data.filter(item => {
-        const itemDate = new Date(item.sale_dt);
-        return itemDate >= previousPeriodStartDate && itemDate <= previousPeriodEndDate;
-    });
-
-    const totalDeliveryCostPreviousPeriod = dataInPreviousPeriod.reduce((total, item) => total + item.delivery_rub, 0);
-
-    const percentageGrowth = ((totalDeliveryCostCurrentPeriod - totalDeliveryCostPreviousPeriod) / totalDeliveryCostPreviousPeriod) * 100;
-
-    return {
-        totalDeliveryCostCurrentPeriod,
-        totalDeliveryCostPreviousPeriod,
-        percentageGrowth
-    };
 }
 
 async function calculateMarginalProfit(data, days, delivery) {
