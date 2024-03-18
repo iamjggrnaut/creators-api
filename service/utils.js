@@ -540,59 +540,63 @@ async function calculateROI(data, days) {
 }
 
 async function calculateGrossProfit(salesData, deliveryData, days) {
-    // Функция для получения дат последних days дней
-    function getLastDaysDates(days) {
-        const currentDate = new Date();
-        const lastDaysDates = [];
-        for (let i = 0; i < days; i++) {
-            const date = new Date(currentDate);
-            date.setDate(date.getDate() - i);
-            lastDaysDates.push(date.toISOString().split('T')[0]);
-        }
-        return lastDaysDates;
-    }
-
-    // Функция для фильтрации данных за последние days дней
-    function filterDataByLastDays(data, lastDaysDates) {
-
-        const getDateProp = (item) => {
-            if (item.date) {
-                return item.date
-            } else if (item.rr_dt) {
-                return item.rr_dt
-            } else if (item.sale_dt) {
-                return item.sale_dt
+    try {
+        // Функция для получения дат последних days дней
+        function getLastDaysDates(days) {
+            const currentDate = new Date();
+            const lastDaysDates = [];
+            for (let i = 0; i < days; i++) {
+                const date = new Date(currentDate);
+                date.setDate(date.getDate() - i);
+                lastDaysDates.push(date.toISOString().split('T')[0]);
             }
+            return lastDaysDates;
         }
 
-        return data.filter(item => {
-            let date = getDateProp(item)
-            return lastDaysDates.includes(date.split('T')[0] || date.split('T')[0])
-        });
+        // Функция для фильтрации данных за последние days дней
+        function filterDataByLastDays(data, lastDaysDates) {
+
+            const getDateProp = (item) => {
+                if (item.date) {
+                    return item.date
+                } else if (item.rr_dt) {
+                    return item.rr_dt
+                } else if (item.sale_dt) {
+                    return item.sale_dt
+                }
+            }
+
+            return data.filter(item => {
+                let date = getDateProp(item)
+                return lastDaysDates.includes(date.split('T')[0] || date.split('T')[0])
+            });
+        }
+
+        // Получаем даты последних days дней
+        const lastDaysDates = getLastDaysDates(days);
+
+        // Фильтруем данные о продажах за последние days дней
+        const filteredSalesData = filterDataByLastDays(salesData, lastDaysDates);
+
+        // Фильтруем данные о доставках за последние days дней
+        const filteredDeliveryData = filterDataByLastDays(deliveryData, lastDaysDates);
+
+        // Суммируем стоимость товаров из данных о продажах
+        const totalSalesCost = filteredSalesData.reduce((total, item) => total + item.forPay, 0);
+
+        // Суммируем затраты на доставку
+        const totalDeliveryCost = filteredDeliveryData.reduce((total, item) => total + item.delivery_rub, 0);
+
+        // Вычисляем валовую прибыль
+        const grossProfit = totalSalesCost - totalDeliveryCost;
+
+        return {
+            percent: (grossProfit / totalSalesCost) * 100,
+            amount: grossProfit
+        };
+    } catch (e) {
+        return {}
     }
-
-    // Получаем даты последних days дней
-    const lastDaysDates = getLastDaysDates(days);
-
-    // Фильтруем данные о продажах за последние days дней
-    const filteredSalesData = filterDataByLastDays(salesData, lastDaysDates);
-
-    // Фильтруем данные о доставках за последние days дней
-    const filteredDeliveryData = filterDataByLastDays(deliveryData, lastDaysDates);
-
-    // Суммируем стоимость товаров из данных о продажах
-    const totalSalesCost = filteredSalesData.reduce((total, item) => total + item.forPay, 0);
-
-    // Суммируем затраты на доставку
-    const totalDeliveryCost = filteredDeliveryData.reduce((total, item) => total + item.delivery_rub, 0);
-
-    // Вычисляем валовую прибыль
-    const grossProfit = totalSalesCost - totalDeliveryCost;
-
-    return {
-        percent: (grossProfit / totalSalesCost) * 100,
-        amount: grossProfit
-    };
 }
 
 async function calculateNotSorted(data, days) {
