@@ -515,24 +515,28 @@ async function calculatePurchasePercentage(sales, report, days) {
 
 async function calculateROI(data, days) {
     // Фильтрация данных за указанный период
-    const currentDate = new Date();
-    const startDate = new Date(currentDate);
-    startDate.setDate(startDate.getDate() - days);
-    const filteredData = data.filter(item => {
-        const itemDate = new Date(item.date); // Предполагается, что в объекте есть поле date с датой
-        return itemDate >= startDate && itemDate <= currentDate;
-    });
+    try {
+        const currentDate = new Date();
+        const startDate = new Date(currentDate);
+        startDate.setDate(startDate.getDate() - days);
+        const filteredData = data.filter(item => {
+            const itemDate = new Date(item.date); // Предполагается, что в объекте есть поле date с датой
+            return itemDate >= startDate && itemDate <= currentDate;
+        });
 
-    // Вычисление общих затрат за период (стоимость товаров + затраты на доставку)
-    const totalCost = filteredData.reduce((acc, item) => acc + 1000, 0);
+        // Вычисление общих затрат за период (стоимость товаров + затраты на доставку)
+        const totalCost = filteredData.reduce((acc, item) => acc + 1000, 0);
 
-    // Вычисление общей выручки за период
-    const totalRevenue = filteredData.reduce((acc, item) => acc + item.finishedPrice, 0);
+        // Вычисление общей выручки за период
+        const totalRevenue = filteredData.reduce((acc, item) => acc + item.finishedPrice, 0);
 
-    // Вычисление ROI
-    const roi = ((totalRevenue - totalCost) / totalCost) * 100;
+        // Вычисление ROI
+        const roi = ((totalRevenue - totalCost) / totalCost) * 100;
 
-    return roi;
+        return roi;
+    } catch (e) {
+        return 0
+    }
 }
 
 async function calculateGrossProfit(salesData, deliveryData, days) {
