@@ -218,24 +218,28 @@ async function calculatePenalty(data, days) {
 }
 
 async function calculateAdditionalPayment(data, days) {
-    const currentDate = new Date();
-    // Получение даты days дней назад
-    const lastDaysDate = new Date(currentDate);
-    lastDaysDate.setDate(lastDaysDate.getDate() - days);
+    try {
+        const currentDate = new Date();
+        // Получение даты days дней назад
+        const lastDaysDate = new Date(currentDate);
+        lastDaysDate.setDate(lastDaysDate.getDate() - days);
 
-    // Функция для проверки, попадает ли дата объекта в заданный период
-    function isWithinPeriod(item) {
-        const itemDate = new Date(item.sale_dt); // Используем дату создания записи
-        return itemDate >= lastDaysDate && itemDate <= currentDate;
+        // Функция для проверки, попадает ли дата объекта в заданный период
+        function isWithinPeriod(item) {
+            const itemDate = new Date(item.sale_dt); // Используем дату создания записи
+            return itemDate >= lastDaysDate && itemDate <= currentDate;
+        }
+
+        // Фильтрация данных для получения записей, попадающих в заданный период
+        const dataInPeriod = data.filter(isWithinPeriod);
+
+        // Используем reduce для вычисления суммы дополнительных платежей
+        const totalAdditionalPayment = dataInPeriod.reduce((total, item) => total + item.additional_payment, 0);
+
+        return totalAdditionalPayment;
+    } catch (error) {
+        return 0
     }
-
-    // Фильтрация данных для получения записей, попадающих в заданный период
-    const dataInPeriod = data.filter(isWithinPeriod);
-
-    // Используем reduce для вычисления суммы дополнительных платежей
-    const totalAdditionalPayment = dataInPeriod.reduce((total, item) => total + item.additional_payment, 0);
-
-    return totalAdditionalPayment;
 }
 
 async function calculateCommission(data, days) {
