@@ -500,38 +500,64 @@ class DataCollectionController {
 
         try {
             // Создаем новый Excel файл
-            const workbook = new exceljs.Workbook();
-            const worksheet = workbook.addWorksheet('Sheet 1');
+            // const workbook = new exceljs.Workbook();
+            // const worksheet = workbook.addWorksheet('Sheet 1');
 
-            const goods = await Goods.findOne({ where: { userId: id, brandName } })
+            // const goods = await Goods.findOne({ where: { userId: id, brandName } })
 
-            // Добавляем данные в Excel файл
-            worksheet.columns = [
-                { header: 'Артикул WB', key: 'wb_article', width: 30 },
-                { header: 'Артикул продавца', key: 'product_article', width: 30 },
-                { header: 'Себестоимость', key: 'initial_cost', width: 20 }
-            ]
+            // // Добавляем данные в Excel файл
+            // worksheet.columns = [
+            //     { header: 'Артикул WB', key: 'wb_article', width: 30 },
+            //     { header: 'Артикул продавца', key: 'product_article', width: 30 },
+            //     { header: 'Себестоимость', key: 'initial_cost', width: 20 }
+            // ]
 
-            for (let i in goods.dataValues.data.data.listGoods) {
-                worksheet.addRow({
-                    wb_article: goods.dataValues.data.data.listGoods[i].nmID,
-                    product_article: goods.dataValues.data.data.listGoods[i].vendorCode,
-                    initial_cost: '',
-                })
-            }
+            // for (let i in goods.dataValues.data.data.listGoods) {
+            //     worksheet.addRow({
+            //         wb_article: goods.dataValues.data.data.listGoods[i].nmID,
+            //         product_article: goods.dataValues.data.data.listGoods[i].vendorCode,
+            //         initial_cost: '',
+            //     })
+            // }
 
-            const projectDir = path.resolve(__dirname);
+            // const projectDir = path.resolve(__dirname);
 
-            // Создаем директорию temp внутри директории проекта, если она не существует
-            const tempDir = path.join(projectDir, 'temp');
+            // // Создаем директорию temp внутри директории проекта, если она не существует
+            // const tempDir = path.join(projectDir, 'temp');
+            // if (!fs.existsSync(tempDir)) {
+            //     fs.mkdirSync(tempDir);
+            // }
+
+            // const filePath = path.join(tempDir, `${id}-${brandName}.xlsx`) // Путь к файлу
+            // await workbook.xlsx.writeFile(filePath);
+
+
+
+            // res.sendFile(filePath, (err) => {
+            //     if (err) {
+            //         console.error('Ошибка при отправке файла:', err);
+            //         res.status(500).send('Произошла ошибка при отправке файла');
+            //     } else {
+            //         // Удаляем временный файл
+            //         fs.unlinkSync(filePath);
+            //     }
+            // });
+
+            const goods = await Goods.findOne({ where: { userId: id, brandName } });
+
+            const workbook = xlsx.utils.book_new();
+            const worksheet = xlsx.utils.json_to_sheet(goods.dataValues.data.data.listGoods);
+            xlsx.utils.book_append_sheet(workbook, worksheet, 'Sheet 1');
+
+            const tempDir = path.join(__dirname, 'temp');
             if (!fs.existsSync(tempDir)) {
                 fs.mkdirSync(tempDir);
             }
 
-            const filePath = path.join(tempDir, `${id}-${brandName}.xlsx`) // Путь к файлу
-            await workbook.xlsx.writeFile(filePath);
+            const filePath = path.join(tempDir, `${id}-${brandName}.xlsx`);
 
-
+            // Сохраняем файл синхронно
+            xlsx.writeFile(workbook, filePath);
 
             res.sendFile(filePath, (err) => {
                 if (err) {
@@ -542,6 +568,7 @@ class DataCollectionController {
                     fs.unlinkSync(filePath);
                 }
             });
+
 
         } catch (error) {
             console.error('Ошибка при генерации Excel файла:', error);
