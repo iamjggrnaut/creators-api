@@ -528,12 +528,12 @@ class DataCollectionController {
                 fs.mkdirSync(tempDir);
             }
 
-            const filePath = path.join(tempDir, `${id}-${brandName}.xlsx`) // Путь к файлу
+            const filePath = path.join(tempDir, `Себестоимость.xlsx`) // Путь к файлу
             await workbook.xlsx.writeFile(filePath);
 
 
 
-            res.sendFile(filePath, `${id}-${brandName}.xlsx`, (err) => {
+            res.sendFile(filePath, `Себестоимость.xlsx`, (err) => {
                 if (err) {
                     console.error('Ошибка при отправке файла:', err);
                     res.status(500).send('Произошла ошибка при отправке файла');
