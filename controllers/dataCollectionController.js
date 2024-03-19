@@ -501,7 +501,9 @@ class DataCollectionController {
         try {
             // Создаем новый Excel файл
             const workbook = new exceljs.Workbook();
-            const worksheet = workbook.addWorksheet('Sheet 1');
+
+            const options = { useStyles: true };
+            const worksheet = workbook.addWorksheet('Sheet 1', options);
 
             const goods = await Goods.findOne({ where: { userId: id, brandName } })
 
