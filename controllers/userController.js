@@ -83,7 +83,7 @@ class UserController {
                 ],
                 html:
                     `<div style="padding: 1rem; background-color: white; width: 100%; ">
-                    <div style="padding: 1rem; max-width: 560px; margin: 0 auto; ">
+                    <div style="padding: 1rem; max-width: 560px; ">
                         <img src="cid:unique-image-id" alt="Изображение" style="width: 200px;">
                         <h1>Здравствуйте, ${lastName}!</h1>
                         <p style="color: #8C8C8C;">Осталось совсем чуть-чуть</p>
@@ -97,7 +97,7 @@ class UserController {
                         <p>Команда сервиса Radar Analytica</p>
                         <br />
                     </div>
-                    <div style="background-color: rgba(247, 246, 254, 1); padding: 1rem; border-radius: 4px; max-width: 560px; margin: 0 auto;">
+                    <div style="background-color: rgba(247, 246, 254, 1); padding: 1rem; border-radius: 4px; max-width: 560px;">
                         <p>Вы получили это письмо, так как зарегистрировались на сайте</p>
                         <a href="https://radar-analytica.ru">https://radar-analytica.ru</a>
                         <br>
@@ -149,7 +149,7 @@ class UserController {
             ],
             html:
                 `<div style="padding: 1rem; background-color: white;">
-                    <div style="padding: 1rem; max-width: 560px; margin:0 auto">
+                    <div style="padding: 1rem; max-width: 560px;">
                         <img src="cid:unique-image-id" alt="Изображение" style="width: 200px;">
                         <h1>Восстановление пароля</h1>
                         <p style="color: #8C8C8C;">Не переживайте, это несложно и безопасно</p>
@@ -160,7 +160,7 @@ class UserController {
                         <p>Команда сервиса Radar Analytica</p>
                         <br />
                     </div>
-                    <div style="background-color: rgba(247, 246, 254, 1); padding: 1rem; border-radius: 4px; max-width: 560px; margin:0 auto">
+                    <div style="background-color: rgba(247, 246, 254, 1); padding: 1rem; border-radius: 4px; max-width: 560px;">
                         <p>Вы получили это письмо, так как запросили восстановление пароля на сайте</p>
                         <a href="https://radar-analytica.ru">https://radar-analytica.ru</a>
                         <br>
