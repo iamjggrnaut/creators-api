@@ -533,7 +533,7 @@ class DataCollectionController {
 
 
 
-            res.sendFile(filePath, (err) => {
+            res.sendFile(filePath, `${id}-${brandName}.xlsx`, (err) => {
                 if (err) {
                     console.error('Ошибка при отправке файла:', err);
                     res.status(500).send('Произошла ошибка при отправке файла');
