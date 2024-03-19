@@ -529,9 +529,7 @@ class DataCollectionController {
             }
 
             const filePath = path.join(tempDir, `${id}-${brandName}.xlsx`) // Путь к файлу
-            // await workbook.xlsx.writeFile(filePath);
-
-            xlsx.writeFile(workbook, filePath)
+            await workbook.xlsx.writeFile(filePath);
 
 
 
