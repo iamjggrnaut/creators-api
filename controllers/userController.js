@@ -82,7 +82,7 @@ class UserController {
                     }
                 ],
                 html:
-                    `<div style="padding: 1rem; background-color: white; width: 100%; margin: 0 auto; ">
+                    `<div style="padding: 1rem; background-color: white; width: 100%; ">
                     <div style="padding: 1rem; max-width: 560px; margin: 0 auto; ">
                         <img src="cid:unique-image-id" alt="Изображение" style="width: 200px;">
                         <h1>Здравствуйте, ${lastName}!</h1>
@@ -148,7 +148,7 @@ class UserController {
                 }
             ],
             html:
-                `<div style="padding: 1rem; background-color: white; margin: 0 auto">
+                `<div style="padding: 1rem; background-color: white;">
                     <div style="padding: 1rem; max-width: 560px; margin:0 auto">
                         <img src="cid:unique-image-id" alt="Изображение" style="width: 200px;">
                         <h1>Восстановление пароля</h1>
