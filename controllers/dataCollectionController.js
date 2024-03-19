@@ -535,7 +535,7 @@ class DataCollectionController {
 
 
 
-            res.sendFile(filePath, `Себестоимость.xlsx`, (err) => {
+            res.download(filePath, `Себестоимость.xlsx`, (err) => {
                 if (err) {
                     console.error('Ошибка при отправке файла:', err);
                     res.status(500).send('Произошла ошибка при отправке файла');
