@@ -22,7 +22,8 @@ const {
     ReportDaily,
     ReportTwoWeeks,
     Goods,
-    InitialCostsAndTax
+    InitialCostsAndTax,
+    User
 } = require('../models/models')
 const {
     filterArrays,
@@ -54,8 +55,11 @@ class DataCollectionController {
 
     async getBrandNames(req, res) {
         const { id } = req.params
-        const data = await Warehouse.findAll({ where: { userId: id } })
-        const names = data.map(el => el.brandName)
+        const user = await User.findOne({ where: { id } });
+        const decodedTokens = user.tokens.map(token => ({ brandName: token.brandName, token: jwt.decode(token.token, { complete: true }) }))
+        const resTokens = decodedTokens && decodedTokens.length ? decodedTokens.map(token => ({ brandName: token.brandName })) : [];
+
+        const names = resTokens.map(el => el.brandName)
         return res.json(names)
     }
 
