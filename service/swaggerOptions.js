@@ -8,7 +8,7 @@ const options = {
             description: 'Documentation for your RESTful API',
         },
     },
-    apis: ['path/to/your/routes/*.js'], // Путь к вашим маршрутам API
+    apis: ['../routes/*.js'], // Путь к вашим маршрутам API
 };
 
 const swaggerSpec = swaggerJSDoc(options);
