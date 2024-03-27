@@ -16,12 +16,17 @@ if (cluster.isMaster) {
     const router = require('./routes/index');
     require('./service/scheduler');
 
+    const swaggerUi = require('swagger-ui-express');
+    const swaggerSpec = require('./service/swaggerOptions');
+
     const app = express();
 
     app.use('/static', express.static('static'));
     app.use(cors());
     app.use(express.json());
     app.use('/api', router);
+
+    app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
     const start = async () => {
         try {
