@@ -79,16 +79,16 @@ class DataCollectionController {
 
         const warehouses = await Warehouse.findOne({ where: { userId: id, brandName } })
         const warehousesWB = await WarehouseWB.findOne({ where: { userId: id, brandName } })
-        const supplies = await Supply.findOne({ where: { userId: id, brandName } })
-        const newOrders = await NewOrder.findOne({ where: { userId: id, brandName } })
-        const reshipmentOrders = await ReshipmentOrder.findOne({ where: { userId: id, brandName } })
+        // const supplies = await Supply.findOne({ where: { userId: id, brandName } })
+        // const newOrders = await NewOrder.findOne({ where: { userId: id, brandName } })
+        // const reshipmentOrders = await ReshipmentOrder.findOne({ where: { userId: id, brandName } })
         const incomes = await Income.findOne({ where: { userId: id, brandName } })
         const stocks = await Stock.findOne({ where: { userId: id, brandName } })
         const orders = await Order.findOne({ where: { userId: id, brandName } })
         const sales = await Sale.findOne({ where: { userId: id, brandName } })
         const reportDetailByPeriod = await ReportDetailByPeriod.findOne({ where: { userId: id, brandName } })
         const add = await Add.findOne({ where: { userId: id, brandName } })
-        const info = await Info.findOne({ where: { userId: id, brandName } })
+        // const info = await Info.findOne({ where: { userId: id, brandName } })
         const goods = await Goods.findOne({ where: { userId: id, brandName } })
         const reportThreeMonths = await ReportThreeMonths.findOne({ where: { userId: id, brandName } })
         const reportMonthly = await ReportMonthly.findOne({ where: { userId: id, brandName } })
@@ -165,16 +165,16 @@ class DataCollectionController {
         return res.json({
             warehouses,
             warehousesWB,
-            supplies,
-            newOrders,
-            reshipmentOrders,
+            // supplies,
+            // newOrders,
+            // reshipmentOrders,
             incomes,
             stocks,
             orders,
             sales,
             reportDetailByPeriod,
             add,
-            info,
+            // info,
             goods,
             content,
             reportDaily,
@@ -194,16 +194,16 @@ class DataCollectionController {
 
         const warehouses = await Warehouse.findOne({ where: { userId: id, brandName } })
         const warehousesWB = await WarehouseWB.findOne({ where: { userId: id, brandName } })
-        const supplies = await Supply.findOne({ where: { userId: id, brandName } })
-        const newOrders = await NewOrder.findOne({ where: { userId: id, brandName } })
-        const reshipmentOrders = await ReshipmentOrder.findOne({ where: { userId: id, brandName } })
+        // const supplies = await Supply.findOne({ where: { userId: id, brandName } })
+        // const newOrders = await NewOrder.findOne({ where: { userId: id, brandName } })
+        // const reshipmentOrders = await ReshipmentOrder.findOne({ where: { userId: id, brandName } })
         const incomes = await Income.findOne({ where: { userId: id, brandName } })
         const stocks = await Stock.findOne({ where: { userId: id, brandName } })
         const orders = await Order.findOne({ where: { userId: id, brandName } })
         const sales = await Sale.findOne({ where: { userId: id, brandName } })
         const reportDetailByPeriod = await ReportDetailByPeriod.findOne({ where: { userId: id, brandName } })
         const add = await Add.findOne({ where: { userId: id, brandName } })
-        const info = await Info.findOne({ where: { userId: id, brandName } })
+        // // const info = await Info.findOne({ where: { userId: id, brandName } })
         const goods = await Goods.findOne({ where: { userId: id, brandName } })
         const reportThreeMonths = await ReportThreeMonths.findOne({ where: { userId: id, brandName } })
         const reportMonthly = await ReportMonthly.findOne({ where: { userId: id, brandName } })
@@ -280,16 +280,16 @@ class DataCollectionController {
         return res.json({
             warehouses,
             warehousesWB,
-            supplies,
-            newOrders,
-            reshipmentOrders,
+            // supplies,
+            // newOrders,
+            // reshipmentOrders,
             incomes,
             stocks,
             orders,
             sales,
             reportDetailByPeriod,
             add,
-            info,
+            // info,
             goods,
             content,
             reportDaily,
