@@ -1,6 +1,5 @@
 const Router = require('express')
 const roomController = require('../controllers/roomController')
-const { authMiddleware } = require('../middleware/authMiddleware')
 const router = new Router()
 
 
