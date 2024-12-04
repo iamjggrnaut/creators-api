@@ -1,14 +1,15 @@
 const Router = require('express')
 const router = new Router()
-const userRouter = require('./userRouter')
-const dataCollectionRouter = require('./dataCollectionRouter')
-const ordersRouter = require('./ordersRouter')
-const salesRouter = require('./ordersRouter')
+const userRoutes = require('../routes/userRoutes')
+const adminRoutes = require('../routes/adminRoutes')
+const bookingRoutes = require('../routes/bookingRoutes')
+const roomRoutes = require('../routes/roomRoutes')
 
-router.use('/user', userRouter)
-router.use('/data-collection', dataCollectionRouter)
-router.use('/orders', ordersRouter)
-router.use('/sales', salesRouter)
+
+router.use('/user', userRoutes)
+router.use('/admin', adminRoutes)
+router.use('/booking', bookingRoutes)
+router.use('/room', roomRoutes)
 
 
 module.exports = router

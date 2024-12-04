@@ -1,47 +1,54 @@
-const cluster = require('cluster');
-const os = require('os');
+require('dotenv').config()
+const express = require('express')
+const sequelize = require('./db')
+const PORT = process.env.PORT || 5000
+const cors = require('cors')
+const router = require('./routes/index')
+const errorHandling = require('./middleware/ErrorHandlingMiddleware')
+const createAdmin = require('./utils/utils')
 
-if (cluster.isMaster) {
-    const numCPUs = os.cpus().length;
-    for (let i = 0; i < numCPUs; i++) {
-        cluster.fork();
-    }
-} else {
-    require('dotenv').config();
-    const express = require('express');
-    const sequelize = require('./db');
-    const multer = require('multer');
-    const PORT = process.env.PORT || 5000;
-    const cors = require('cors');
-    const router = require('./routes/index');
-    require('./service/scheduler');
+const { Room } = require('./models/models')
 
-    const swaggerUi = require('swagger-ui-express');
-    const swaggerSpec = require('./service/swaggerOptions');
+const app = express()
 
-    const app = express();
+app.use(cors())
 
-    app.use('/static', express.static('static'));
-    app.use(cors());
-    app.use(express.json());
-    app.use('/api', router);
 
-    // app.get('/api-docs.json', (req, res) => {
-    //     res.setHeader('Content-Type', 'application/json');
-    //     res.send(swaggerSpec);
-    // });
+app.use(express.json())
+app.use('/api', router)
+app.use(errorHandling)
 
-    // app.use('/api-docs', swaggerUi.serve, swaggerUi.setup());
+const start = async () => {
+    try {
+        await sequelize.authenticate()
+        await sequelize.sync()
 
-    const start = async () => {
-        try {
-            await sequelize.authenticate();
-            await sequelize.sync();
-            app.listen(PORT, () => console.log(`Server is running on port ${PORT}`));
-        } catch (e) {
-            console.log(e);
+        await createAdmin();
+        await createRoom()
+
+        app.listen(PORT, () => console.log(`Server is running on port ${PORT}`))
+
+    } catch (e) { console.log(e); }
+}
+
+start()
+
+
+const createRoom = async () => {
+    const names = ['genesis', 'nova', 'echo', 'chrono', 'pantheon']
+    for (let name in names) {
+        const room = await Room.findOne({ where: { name: names[name] } })
+        if (!room) {
+            await Room.create({
+                name: names[name],
+                description: '',
+            })
+            console.log('Room created');
+
         }
-    };
+        else {
+            console.log('Room already exists');
 
-    start();
+        }
+    }
 }
