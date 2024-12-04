@@ -1,7 +1,5 @@
 const Router = require('express')
 const userController = require('../controllers/userController')
-const bookingController = require('../controllers/bookingController')
-const { authMiddleware } = require('../middleware/authMiddleware')
 const checkRoleMiddleware = require('../middleware/CheckRoleMiddleware')
 const router = new Router()
 
